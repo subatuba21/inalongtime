@@ -24,3 +24,5 @@ WHAT (what file, function or code you edited):
 WHY: (why did you change it):
 
 ...
+
+One message for each file at the minimum
