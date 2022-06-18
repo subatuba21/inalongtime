@@ -14,13 +14,18 @@ node, express, mongo, react, GCP
 
 ## Commit Template
 
+Summary sentence.
+
 WHAT (what file, function or code you edited):
+
 WHY: (why did you change it):
 
 WHAT (what file, function or code you edited):
+
 WHY: (why did you change it):
 
 WHAT (what file, function or code you edited):
+
 WHY: (why did you change it):
 
 ...
