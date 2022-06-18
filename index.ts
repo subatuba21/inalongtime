@@ -2,7 +2,6 @@ import express from 'express';
 import {authRouter} from './api/auth';
 import {futureRouter} from './api/future';
 import logger from './logger';
-// import {serveReact} from './utils/serveReact';
 
 const app = express();
 
