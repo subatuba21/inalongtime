@@ -1,4 +1,4 @@
-import {Collection, Db} from 'mongodb';
+import {Collection, Db, ObjectId} from 'mongodb';
 import {DbResponse} from './setup';
 
 let futureCol : Collection;
@@ -30,7 +30,7 @@ export const addFuture =
       try {
         const currentDate = new Date();
         const res = await futureCol.insertOne({userId, sendDate,
-          contentUrl, type, title, currentDate, description, published: false});
+          contentUrl, type, title, currentDate, description});
         if (res.acknowledged) {
           return {
             success: true,
@@ -38,7 +38,7 @@ export const addFuture =
               _id: res.insertedId.toString(),
               userId,
               sendDate,
-              currentDate: new Date(),
+              currentDate,
               contentUrl,
               type,
               title,
@@ -54,5 +54,25 @@ export const addFuture =
         };
       }
     };
+
+export const getFuture = async (_id: string) : Promise<FutureDbResponse> => {
+  try {
+    const res = await futureCol.findOne({_id: new ObjectId(_id)});
+    if (res) {
+      return {
+        success: true,
+        future: {...(res as unknown as FutureEntry), _id: _id},
+      };
+    } else {
+      throw new Error('Future not found.');
+    }
+  } catch (err: any) {
+    return {
+      success: false,
+      error: err.message,
+      future: null,
+    };
+  }
+};
 
 
