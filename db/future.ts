@@ -10,8 +10,8 @@ export const setFutureDb = async (db: Db) => {
 export type FutureType = 'memory' | 'reminder' | 'letter' | 'journal' | 'goals';
 
 export interface FutureEntry {
-    _id: string;
-    userId: string;
+    _id: ObjectId;
+    userId: ObjectId;
     sendDate: Date;
     currentDate: Date;
     contentUrl: string;
@@ -20,31 +20,33 @@ export interface FutureEntry {
     description: string;
 }
 
+export interface FutureInput {
+  userId: ObjectId;
+  sendDate: Date;
+  contentUrl: string;
+  type: FutureType;
+  title: string;
+  description: string;
+}
+
 export interface FutureDbResponse extends DbResponse {
     future: FutureEntry | null;
 }
 
 export const addFuture =
-    async (userId: string, sendDate: Date, contentUrl: string,
-        type: FutureType, title: string, description: string)
+    async (future: FutureInput)
     : Promise<FutureDbResponse> => {
       try {
         const currentDate = new Date();
-        const res = await futureCol.insertOne({userId, sendDate,
-          contentUrl, type, title, currentDate, description});
+        const res = await futureCol.insertOne({...future, currentDate});
         if (res.acknowledged) {
           logger.info(`Added future with id ${res.insertedId}`);
           return {
             success: true,
             future: {
-              _id: res.insertedId.toString(),
-              userId,
-              sendDate,
+              _id: res.insertedId,
+              ...future,
               currentDate,
-              contentUrl,
-              type,
-              title,
-              description,
             },
           };
         } else throw new Error('MongoDB error: write not allowed.');
@@ -65,7 +67,7 @@ export const getFuture = async (_id: string) : Promise<FutureDbResponse> => {
       logger.info(`Found future with id ${_id}`);
       return {
         success: true,
-        future: {...(res as unknown as FutureEntry), _id: _id},
+        future: res as FutureEntry,
       };
     } else {
       throw new Error('Future not found.');

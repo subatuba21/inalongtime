@@ -1,5 +1,5 @@
 // eslint-disable-next-line max-len
-import {getUser, getUserByEmail, registerUser, setUserDb, UserEntry} from './auth';
+import {getUser, getUserByEmail, registerUser, setUserDb, UserEntry, UserInput} from './auth';
 import {getClient, getDb, setupDb} from './setup';
 import {config} from 'dotenv';
 import md5 from 'md5';
@@ -28,12 +28,13 @@ describe('Testing auth-related db queries', () => {
   test('Testing registerUser', async () => {
     const db = getDb();
 
-    const firstname = 'John';
-    const lastname = 'Doe';
-    const email = 'johndoe@gmail.com';
-    const password = 'password';
-    // eslint-disable-next-line max-len
-    const res = await registerUser(firstname, lastname, email, password);
+    const userInput : UserInput = {
+      firstname: 'John',
+      lastname: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: 'password',
+    };
+    const res = await registerUser(userInput);
     expect(res.success).toBe(true);
     expect(res.user).toBeTruthy();
 
@@ -41,43 +42,49 @@ describe('Testing auth-related db queries', () => {
         {_id: new ObjectId((res.user as UserEntry)._id)}) as UserEntry | null;
     expect(user).toBeTruthy();
     user = user as UserEntry;
-    expect(user.email).toBe(email);
-    expect(user.firstname).toBe(firstname);
-    expect(user.lastname).toBe(lastname);
-    expect(user.password).toBe(md5(password));
+    expect(user.email).toBe(userInput.email);
+    expect(user.firstname).toBe(userInput.firstname);
+    expect(user.lastname).toBe(userInput.lastname);
+    expect(user.password).toBe(md5(userInput.password));
   });
 
   test('adding a duplicate user should be stopped', async () => {
-    const firstname = 'John';
-    const lastname = 'Doe';
-    const email = 'johndoe@gmail.com';
-    const password = 'password';
+    const userInput : UserInput = {
+      firstname: 'John',
+      lastname: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: 'password',
+    };
     // eslint-disable-next-line max-len
-    const res = await registerUser(firstname, lastname, email, password);
+    const res = await registerUser(userInput);
     expect(res.success).toBe(true);
 
-    const dup = await registerUser(firstname, lastname, email, password);
+    const dup = await registerUser(userInput);
     expect(dup.success).toBe(false);
   });
 
   test('Testing getUser', async () => {
-    const firstname = 'John';
-    const lastname = 'Doe';
-    const email = 'johndoe@gmail.com';
-    const password = 'password';
+    const userInput : UserInput = {
+      firstname: 'John',
+      lastname: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: 'password',
+    };
 
-    const res = await registerUser(firstname, lastname, email, password);
-    const user = await getUser((res.user as UserEntry)._id);
+    const res = await registerUser(userInput);
+    const user = await getUser((res.user as UserEntry)._id.toString());
     expect(user.user).toStrictEqual(res.user as UserEntry);
   });
 
   test('Testing getUserByEmail', async () => {
-    const firstname = 'John';
-    const lastname = 'Doe';
-    const email = 'johndoe@gmail.com';
-    const password = 'password';
+    const userInput : UserInput = {
+      firstname: 'John',
+      lastname: 'Doe',
+      email: 'johndoe@gmail.com',
+      password: 'password',
+    };
 
-    const res = await registerUser(firstname, lastname, email, password);
+    const res = await registerUser(userInput);
     const user = await getUserByEmail((res.user as UserEntry).email);
     expect(user.user).toStrictEqual(res.user as UserEntry);
   });

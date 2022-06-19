@@ -8,11 +8,18 @@ export const setUserDb = async (db: Db) => {
 };
 
 export interface UserEntry {
-    _id: string;
+    _id: ObjectId;
     email: string;
     firstname: string;
     lastname: string;
     password: string;
+}
+
+export interface UserInput {
+  email: string;
+  firstname: string;
+  lastname: string;
+  password: string;
 }
 
 // eslint-disable-next-line max-len
@@ -21,25 +28,23 @@ export interface UserDbResponse extends DbResponse {
 }
 
 // eslint-disable-next-line max-len
-export const registerUser = async (firstname: string, lastname: string, email: string, password: string) : Promise<UserDbResponse> => {
-  const hashedPass = md5(password);
+export const registerUser = async (userInput: UserInput) : Promise<UserDbResponse> => {
+  const hashedPass = md5(userInput.password);
   try {
     // eslint-disable-next-line max-len
-    const user = await userCol.findOne({email: email});
+    const user = await userCol.findOne({email: userInput.email});
     if (user) {
       return {success: false, error: 'User already exists', user: null};
     }
 
     const res = await userCol.insertOne(
-        {firstname, lastname, email, password: hashedPass});
+        {...userInput, password: hashedPass});
     if (res.acknowledged) {
       return {
         success: true,
         user: {
-          _id: res.insertedId.toString(),
-          email,
-          firstname,
-          lastname,
+          _id: res.insertedId,
+          ...userInput,
           password: hashedPass,
         },
       };
@@ -60,7 +65,7 @@ export const getUser = async (_id: string) : Promise<UserDbResponse> => {
     if (res) {
       return {
         success: true,
-        user: {...(res as unknown as UserEntry), _id: res._id.toString()},
+        user: {...(res as unknown as UserEntry), _id: res._id},
       };
     } else throw new Error('User not found.');
   } catch (err: any) {
@@ -80,7 +85,7 @@ export const getUserByEmail = async (email: string) : Promise<UserDbResponse> =>
     if (res) {
       return {
         success: true,
-        user: {...(res as unknown as UserEntry), _id: res._id.toString()},
+        user: {...(res as unknown as UserEntry), _id: res._id},
       };
     } else throw new Error('User not found.');
   } catch (err: any) {

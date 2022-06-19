@@ -1,7 +1,7 @@
 import {config} from 'dotenv';
 import {ObjectId} from 'mongodb';
-import {addFuture, FutureEntry, FutureType,
-  setFutureDb, getFuture} from './future';
+import {addFuture, FutureEntry,
+  setFutureDb, getFuture, FutureInput} from './future';
 import {getClient, getDb, setupDb} from './setup';
 
 config();
@@ -26,39 +26,42 @@ afterAll(async () => {
 describe('Testing future-related db queries', () => {
   test('Testing addFuture', async () => {
     const db = getDb();
-    const userId = new ObjectId();
-    const title = 'Test title';
-    const type : FutureType = 'letter';
-    const description = 'Test description';
-    const sendDate = new Date('2025-01-01');
-    const contentUrl = 'https://www.google.com';
-    const res = await addFuture(userId.toString(), sendDate,
-        contentUrl, type, title, description);
+    const future : FutureInput = {
+      title: 'Test title',
+      userId: new ObjectId(),
+      contentUrl: 'https://www.google.com',
+      description: 'Test description',
+      sendDate: new Date('2025-01-01'),
+      type: 'letter',
+    };
+    const res = await addFuture(future);
     expect(res.success).toBe(true);
 
-    let future = await db.collection('futures').findOne({_id: new ObjectId(
-        (res.future as FutureEntry)._id)}) as FutureEntry | null;
-    expect(future).toBeTruthy();
-    future = future as FutureEntry;
-    expect(future?.userId).toBe(userId.toString());
-    expect(future.contentUrl).toBe(contentUrl);
-    expect(future.description).toBe(description);
-    expect(future.sendDate).toStrictEqual(sendDate);
+    let retrievedFuture = await db.collection('futures')
+        .findOne({_id: (res.future as FutureEntry)._id}) as FutureEntry | null;
+    expect(retrievedFuture).toBeTruthy();
+    retrievedFuture = retrievedFuture as FutureEntry;
+    expect(retrievedFuture.userId).toStrictEqual(future.userId);
+    expect(retrievedFuture.contentUrl).toBe(future.contentUrl);
+    expect(retrievedFuture.description).toBe(future.description);
+    expect(retrievedFuture.sendDate).toStrictEqual(future.sendDate);
   });
 
   test('Testing getFuture', async () => {
-    const userId = new ObjectId();
-    const title = 'Test title';
-    const type : FutureType = 'letter';
-    const description = 'Test description';
-    const sendDate = new Date('2025-01-01');
-    const contentUrl = 'https://www.google.com';
-    const res = await addFuture(userId.toString(), sendDate,
-        contentUrl, type, title, description);
+    const future : FutureInput = {
+      title: 'Test title',
+      userId: new ObjectId(),
+      contentUrl: 'https://www.google.com',
+      description: 'Test description',
+      sendDate: new Date('2025-01-01'),
+      type: 'letter',
+    };
+    const res = await addFuture(future);
     expect(res.success).toBe(true);
     expect(res.future).toBeTruthy();
-    const futureResponse = await getFuture((res.future as FutureEntry)._id);
+    const futureResponse = await getFuture(
+        (res.future as FutureEntry)._id.toString());
     expect(futureResponse.success).toBe(true);
-    expect(res.future).toStrictEqual(futureResponse.future);
+    expect(futureResponse.future).toStrictEqual(res.future);
   });
 });
