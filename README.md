@@ -11,6 +11,7 @@ node, express, mongo, react, GCP
 - No default exports
 - Types and interfaces capitalized
 - Capitalize first letter for types and interfaces
+- Only arrow functions except for components
 
 ## Commit Template
 
@@ -31,3 +32,7 @@ WHY: (why did you change it):
 ...
 
 One message for each file at the minimum
+
+## TODO
+
+- Write Schema Validation script
