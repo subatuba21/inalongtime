@@ -25,7 +25,13 @@ export const registerUser = async (firstname: string, lastname: string, email: s
   const hashedPass = md5(password);
   try {
     // eslint-disable-next-line max-len
-    const res = await userCol.insertOne({firstname, lastname, email, password: hashedPass});
+    const user = await userCol.findOne({email: email});
+    if (user) {
+      return {success: false, error: 'User already exists', user: null};
+    }
+
+    const res = await userCol.insertOne(
+        {firstname, lastname, email, password: hashedPass});
     if (res.acknowledged) {
       return {
         success: true,
@@ -85,4 +91,3 @@ export const getUserByEmail = async (email: string) : Promise<UserDbResponse> =>
     };
   }
 };
-

@@ -37,14 +37,27 @@ describe('Testing auth-related db queries', () => {
     expect(res.success).toBe(true);
     expect(res.user).toBeTruthy();
 
-    // eslint-disable-next-line max-len
-    let user = await db.collection('users').findOne({_id: new ObjectId((res.user as UserEntry)._id)}) as UserEntry | null;
+    let user = await db.collection('users').findOne(
+        {_id: new ObjectId((res.user as UserEntry)._id)}) as UserEntry | null;
     expect(user).toBeTruthy();
     user = user as UserEntry;
     expect(user.email).toBe(email);
     expect(user.firstname).toBe(firstname);
     expect(user.lastname).toBe(lastname);
     expect(user.password).toBe(md5(password));
+  });
+
+  test('adding a duplicate user should be stopped', async () => {
+    const firstname = 'John';
+    const lastname = 'Doe';
+    const email = 'johndoe@gmail.com';
+    const password = 'password';
+    // eslint-disable-next-line max-len
+    const res = await registerUser(firstname, lastname, email, password);
+    expect(res.success).toBe(true);
+
+    const dup = await registerUser(firstname, lastname, email, password);
+    expect(dup.success).toBe(false);
   });
 
   test('Testing getUser', async () => {

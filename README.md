@@ -13,6 +13,12 @@ node, express, mongo, react, GCP
 - Capitalize first letter for types and interfaces
 - Only arrow functions except for components
 
+
+## Procedures
+
+- Test every function that is not SETUP or that does not return STATIC CONTENT.
+- Every function as mentioned above should also have at minimum one info log.
+
 ## Commit Template
 
 Summary sentence.
