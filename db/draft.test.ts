@@ -1,6 +1,7 @@
 import {config} from 'dotenv';
 import {ObjectId} from 'mongodb';
-import {addDraft, DraftEntry, setDraftDb, DraftInput} from './draft';
+import {addDraft, DraftEntry, setDraftDb, DraftInput, modifyDraft,
+  getDraft, ModifyDraftInput} from './draft';
 import {getClient, getDb, setupDb} from './setup';
 
 config();
@@ -45,7 +46,52 @@ describe('Testing draft related db functionalities', () => {
     expect(draft.sendDate).toStrictEqual(draftInput.sendDate);
   });
 
-  test('Testing modifyDraft', async () => {
+  test('Testing getDraft', async () => {
+    const draftInput : DraftInput = {
+      title: 'Test title',
+      userId: new ObjectId(),
+      contentUrl: 'https://www.google.com',
+      description: 'Test description',
+      sendDate: new Date('2025-01-01'),
+      type: 'letter',
+    };
+    const res = await addDraft(draftInput);
+    expect(res.success).toBe(true);
+    const draftResult = await getDraft(new ObjectId(res.draft?._id));
+    expect(draftResult.draft).toBeTruthy();
+    expect(res.draft).toStrictEqual(draftResult.draft);
+  });
 
+  test('Testing modifyDraft', async () => {
+    const draftInput : DraftInput = {
+      title: 'Test title',
+      userId: new ObjectId(),
+      contentUrl: 'https://www.google.com',
+      description: 'Test description',
+      sendDate: new Date('2025-01-01'),
+      type: 'letter',
+    };
+    const res = await addDraft(draftInput);
+    expect(res.success).toBe(true);
+    const updateDraftInput : ModifyDraftInput = {
+      title: 'Test title updated',
+    };
+    const _id = res.draft?._id as ObjectId;
+
+    const updateRes = await modifyDraft(_id, updateDraftInput);
+    expect(updateRes.success).toBe(true);
+    expect(updateRes.draft).toBeTruthy();
+    expect(updateRes.draft?.title).toBe(updateDraftInput.title);
+  });
+
+  test('Testing modifying nonexistent draft', async () => {
+    const updateDraftInput : ModifyDraftInput = {
+      title: 'Test title updated',
+    };
+    const _id = new ObjectId();
+
+    const updateRes = await modifyDraft(_id, updateDraftInput);
+    expect(updateRes.success).toBe(false);
+    expect(updateRes.draft).toBeFalsy();
   });
 });
