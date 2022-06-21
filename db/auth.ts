@@ -1,7 +1,7 @@
 import {Db, Collection, ObjectId} from 'mongodb';
 import md5 from 'md5';
 import {DbResponse} from './setup';
-import {UserSchema} from './schemas/auth';
+import {UserSchema} from './schemas/user';
 
 let userCol : Collection;
 export const setUserDb = async (db: Db) => {
