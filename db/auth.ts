@@ -8,7 +8,7 @@ export const setUserDb = async (db: Db) => {
 };
 
 export interface UserEntry {
-    _id: ObjectId;
+    _id: string;
     email: string;
     firstname: string;
     lastname: string;
@@ -43,7 +43,7 @@ export const registerUser = async (userInput: UserInput) : Promise<UserDbRespons
       return {
         success: true,
         user: {
-          _id: res.insertedId,
+          _id: res.insertedId.toString(),
           ...userInput,
           password: hashedPass,
         },
@@ -65,7 +65,7 @@ export const getUser = async (_id: string) : Promise<UserDbResponse> => {
     if (res) {
       return {
         success: true,
-        user: {...(res as unknown as UserEntry), _id: res._id},
+        user: {...(res as unknown as UserEntry), _id: res._id.toString()},
       };
     } else throw new Error('User not found.');
   } catch (err: any) {
@@ -85,7 +85,7 @@ export const getUserByEmail = async (email: string) : Promise<UserDbResponse> =>
     if (res) {
       return {
         success: true,
-        user: {...(res as unknown as UserEntry), _id: res._id},
+        user: {...(res as unknown as UserEntry), _id: res._id.toString()},
       };
     } else throw new Error('User not found.');
   } catch (err: any) {

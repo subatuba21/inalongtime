@@ -10,8 +10,8 @@ export const setFutureDb = async (db: Db) => {
 export type FutureType = 'memory' | 'reminder' | 'letter' | 'journal' | 'goals';
 
 export interface FutureEntry {
-    _id: ObjectId;
-    userId: ObjectId;
+    _id: string;
+    userId: string;
     sendDate: Date;
     currentDate: Date;
     contentUrl: string;
@@ -21,7 +21,7 @@ export interface FutureEntry {
 }
 
 export interface FutureInput {
-  userId: ObjectId;
+  userId: string;
   sendDate: Date;
   contentUrl: string;
   type: FutureType;
@@ -38,13 +38,15 @@ export const addFuture =
     : Promise<FutureDbResponse> => {
       try {
         const currentDate = new Date();
-        const res = await futureCol.insertOne({...future, currentDate});
+        const res = await futureCol.insertOne(
+            {...future, currentDate,
+              userId: new ObjectId(future.userId.toString())});
         if (res.acknowledged) {
           logger.info(`Added future with id ${res.insertedId}`);
           return {
             success: true,
             future: {
-              _id: res.insertedId,
+              _id: res.insertedId.toString(),
               ...future,
               currentDate,
             },
@@ -67,7 +69,9 @@ export const getFuture = async (_id: string) : Promise<FutureDbResponse> => {
       logger.info(`Found future with id ${_id}`);
       return {
         success: true,
-        future: res as FutureEntry,
+        future: {...res, _id,
+          userId: ((res as any).userId.toString()),
+        } as FutureEntry,
       };
     } else {
       throw new Error('Future not found.');

@@ -9,7 +9,7 @@ export const setDraftDb = async (db: Db) => {
 };
 
 export interface DraftEntry {
-    _id: ObjectId;
+    _id: string;
     userId: string;
     sendDate?: Date;
     contentUrl: string;
@@ -23,7 +23,7 @@ export interface DraftDbResponse extends DbResponse {
 }
 
 export interface DraftInput {
-    userId: ObjectId;
+    userId: string;
     sendDate?: Date;
     contentUrl: string;
     type: FutureType;
@@ -34,14 +34,15 @@ export interface DraftInput {
 export const addDraft =
     async (draft: DraftInput) : Promise<DraftDbResponse> => {
       try {
-        const res = await draftCol.insertOne(draft);
+        const res = await draftCol.insertOne(
+            {...draft, userId: new ObjectId(draft.userId)});
         if (res.acknowledged) {
           logger.info(`Added draft with id ${res.insertedId}`);
           return {
             success: true,
             draft: {
-              ...draft as unknown as DraftEntry,
-              _id: res.insertedId,
+              ...draft as DraftEntry,
+              _id: res.insertedId.toString(),
             },
           };
         } else throw new Error('MongoDB error: write not allowed.');
@@ -55,54 +56,21 @@ export const addDraft =
       }
     };
 
-export interface MultipleDraftsDbResponse extends DbResponse {
-    drafts: DraftEntry[];
-}
-
-export const getDraftsByUserId =
-    async (userId: string) : Promise<MultipleDraftsDbResponse> => {
-      try {
-        logger.info('Trying to get drafts for UserId: ' + userId);
-        const drafts = await draftCol.find({userId}).toArray();
-        if (drafts.length>0) {
-          logger.info(`Found drafts for user ${userId}`);
-          const draftEntries = drafts as DraftEntry[];
-          return {
-            success: true,
-            drafts: draftEntries,
-          };
-        } else {
-          logger.info(`No drafts found for user ${userId}`);
-          return {
-            success: true,
-            drafts: [],
-          };
-        }
-      } catch (err: any) {
-        logger.warning(
-            `Unable to find drafts for user ${userId}: ${err.message}`);
-        return {
-          success: false,
-          error: err.message,
-          drafts: [],
-        };
-      }
-    };
-
-export const getDraft = async (_id: ObjectId) : Promise<DraftDbResponse> => {
+export const getDraft = async (_id: string) : Promise<DraftDbResponse> => {
   try {
-    const res = await draftCol.findOne({_id});
+    const res = await draftCol.findOne({_id: new ObjectId(_id)});
     if (res) {
       logger.info(`Found draft with id ${_id}`);
       return {
         success: true,
-        draft: res as DraftEntry,
+        draft: {...res, _id, userId:
+          (res as any).userId.toString()} as DraftEntry,
       };
     } else {
       throw new Error('Draft not found.');
     }
   } catch (err: any) {
-    logger.warning(`Unable to find draft with id ${_id}: ${err.message}`);
+    logger.warn(`Unable to find draft with id ${_id}: ${err.message}`);
     return {
       success: false,
       error: err.message,
@@ -120,18 +88,19 @@ export interface ModifyDraftInput {
 }
 
 export const modifyDraft =
-    async (_id: ObjectId, draft : ModifyDraftInput)
+    async (_id: string, draft : ModifyDraftInput)
     : Promise<DraftDbResponse> => {
       try {
         const res = await draftCol.findOneAndUpdate(
-            {_id: _id}, {$set: draft}, {
+            {_id: new ObjectId(_id)}, {$set: draft}, {
               returnDocument: 'after',
             });
         if (res.value) {
           logger.info(`Modified draft with id ${_id}`);
           return {
             success: true,
-            draft: res.value as DraftEntry,
+            draft: {...res.value, _id,
+              userId: res.value.userId.toString()} as DraftEntry,
           };
         } else {
           throw new Error('MongoDB error: write not allowed.');

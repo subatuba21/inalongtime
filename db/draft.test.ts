@@ -1,5 +1,6 @@
 import {config} from 'dotenv';
 import {ObjectId} from 'mongodb';
+import logger from '../logger';
 import {addDraft, DraftEntry, setDraftDb, DraftInput, modifyDraft,
   getDraft, ModifyDraftInput} from './draft';
 import {getClient, getDb, setupDb} from './setup';
@@ -28,7 +29,7 @@ describe('Testing draft related db functionalities', () => {
     const db = getDb();
     const draftInput : DraftInput = {
       title: 'Test title',
-      userId: new ObjectId(),
+      userId: new ObjectId().toString(),
       contentUrl: 'https://www.google.com',
       description: 'Test description',
       sendDate: new Date('2025-01-01'),
@@ -49,7 +50,7 @@ describe('Testing draft related db functionalities', () => {
   test('Testing getDraft', async () => {
     const draftInput : DraftInput = {
       title: 'Test title',
-      userId: new ObjectId(),
+      userId: new ObjectId().toString(),
       contentUrl: 'https://www.google.com',
       description: 'Test description',
       sendDate: new Date('2025-01-01'),
@@ -57,7 +58,7 @@ describe('Testing draft related db functionalities', () => {
     };
     const res = await addDraft(draftInput);
     expect(res.success).toBe(true);
-    const draftResult = await getDraft(new ObjectId(res.draft?._id));
+    const draftResult = await getDraft(res.draft?._id as string);
     expect(draftResult.draft).toBeTruthy();
     expect(res.draft).toStrictEqual(draftResult.draft);
   });
@@ -65,18 +66,19 @@ describe('Testing draft related db functionalities', () => {
   test('Testing modifyDraft', async () => {
     const draftInput : DraftInput = {
       title: 'Test title',
-      userId: new ObjectId(),
+      userId: new ObjectId().toString(),
       contentUrl: 'https://www.google.com',
       description: 'Test description',
       sendDate: new Date('2025-01-01'),
       type: 'letter',
     };
     const res = await addDraft(draftInput);
+    logger.warn(res);
     expect(res.success).toBe(true);
     const updateDraftInput : ModifyDraftInput = {
       title: 'Test title updated',
     };
-    const _id = res.draft?._id as ObjectId;
+    const _id = res.draft?._id as string;
 
     const updateRes = await modifyDraft(_id, updateDraftInput);
     expect(updateRes.success).toBe(true);
@@ -88,7 +90,7 @@ describe('Testing draft related db functionalities', () => {
     const updateDraftInput : ModifyDraftInput = {
       title: 'Test title updated',
     };
-    const _id = new ObjectId();
+    const _id = new ObjectId().toString();
 
     const updateRes = await modifyDraft(_id, updateDraftInput);
     expect(updateRes.success).toBe(false);

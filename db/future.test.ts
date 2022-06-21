@@ -28,7 +28,7 @@ describe('Testing future-related db queries', () => {
     const db = getDb();
     const future : FutureInput = {
       title: 'Test title',
-      userId: new ObjectId(),
+      userId: new ObjectId().toString(),
       contentUrl: 'https://www.google.com',
       description: 'Test description',
       sendDate: new Date('2025-01-01'),
@@ -38,10 +38,11 @@ describe('Testing future-related db queries', () => {
     expect(res.success).toBe(true);
 
     let retrievedFuture = await db.collection('futures')
-        .findOne({_id: (res.future as FutureEntry)._id}) as FutureEntry | null;
+        .findOne({_id: new ObjectId(
+            (res.future as FutureEntry)._id)}) as FutureEntry | null;
     expect(retrievedFuture).toBeTruthy();
     retrievedFuture = retrievedFuture as FutureEntry;
-    expect(retrievedFuture.userId).toStrictEqual(future.userId);
+    expect(retrievedFuture.userId.toString()).toStrictEqual(future.userId);
     expect(retrievedFuture.contentUrl).toBe(future.contentUrl);
     expect(retrievedFuture.description).toBe(future.description);
     expect(retrievedFuture.sendDate).toStrictEqual(future.sendDate);
@@ -50,7 +51,7 @@ describe('Testing future-related db queries', () => {
   test('Testing getFuture', async () => {
     const future : FutureInput = {
       title: 'Test title',
-      userId: new ObjectId(),
+      userId: new ObjectId().toString(),
       contentUrl: 'https://www.google.com',
       description: 'Test description',
       sendDate: new Date('2025-01-01'),
