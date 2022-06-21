@@ -1,10 +1,10 @@
 // eslint-disable-next-line max-len
-import {getUser, getUserByEmail, registerUser, setUserDb, UserInput} from './auth';
+import {getUser, getUserByEmail, registerUser, setUserDb} from './auth';
 import {getClient, getDb, setupDb} from './setup';
 import {config} from 'dotenv';
 import md5 from 'md5';
 import {ObjectId} from 'mongodb';
-import {UserSchema} from '../utils/schemas/user';
+import {RegisterUserInput, UserSchema} from '../utils/schemas/user';
 
 config();
 
@@ -29,7 +29,7 @@ describe('Testing auth-related db queries', () => {
   test('Testing registerUser', async () => {
     const db = getDb();
 
-    const userInput : UserInput = {
+    const userInput : RegisterUserInput = {
       firstname: 'John',
       lastname: 'Doe',
       email: 'johndoe@gmail.com',
@@ -46,11 +46,11 @@ describe('Testing auth-related db queries', () => {
     expect(user.email).toBe(userInput.email);
     expect(user.firstname).toBe(userInput.firstname);
     expect(user.lastname).toBe(userInput.lastname);
-    expect(user.password).toBe(md5(userInput.password));
+    expect(user.passwordHash).toBe(md5(userInput.password));
   });
 
   test('adding a duplicate user should be stopped', async () => {
-    const userInput : UserInput = {
+    const userInput : RegisterUserInput = {
       firstname: 'John',
       lastname: 'Doe',
       email: 'johndoe@gmail.com',
@@ -65,7 +65,7 @@ describe('Testing auth-related db queries', () => {
   });
 
   test('Testing getUser', async () => {
-    const userInput : UserInput = {
+    const userInput : RegisterUserInput = {
       firstname: 'John',
       lastname: 'Doe',
       email: 'johndoe@gmail.com',
@@ -78,7 +78,7 @@ describe('Testing auth-related db queries', () => {
   });
 
   test('Testing getUserByEmail', async () => {
-    const userInput : UserInput = {
+    const userInput : RegisterUserInput = {
       firstname: 'John',
       lastname: 'Doe',
       email: 'johndoe@gmail.com',

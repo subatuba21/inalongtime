@@ -1,7 +1,8 @@
 import {Db, Collection, ObjectId} from 'mongodb';
 import md5 from 'md5';
 import {DbResponse} from './setup';
-import {UserSchema} from '../utils/schemas/user';
+import {RegisterUserInput, UserSchema} from '../utils/schemas/user';
+import logger from '../logger';
 
 let userCol : Collection;
 export const setUserDb = async (db: Db) => {
@@ -15,24 +16,24 @@ export interface UserDbResponse extends DbResponse {
 export type UserInput = Omit<UserSchema, '_id'>
 
 // eslint-disable-next-line max-len
-export const registerUser = async (userInput: UserInput) : Promise<UserDbResponse> => {
+export const registerUser = async (userInput: RegisterUserInput) : Promise<UserDbResponse> => {
   const hashedPass = md5(userInput.password);
   try {
-    // eslint-disable-next-line max-len
+    logger.info(`registering user: ${userInput}`);
     const user = await userCol.findOne({email: userInput.email});
     if (user) {
       return {success: false, error: 'User already exists', user: null};
     }
 
     const res = await userCol.insertOne(
-        {...userInput, password: hashedPass});
+        {...userInput, passwordHash: hashedPass});
     if (res.acknowledged) {
       return {
         success: true,
         user: {
           _id: res.insertedId.toString(),
           ...userInput,
-          password: hashedPass,
+          passwordHash: hashedPass,
         },
       };
     } else throw new Error('MongoDB error: write not allowed.');
@@ -47,7 +48,7 @@ export const registerUser = async (userInput: UserInput) : Promise<UserDbRespons
 
 export const getUser = async (_id: string) : Promise<UserDbResponse> => {
   try {
-    // eslint-disable-next-line max-len
+    logger.info(`finding user with _id: ${_id}`);
     const res = await userCol.findOne({_id: new ObjectId(_id)});
     if (res) {
       return {
@@ -67,7 +68,7 @@ export const getUser = async (_id: string) : Promise<UserDbResponse> => {
 // eslint-disable-next-line max-len
 export const getUserByEmail = async (email: string) : Promise<UserDbResponse> => {
   try {
-    // eslint-disable-next-line max-len
+    logger.info(`finding user with email: ${email}`);
     const res = await userCol.findOne({email});
     if (res) {
       return {
