@@ -35,7 +35,7 @@ export const addDraft =
           return {
             success: true,
             draft: {
-              ...draft as DraftSchema,
+              ...draft,
               _id: res.insertedId.toString(),
             },
           };

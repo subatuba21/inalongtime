@@ -51,7 +51,7 @@ export const getFuture = async (_id: string) : Promise<FutureDbResponse> => {
       return {
         success: true,
         future: {...res, _id,
-          userId: ((res as any).userId.toString()),
+          userId: (res as any).userId.toString(),
         } as FutureSchema,
       };
     } else {

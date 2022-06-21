@@ -52,7 +52,7 @@ export const getUser = async (_id: string) : Promise<UserDbResponse> => {
     if (res) {
       return {
         success: true,
-        user: {...(res as unknown as UserSchema), _id: res._id.toString()},
+        user: {...res, _id: res._id.toString()} as UserSchema,
       };
     } else throw new Error('User not found.');
   } catch (err: any) {
@@ -72,7 +72,7 @@ export const getUserByEmail = async (email: string) : Promise<UserDbResponse> =>
     if (res) {
       return {
         success: true,
-        user: {...(res as unknown as UserSchema), _id: res._id.toString()},
+        user: {...res, _id: res._id.toString()} as UserSchema,
       };
     } else throw new Error('User not found.');
   } catch (err: any) {
