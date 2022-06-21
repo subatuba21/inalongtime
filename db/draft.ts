@@ -1,7 +1,7 @@
 import {Db, Collection, ObjectId} from 'mongodb';
 import logger from '../logger';
-import {DraftSchema} from './schemas/draft';
-import {FutureType} from './schemas/future';
+import {DraftSchema} from '../utils/schemas/draft';
+import {FutureType} from '../utils/schemas/future';
 import {DbResponse} from './setup';
 
 let draftCol : Collection;

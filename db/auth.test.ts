@@ -4,7 +4,7 @@ import {getClient, getDb, setupDb} from './setup';
 import {config} from 'dotenv';
 import md5 from 'md5';
 import {ObjectId} from 'mongodb';
-import {UserSchema} from './schemas/user';
+import {UserSchema} from '../utils/schemas/user';
 
 config();
 

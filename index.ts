@@ -5,10 +5,12 @@ import {getDb, setupDb} from './db/setup';
 import logger from './logger';
 import {config} from 'dotenv';
 import {setUserDb} from './db/auth';
+import {authenticate} from 'passport';
 
 const app = express();
 config();
 
+app.use(authenticate('session'));
 
 app.use('/api/future', futureRouter);
 app.use('/api/auth', authRouter);

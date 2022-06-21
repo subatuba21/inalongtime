@@ -2,7 +2,7 @@ import {config} from 'dotenv';
 import {ObjectId} from 'mongodb';
 import {addFuture,
   setFutureDb, getFuture, FutureInput} from './future';
-import {FutureSchema} from './schemas/future';
+import {FutureSchema} from '../utils/schemas/future';
 import {getClient, getDb, setupDb} from './setup';
 
 config();

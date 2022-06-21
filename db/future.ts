@@ -1,6 +1,6 @@
 import {Collection, Db, ObjectId} from 'mongodb';
 import logger from '../logger';
-import {FutureSchema} from './schemas/future';
+import {FutureSchema} from '../utils/schemas/future';
 import {DbResponse} from './setup';
 
 let futureCol : Collection;
