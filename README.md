@@ -37,7 +37,7 @@ WHY: (why did you change it):
 
 ...
 
-One message for each file at the minimum
+One message for each file (unless changes are super arbitrary)
 
 ## TODO
 

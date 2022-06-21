@@ -1,7 +1,8 @@
 import {config} from 'dotenv';
 import {ObjectId} from 'mongodb';
-import {addFuture, FutureEntry,
+import {addFuture,
   setFutureDb, getFuture, FutureInput} from './future';
+import {FutureSchema} from './schemas/future';
 import {getClient, getDb, setupDb} from './setup';
 
 config();
@@ -39,9 +40,9 @@ describe('Testing future-related db queries', () => {
 
     let retrievedFuture = await db.collection('futures')
         .findOne({_id: new ObjectId(
-            (res.future as FutureEntry)._id)}) as FutureEntry | null;
+            (res.future as FutureSchema)._id)}) as FutureSchema | null;
     expect(retrievedFuture).toBeTruthy();
-    retrievedFuture = retrievedFuture as FutureEntry;
+    retrievedFuture = retrievedFuture as FutureSchema;
     expect(retrievedFuture.userId.toString()).toStrictEqual(future.userId);
     expect(retrievedFuture.contentUrl).toBe(future.contentUrl);
     expect(retrievedFuture.description).toBe(future.description);
@@ -61,7 +62,7 @@ describe('Testing future-related db queries', () => {
     expect(res.success).toBe(true);
     expect(res.future).toBeTruthy();
     const futureResponse = await getFuture(
-        (res.future as FutureEntry)._id.toString());
+        (res.future as FutureSchema)._id.toString());
     expect(futureResponse.success).toBe(true);
     expect(futureResponse.future).toStrictEqual(res.future);
   });

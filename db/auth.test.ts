@@ -1,9 +1,10 @@
 // eslint-disable-next-line max-len
-import {getUser, getUserByEmail, registerUser, setUserDb, UserEntry, UserInput} from './auth';
+import {getUser, getUserByEmail, registerUser, setUserDb, UserInput} from './auth';
 import {getClient, getDb, setupDb} from './setup';
 import {config} from 'dotenv';
 import md5 from 'md5';
 import {ObjectId} from 'mongodb';
+import {UserSchema} from './schemas/auth';
 
 config();
 
@@ -39,9 +40,9 @@ describe('Testing auth-related db queries', () => {
     expect(res.user).toBeTruthy();
 
     let user = await db.collection('users').findOne(
-        {_id: new ObjectId((res.user as UserEntry)._id)}) as UserEntry | null;
+        {_id: new ObjectId((res.user as UserSchema)._id)}) as UserSchema | null;
     expect(user).toBeTruthy();
-    user = user as UserEntry;
+    user = user as UserSchema;
     expect(user.email).toBe(userInput.email);
     expect(user.firstname).toBe(userInput.firstname);
     expect(user.lastname).toBe(userInput.lastname);
@@ -72,8 +73,8 @@ describe('Testing auth-related db queries', () => {
     };
 
     const res = await registerUser(userInput);
-    const user = await getUser((res.user as UserEntry)._id.toString());
-    expect(user.user).toStrictEqual(res.user as UserEntry);
+    const user = await getUser((res.user as UserSchema)._id.toString());
+    expect(user.user).toStrictEqual(res.user as UserSchema);
   });
 
   test('Testing getUserByEmail', async () => {
@@ -85,8 +86,8 @@ describe('Testing auth-related db queries', () => {
     };
 
     const res = await registerUser(userInput);
-    const user = await getUserByEmail((res.user as UserEntry).email);
-    expect(user.user).toStrictEqual(res.user as UserEntry);
+    const user = await getUserByEmail((res.user as UserSchema).email);
+    expect(user.user).toStrictEqual(res.user as UserSchema);
   });
 });
 

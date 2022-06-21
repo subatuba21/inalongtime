@@ -1,6 +1,7 @@
 import {Db, Collection, ObjectId} from 'mongodb';
 import logger from '../logger';
-import {FutureType} from './future';
+import {DraftSchema} from './schemas/draft';
+import {FutureType} from './schemas/future';
 import {DbResponse} from './setup';
 
 let draftCol : Collection;
@@ -18,17 +19,10 @@ export interface DraftEntry {
     description?: string;
 };
 
-export interface DraftDbResponse extends DbResponse {
-    draft: DraftEntry | null;
-}
+export type DraftInput = Omit<DraftSchema, '_id'>
 
-export interface DraftInput {
-    userId: string;
-    sendDate?: Date;
-    contentUrl: string;
-    type: FutureType;
-    title: string;
-    description?: string;
+export interface DraftDbResponse extends DbResponse {
+    draft: DraftSchema | null;
 }
 
 export const addDraft =
@@ -41,7 +35,7 @@ export const addDraft =
           return {
             success: true,
             draft: {
-              ...draft as DraftEntry,
+              ...draft as DraftSchema,
               _id: res.insertedId.toString(),
             },
           };
@@ -64,7 +58,7 @@ export const getDraft = async (_id: string) : Promise<DraftDbResponse> => {
       return {
         success: true,
         draft: {...res, _id, userId:
-          (res as any).userId.toString()} as DraftEntry,
+          (res as any).userId.toString()} as DraftSchema,
       };
     } else {
       throw new Error('Draft not found.');
@@ -100,7 +94,7 @@ export const modifyDraft =
           return {
             success: true,
             draft: {...res.value, _id,
-              userId: res.value.userId.toString()} as DraftEntry,
+              userId: res.value.userId.toString()} as DraftSchema,
           };
         } else {
           throw new Error('MongoDB error: write not allowed.');

@@ -1,8 +1,8 @@
 import {config} from 'dotenv';
 import {ObjectId} from 'mongodb';
 import logger from '../logger';
-import {addDraft, DraftEntry, setDraftDb, DraftInput, modifyDraft,
-  getDraft, ModifyDraftInput} from './draft';
+import {addDraft, DraftEntry, setDraftDb, modifyDraft,
+  getDraft, ModifyDraftInput, DraftInput} from './draft';
 import {getClient, getDb, setupDb} from './setup';
 
 config();

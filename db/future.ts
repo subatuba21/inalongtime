@@ -1,5 +1,6 @@
 import {Collection, Db, ObjectId} from 'mongodb';
 import logger from '../logger';
+import {FutureSchema} from './schemas/future';
 import {DbResponse} from './setup';
 
 let futureCol : Collection;
@@ -7,30 +8,10 @@ export const setFutureDb = async (db: Db) => {
   futureCol = db.collection('futures');
 };
 
-export type FutureType = 'memory' | 'reminder' | 'letter' | 'journal' | 'goals';
-
-export interface FutureEntry {
-    _id: string;
-    userId: string;
-    sendDate: Date;
-    currentDate: Date;
-    contentUrl: string;
-    type: FutureType;
-    title: string;
-    description: string;
-}
-
-export interface FutureInput {
-  userId: string;
-  sendDate: Date;
-  contentUrl: string;
-  type: FutureType;
-  title: string;
-  description: string;
-}
+export type FutureInput = Omit<Omit<FutureSchema, '_id'>, 'currentDate'>;
 
 export interface FutureDbResponse extends DbResponse {
-    future: FutureEntry | null;
+    future: FutureSchema | null;
 }
 
 export const addFuture =
@@ -71,7 +52,7 @@ export const getFuture = async (_id: string) : Promise<FutureDbResponse> => {
         success: true,
         future: {...res, _id,
           userId: ((res as any).userId.toString()),
-        } as FutureEntry,
+        } as FutureSchema,
       };
     } else {
       throw new Error('Future not found.');

@@ -1,31 +1,18 @@
 import {Db, Collection, ObjectId} from 'mongodb';
 import md5 from 'md5';
 import {DbResponse} from './setup';
+import {UserSchema} from './schemas/auth';
 
 let userCol : Collection;
 export const setUserDb = async (db: Db) => {
   userCol = db.collection('users');
 };
 
-export interface UserEntry {
-    _id: string;
-    email: string;
-    firstname: string;
-    lastname: string;
-    password: string;
-}
-
-export interface UserInput {
-  email: string;
-  firstname: string;
-  lastname: string;
-  password: string;
-}
-
-// eslint-disable-next-line max-len
 export interface UserDbResponse extends DbResponse {
-    user: UserEntry | null;
+    user: UserSchema | null;
 }
+
+export type UserInput = Omit<UserSchema, '_id'>
 
 // eslint-disable-next-line max-len
 export const registerUser = async (userInput: UserInput) : Promise<UserDbResponse> => {
@@ -65,7 +52,7 @@ export const getUser = async (_id: string) : Promise<UserDbResponse> => {
     if (res) {
       return {
         success: true,
-        user: {...(res as unknown as UserEntry), _id: res._id.toString()},
+        user: {...(res as unknown as UserSchema), _id: res._id.toString()},
       };
     } else throw new Error('User not found.');
   } catch (err: any) {
@@ -85,7 +72,7 @@ export const getUserByEmail = async (email: string) : Promise<UserDbResponse> =>
     if (res) {
       return {
         success: true,
-        user: {...(res as unknown as UserEntry), _id: res._id.toString()},
+        user: {...(res as unknown as UserSchema), _id: res._id.toString()},
       };
     } else throw new Error('User not found.');
   } catch (err: any) {
