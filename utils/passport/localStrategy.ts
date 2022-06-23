@@ -8,7 +8,7 @@ export const localStrategy = new Strategy({
   passwordField: 'password',
 }, async (email: string, password: string,
     done) => {
-  logger.info(`Localstrategy working for email ${email}`);
+  logger.verbose(`Localstrategy working for email ${email}`);
   const userResponse = await getUserByEmail(email);
   if (!userResponse.success) {
     if (userResponse.error) {

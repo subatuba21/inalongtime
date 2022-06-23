@@ -73,7 +73,7 @@ describe('Testing draft related db functionalities', () => {
       type: 'letter',
     };
     const res = await addDraft(draftInput);
-    logger.warn(res);
+    logger.verbose(res);
     expect(res.success).toBe(true);
     const updateDraftInput : ModifyDraftInput = {
       title: 'Test title updated',

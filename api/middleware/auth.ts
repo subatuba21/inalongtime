@@ -12,7 +12,7 @@ export const extractLoginInput =
         req.user = user;
         next();
       } catch (err) {
-        logger.warn(
+        logger.verbose(
             `Zod error for login attempt. Error ${err}. Input: ${req.body}`);
         const response : APIResponse = {
           data: null,
@@ -39,7 +39,7 @@ export const passportAuthenticateLocal =
         res.status(response.error?.code as number)
             .end(JSON.stringify(response));
       } else if (!req.user) {
-        logger.info(
+        logger.verbose(
             `Incorrect login. Input: ${JSON.stringify(req.user)}}`);
         const response: APIResponse = {
           data: null,
@@ -50,7 +50,7 @@ export const passportAuthenticateLocal =
       } else {
         req.user = req.user as UserSchema;
         req.login(req.user, (err) => {
-          logger.info(
+          logger.verbose(
               `Successful login. User: ${JSON.stringify(req.user)}}`);
           const clientUserData : ClientUserData = {
             ...req.user as UserSchema,

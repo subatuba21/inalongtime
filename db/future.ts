@@ -23,7 +23,7 @@ export const addFuture =
             {...future, currentDate,
               userId: new ObjectId(future.userId.toString())});
         if (res.acknowledged) {
-          logger.info(`Added future with id ${res.insertedId}`);
+          logger.verbose(`Added future with id ${res.insertedId}`);
           return {
             success: true,
             future: {
@@ -34,7 +34,7 @@ export const addFuture =
           };
         } else throw new Error('MongoDB error: write not allowed.');
       } catch (err: any) {
-        logger.warning(`Unable to add future: err.message`);
+        logger.verbose(`Unable to add future: err.message`);
         return {
           success: false,
           error: err.message,
@@ -47,7 +47,7 @@ export const getFuture = async (_id: string) : Promise<FutureDbResponse> => {
   try {
     const res = await futureCol.findOne({_id: new ObjectId(_id)});
     if (res) {
-      logger.info(`Found future with id ${_id}`);
+      logger.verbose(`Found future with id ${_id}`);
       return {
         success: true,
         future: {...res, _id,
@@ -58,7 +58,7 @@ export const getFuture = async (_id: string) : Promise<FutureDbResponse> => {
       throw new Error('Future not found.');
     }
   } catch (err: any) {
-    logger.warning(`Unable to find future with id ${_id}: ${err.message}`);
+    logger.verbose(`Unable to find future with id ${_id}: ${err.message}`);
     return {
       success: false,
       error: err.message,

@@ -31,7 +31,7 @@ export const addDraft =
         const res = await draftCol.insertOne(
             {...draft, userId: new ObjectId(draft.userId)});
         if (res.acknowledged) {
-          logger.info(`Added draft with id ${res.insertedId}`);
+          logger.verbose(`Added draft with id ${res.insertedId}`);
           return {
             success: true,
             draft: {
@@ -41,7 +41,7 @@ export const addDraft =
           };
         } else throw new Error('MongoDB error: write not allowed.');
       } catch (err: any) {
-        logger.warning(`Unable to add draft: err.message`);
+        logger.verbose(`Unable to add draft: err.message`);
         return {
           success: false,
           error: err.message,
@@ -54,7 +54,7 @@ export const getDraft = async (_id: string) : Promise<DraftDbResponse> => {
   try {
     const res = await draftCol.findOne({_id: new ObjectId(_id)});
     if (res) {
-      logger.info(`Found draft with id ${_id}`);
+      logger.verbose(`Found draft with id ${_id}`);
       return {
         success: true,
         draft: {...res, _id, userId:
@@ -90,7 +90,7 @@ export const modifyDraft =
               returnDocument: 'after',
             });
         if (res.value) {
-          logger.info(`Modified draft with id ${_id}`);
+          logger.verbose(`Modified draft with id ${_id}`);
           return {
             success: true,
             draft: {...res.value, _id,
@@ -100,7 +100,7 @@ export const modifyDraft =
           throw new Error('MongoDB error: write not allowed.');
         }
       } catch (err: any) {
-        logger.warn(`Unable to modify draft: ${err.message}`);
+        logger.verbose(`Unable to modify draft: ${err.message}`);
         return {
           success: false,
           error: err.message,

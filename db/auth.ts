@@ -20,7 +20,7 @@ export type UserInput = Omit<UserSchema, '_id'>
 export const registerUser = async (userInput: RegisterUserInput) : Promise<UserDbResponse> => {
   const hashedPass = md5(userInput.password);
   try {
-    logger.info(`registering user: ${userInput}`);
+    logger.verbose(`registering user: ${userInput}`);
     const user = await userCol.findOne({email: userInput.email});
     if (user) {
       return {success: false,
@@ -50,7 +50,7 @@ export const registerUser = async (userInput: RegisterUserInput) : Promise<UserD
 
 export const getUser = async (_id: string) : Promise<UserDbResponse> => {
   try {
-    logger.info(`finding user with _id: ${_id}`);
+    logger.verbose(`finding user with _id: ${_id}`);
     const res = await userCol.findOne({_id: new ObjectId(_id)});
     if (res) {
       return {
@@ -70,7 +70,7 @@ export const getUser = async (_id: string) : Promise<UserDbResponse> => {
 // eslint-disable-next-line max-len
 export const getUserByEmail = async (email: string) : Promise<UserDbResponse> => {
   try {
-    logger.info(`finding user with email: ${email}`);
+    logger.verbose(`finding user with email: ${email}`);
     const res = await userCol.findOne({email});
     if (res) {
       return {
