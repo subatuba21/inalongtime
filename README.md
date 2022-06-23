@@ -12,6 +12,7 @@ node, express, mongo, react, GCP
 - Types and interfaces capitalized
 - Capitalize first letter for types and interfaces
 - Only arrow functions except for components
+- MongoDB objectIDs are stored as strings throughout the app and are converted to ObjectIDs in the db layer
 
 ## Procedures
 

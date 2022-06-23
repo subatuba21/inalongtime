@@ -20,8 +20,10 @@ export const registerUserInputSchema = userSchema.omit({
 export const loginUserInputSchema = userSchema.pick({
   email: true,
 }).extend({
-  password: z.string().min(8),
+  password: z.string(),
 });
 
 export type RegisterUserInput = z.infer<typeof registerUserInputSchema>;
 export type UserSchema = z.infer<typeof userSchema>;
+export type LoginInput = z.infer<typeof loginUserInputSchema>;
+export type ClientUserData = Omit<UserSchema, 'passwordHash'>;

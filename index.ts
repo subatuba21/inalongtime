@@ -5,12 +5,27 @@ import {getDb, setupDb} from './db/setup';
 import logger from './logger';
 import {config} from 'dotenv';
 import {setUserDb} from './db/auth';
-import {authenticate} from 'passport';
+import passport from 'passport';
+import './utils/passport/setup';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
 
 const app = express();
 config();
 
-app.use(authenticate('session'));
+app.use(session({
+  secret: process.env.SESSION_SECRET as string,
+  resave: false,
+  saveUninitialized: true,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URL,
+    dbName: process.env.MONGO_SESSION_DB_NAME,
+  }),
+}));
+
+app.use(express.json());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/api/future', futureRouter);
 app.use('/api/auth', authRouter);

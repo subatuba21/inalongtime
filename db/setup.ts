@@ -1,5 +1,6 @@
 import {Db, MongoClient} from 'mongodb';
 import logger from '../logger';
+import {DBError} from './errors';
 
 
 let db : Db;
@@ -27,7 +28,7 @@ export const getClient = () => {
 
 export interface DbResponse {
     success: boolean;
-    error?: string;
+    error?: DBError;
 }
 
 

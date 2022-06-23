@@ -3,6 +3,7 @@ import md5 from 'md5';
 import {DbResponse} from './setup';
 import {RegisterUserInput, UserSchema} from '../utils/schemas/user';
 import logger from '../logger';
+import {DBError} from './errors';
 
 let userCol : Collection;
 export const setUserDb = async (db: Db) => {
@@ -22,7 +23,8 @@ export const registerUser = async (userInput: RegisterUserInput) : Promise<UserD
     logger.info(`registering user: ${userInput}`);
     const user = await userCol.findOne({email: userInput.email});
     if (user) {
-      return {success: false, error: 'User already exists', user: null};
+      return {success: false,
+        error: DBError.UNIQUE_ENTITY_ALREADY_EXISTS, user: null};
     }
 
     const res = await userCol.insertOne(
@@ -55,7 +57,7 @@ export const getUser = async (_id: string) : Promise<UserDbResponse> => {
         success: true,
         user: {...res, _id: res._id.toString()} as UserSchema,
       };
-    } else throw new Error('User not found.');
+    } else throw new Error(DBError.ENTITY_NOT_FOUND);
   } catch (err: any) {
     return {
       success: false,
@@ -75,7 +77,7 @@ export const getUserByEmail = async (email: string) : Promise<UserDbResponse> =>
         success: true,
         user: {...res, _id: res._id.toString()} as UserSchema,
       };
-    } else throw new Error('User not found.');
+    } else throw new Error(DBError.ENTITY_NOT_FOUND);
   } catch (err: any) {
     return {
       success: false,
