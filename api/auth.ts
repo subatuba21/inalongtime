@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {extractLoginInput,
+  handleDeserializeError,
   passportAuthenticateLocal} from './middleware/auth';
 
 
@@ -7,7 +8,9 @@ import {extractLoginInput,
 export const authRouter = Router();
 
 authRouter.post('/login', extractLoginInput,
-    passportAuthenticateLocal);
+    passportAuthenticateLocal, handleDeserializeError);
+
+authRouter.use('/login', handleDeserializeError);
 
 authRouter.get('/test', (req, res) => {
   res.end(JSON.stringify(req.user));

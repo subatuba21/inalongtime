@@ -50,6 +50,15 @@ export const passportAuthenticateLocal =
       } else {
         req.user = req.user as UserSchema;
         req.login(req.user, (err) => {
+          if (err) {
+            logger.warn(`Error logging in: ${err}`);
+            const response: APIResponse = {
+              data: null,
+              error: credentialsInvalid,
+            };
+            res.status(response.error?.code as number)
+                .end(JSON.stringify(response));
+          }
           logger.verbose(
               `Successful login. User: ${JSON.stringify(req.user)}}`);
           const clientUserData : ClientUserData = {
@@ -64,4 +73,20 @@ export const passportAuthenticateLocal =
         });
       }
     })(req, res, next);
+  };
+
+export const handleDeserializeError =
+  (err: Error, req: express.Request, res: express.Response, next: Function) => {
+    if (err) {
+      logger.warn(`Deserialize error: ${err}`);
+      logger.warn(`Error logging in: ${err}`);
+      const response: APIResponse = {
+        data: null,
+        error: credentialsInvalid,
+      };
+      res.status(response.error?.code as number)
+          .end(JSON.stringify(response));
+
+      req.logout(() => {});
+    }
   };
