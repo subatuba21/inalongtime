@@ -1,5 +1,6 @@
 import styles from './indexNavbar.module.css';
 import Button from 'react-bootstrap/Button';
+import {Link} from 'react-router-dom';
 
 export const IndexNavbar = () => {
   return <div style={styles}>
@@ -9,11 +10,14 @@ export const IndexNavbar = () => {
       </div>
       <div id={styles.navbarRight}>
         <Button variant='secondary'
-          className={`superRounded ${styles.navButton}`}>Log In</Button>
+          className={`superRounded ${styles.navButton}`}>
+          <Link to='/login'>Log In</Link>
+        </Button>
         <Button variant='primary'
-          className={`superRounded ${styles.navButton}`}>Sign Up</Button>
+          className={`superRounded ${styles.navButton}`}>
+          <Link to='/register'>Sign Up</Link>
+        </Button>
       </div>
-
     </div>
   </div>;
 };

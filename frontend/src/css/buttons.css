@@ -14,6 +14,10 @@
   border-color: white;
 }
 
+.btn-primary a, .btn-primary a:hover, .btn-primary a:visited {
+  color: black;
+}
+
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active,
@@ -31,6 +35,10 @@
   color: white;
   font-weight: 500;
   border-color: white;
+}
+
+.btn-secondary a, .btn-secondary a:hover, .btn-secondary a:visited {
+  color: white;
 }
 
 .btn-secondary:hover,

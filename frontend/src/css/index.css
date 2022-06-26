@@ -53,6 +53,10 @@ code {
   color: var(--pink);
 }
 
+a, a:hover, a:visited {
+  text-decoration: none;
+}
+
 a.pinkText, a.pinkText:hover, a.pinkText:visited {
   text-decoration: none;
   color: var(--pink);
