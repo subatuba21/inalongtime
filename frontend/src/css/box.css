@@ -1,0 +1,29 @@
+.box {
+    color: black;
+    background-color: white;
+    box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    display: inline-block;
+    padding: 1.2em;
+    font-size: 15pt;
+}
+
+.box > h2 {
+    font-size: 20pt;
+}
+
+.inputBox {
+    color: black;
+    border-width: 0px;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+.inputBox::placeholder {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.inputBox:focus {
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+

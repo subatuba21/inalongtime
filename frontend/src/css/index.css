@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Inline&family=DM+Sans:wght@400;500;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(116.82deg, #5F00FA 0%, #C808D9 100%);
+}
+
+:root {
+  --faded-black: rgba(0, 0, 0, 0.6);
+  --pink: #F8ACFF
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.fillPage {
+  width: 100%;
+  margin: 0;
+  position: relative;
+  height: 100%;
+  min-height: 100vh;
+}
+
+.fillContainer {
+  width: 100%;
+  margin: 0;
+  position: relative;
+  height: 100%;
+}
+
+.block-centered {
+  margin: 0 auto;
+  display: block;
+}
+
+.logo {
+  font-family: 'Bungee Inline', cursive;
+  font-size: 22pt;
+  color: white;
+}
+
+.superRounded {
+  border-radius: 100000px !important;
+}
+
+.pinkText {
+  color: var(--pink);
+}
+
+a.pinkText, a.pinkText:hover, a.pinkText:visited {
+  text-decoration: none;
+  color: var(--pink);
+}
+
+input:focus, textarea { outline: none ! important; }
+
+
+
+

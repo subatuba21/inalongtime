@@ -1,0 +1,44 @@
+#footer {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 1em;
+    font-size: 15pt;
+}
+
+.column {
+    margin: 10px;
+    margin-right: 50px;
+    color: var(--pink);
+    display: inline-flex;
+    flex-direction: column;
+
+}
+
+.column h3 {
+    font-weight: 700;
+    color: white;
+}
+
+#columnContainer {
+    padding: 40px;
+    padding-top: 30px;
+}
+
+#firstRow > span.link {
+    margin-left: 10px;
+    margin-right: 10px;
+    color: var(--pink);
+}
+
+#logo {
+    margin-right: 20px;
+}
+
+#legalDiv {
+    font-size: 11pt; 
+    color: white; 
+}
+
+#legalDiv > span {
+    margin-left: 2em;
+    margin-right: 2em;
+}

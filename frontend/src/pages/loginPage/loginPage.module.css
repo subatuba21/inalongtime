@@ -1,0 +1,11 @@
+.centeredDiv {
+    width: 95%;
+    max-width: 600px;
+    margin-top: 15px;
+}
+
+.centeredDiv button {
+    font-size: 14pt;
+    margin-right: 30px;
+    margin-top: 15px;
+}

@@ -1,0 +1,21 @@
+#loginBox {
+    margin: 0 auto;
+    display: block;
+    width: 600px;
+    max-width: 600px;
+    margin-top: 10vh;
+}
+
+#container {
+    margin-top: 20px;
+}
+
+#container > div {
+    margin-bottom: 13px;
+}
+
+#button {
+    margin-top: 8px;
+    font-size: 15pt;
+}
+
