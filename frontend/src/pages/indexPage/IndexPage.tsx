@@ -1,7 +1,7 @@
 import {Footer} from '../../components/footer/footer';
 import {IndexNavbar} from '../../components/indexNavbar/indexNavbar';
 
-export const HomePage = () => {
+export const IndexPage = () => {
   return <div className='fillPage'>
     <IndexNavbar></IndexNavbar>
 

@@ -8,7 +8,7 @@ import './css/box.css';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import {LoginPage} from './pages/loginPage/loginPage';
 import {RegisterPage} from './pages/registerPage/registerPage';
-import {HomePage} from './pages/homePage/HomePage';
+import {IndexPage} from './pages/indexPage/IndexPage';
 
 
 const root = ReactDOM.createRoot(
@@ -18,7 +18,7 @@ root.render(
     <React.StrictMode>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<HomePage />}/>
+          <Route path='/' element={<IndexPage />}/>
           <Route path='/login' element={<LoginPage />}/>
           <Route path='/register' element={<RegisterPage />}/>
         </Routes>

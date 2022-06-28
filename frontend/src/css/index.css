@@ -64,6 +64,7 @@ a.pinkText, a.pinkText:hover, a.pinkText:visited {
 
 input:focus, textarea { outline: none ! important; }
 
-
-
+.popover[data-popper-placement="bottom-start"] .popover-arrow {
+  transform: translate3d(30px, 0, 0) !important;
+}
 

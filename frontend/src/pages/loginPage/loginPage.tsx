@@ -1,14 +1,16 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/display-name */
 import Button from 'react-bootstrap/esm/Button';
 import {Footer} from '../../components/footer/footer';
 import {IndexNavbar} from '../../components/indexNavbar/indexNavbar';
-import {LoginBox} from './loginBox/LoginBox';
+import {LoginForm} from './loginForm/loginForm';
 import styles from './loginPage.module.css';
 
 export const LoginPage = () => {
   return <div>
     <div className=' fillPage'>
       <IndexNavbar></IndexNavbar>
-      <LoginBox></LoginBox>
+      <LoginForm></LoginForm>
       <div className={`${styles.centeredDiv} block-centered`}>
         <Button variant='primary'>Sign Up With Google</Button>
         <Button variant='primary'>Sign Up With Facebook</Button>
