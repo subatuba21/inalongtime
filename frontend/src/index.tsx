@@ -9,6 +9,8 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import {LoginPage} from './pages/loginPage/loginPage';
 import {RegisterPage} from './pages/registerPage/registerPage';
 import {IndexPage} from './pages/indexPage/IndexPage';
+import {Provider} from 'react-redux';
+import {store} from './store/store';
 
 
 const root = ReactDOM.createRoot(
@@ -16,12 +18,14 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <React.StrictMode>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<IndexPage />}/>
-          <Route path='/login' element={<LoginPage />}/>
-          <Route path='/register' element={<RegisterPage />}/>
-        </Routes>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<IndexPage />}/>
+            <Route path='/login' element={<LoginPage />}/>
+            <Route path='/register' element={<RegisterPage />}/>
+          </Routes>
+        </BrowserRouter>
+      </Provider>
     </React.StrictMode>,
 );

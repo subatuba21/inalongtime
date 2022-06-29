@@ -15,14 +15,14 @@ const initialState: UserState = {
   loggedIn: false,
 };
 
-export const login = createAsyncThunk('users/login',
+export const login = createAsyncThunk('user/login',
     async (credentials: LoginInput, thunkAPI) => {
       const result = await authAPI.login(credentials);
       return result;
     });
 
 export const userSlice = createSlice({
-  name: 'users',
+  name: 'user',
   initialState,
   reducers: {
     logout: (state: UserState) => {

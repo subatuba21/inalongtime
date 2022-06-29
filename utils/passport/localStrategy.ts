@@ -1,7 +1,7 @@
 import {Strategy} from 'passport-local';
 import {getUserByEmail} from '../../db/auth';
 import logger from '../../logger';
-import {validatePassword} from '../validatePassword';
+import {validatePassword} from '../hash';
 
 export const localStrategy = new Strategy({
   usernameField: 'email',

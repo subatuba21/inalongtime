@@ -2,6 +2,9 @@ import {FormEvent, useState} from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import {InputBox} from '../../../components/inputBox/inputBox';
 import styles from './loginForm.module.css';
+import {login as loginAction} from '../../../store/user';
+import {useAppDispatch} from '../../../store/store';
+import {useSelector} from 'react-redux';
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -11,13 +14,25 @@ export const LoginForm = () => {
   React.Dispatch<React.SetStateAction<Record<string, string[]>>>] =
   useState({});
   const [processingLogin, setProcessingLogin] = useState(false);
+  const dispatch = useAppDispatch();
+  const userState = useSelector((state) => (state as any).user);
 
 
   const login = (event: FormEvent)=> {
     setProcessingLogin(true);
-    console.log(errors);
     event.preventDefault();
-    setProcessingLogin(false);
+    for (const item of Object.keys(errors)) {
+      if (errors[item].length!=0) {
+        setProcessingLogin(false);
+        return;
+      }
+    }
+
+    dispatch(loginAction({
+      email,
+      password,
+    }));
+    console.log(userState);
   };
 
   return <div className="box" id={styles.loginForm}>
