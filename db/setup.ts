@@ -6,7 +6,6 @@ import {DBError} from './errors';
 let db : Db;
 let client : MongoClient;
 export const setupDb = async (mongourl: string) => {
-  // eslint-disable-next-line max-len
   client = new MongoClient(mongourl);
   await client.connect().then(() => {
     logger.info('Connected to MongoDB');

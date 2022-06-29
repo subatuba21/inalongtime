@@ -1,5 +1,5 @@
 import {Db, Collection, ObjectId} from 'mongodb';
-import md5 from 'md5';
+import {hashPassword} from '../utils/hash';
 import {DbResponse} from './setup';
 import {RegisterUserInput, UserSchema} from '../utils/schemas/user';
 import logger from '../logger';
@@ -18,7 +18,7 @@ export type UserInput = Omit<UserSchema, '_id'>
 
 // eslint-disable-next-line max-len
 export const registerUser = async (userInput: RegisterUserInput) : Promise<UserDbResponse> => {
-  const hashedPass = md5(userInput.password);
+  const hashedPass = await hashPassword(userInput.password);
   try {
     logger.verbose(`registering user: ${userInput}`);
     const user = await userCol.findOne({email: userInput.email});
