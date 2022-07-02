@@ -1,10 +1,11 @@
-import {configureStore} from '@reduxjs/toolkit';
+import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {useDispatch} from 'react-redux';
+import {userSlice} from './user';
 
 export const store = configureStore({
-  reducer: {
-
-  },
+  reducer: combineReducers({
+    user: userSlice.reducer,
+  }),
 });
 
 export type RootState = ReturnType<typeof store.getState>

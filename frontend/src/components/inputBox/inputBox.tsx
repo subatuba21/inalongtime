@@ -40,7 +40,6 @@ export const InputBox = (props:
   const onChange : React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const value = event.target.value;
     props.valueState.set(value);
-
     errorCheck(value);
   };
 
@@ -60,7 +59,7 @@ export const InputBox = (props:
         }}>
           <Popover.Body>
             {errors.map((error: string, index) => {
-              return <p key={index} className={styles.errorEntry}>
+              return <div key={index} className={styles.errorEntry}>
                 <p style={{
                   margin: '0',
                   padding: '0',
@@ -68,7 +67,7 @@ export const InputBox = (props:
                   <XLg className={styles.XIcon} width='1em' height='1em'></XLg>
                 </p>
                 <span>{error}</span>
-              </p>;
+              </div>;
             })}
           </Popover.Body>
         </Popover>
@@ -78,7 +77,7 @@ export const InputBox = (props:
   } else {
     return <div style={styles}>
       <input className='inputBox' placeholder={props.placeholder}
-        onChange={onChange} type={props.type}></input>
+        onInput={onChange} type={props.type}></input>
     </div>;
   }
 };

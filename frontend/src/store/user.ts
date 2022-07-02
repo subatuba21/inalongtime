@@ -31,9 +31,9 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(login.fulfilled, (state, action) => {
+    builder.addCase(login.fulfilled, (_state, action) => {
       if (action.payload.success) {
-        state = {
+        return {
           email: action.payload.user?.email as string,
           firstName: action.payload.user?.firstName as string,
           lastName: action.payload.user?.lastName as string,
