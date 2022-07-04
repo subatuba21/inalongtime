@@ -1,28 +1,10 @@
 import express from 'express';
 import passport from 'passport';
-import {ClientUserData, APILoginInput,
+import {ClientUserData,
   UserSchema} from '../../utils/schemas/user';
 import {credentialsInvalid} from '../errors';
 import {APIResponse} from '../../utils/types/apiStructure';
 import logger from '../../logger';
-
-export const extractLoginInput =
-    async (req: express.Request, res: express.Response, next: Function) => {
-      try {
-        const data = await APILoginInput.parseAsync(req.body);
-        req.user = data.data;
-        next();
-      } catch (err) {
-        logger.verbose(
-            `Zod error for login attempt. Error ${err}. Input: ${req.body}`);
-        const response : APIResponse = {
-          data: null,
-          error: credentialsInvalid,
-        };
-        res.status(response.error?.code as number)
-            .end(JSON.stringify(response));
-      }
-    };
 
 export const passportAuthenticateLocal =
   async (req: express.Request, res: express.Response, next: Function) => {

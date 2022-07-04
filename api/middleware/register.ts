@@ -13,7 +13,7 @@ export const extractRegisterInput =
 async (req: express.Request, res: express.Response, next: Function) => {
   try {
     const body = await APIRegisterInput.parseAsync(req.body);
-    req.user = body.data;
+    req.registerInfo = body.data;
     next();
   } catch (err) {
     logger.verbose(
@@ -41,7 +41,7 @@ async (req: express.Request, res: express.Response, next: Function) => {
 export const registerUser =
   async (req: express.Request, res: express.Response, next: Function) => {
     try {
-      const userInfo = req.user as RegisterUserInput;
+      const userInfo = req.registerInfo as RegisterUserInput;
       const user = await registerUserToDb(userInfo);
       if (user.success && user.user) {
         const userData : ClientUserData = {

@@ -149,10 +149,8 @@ describe('API Tests for auth', () => {
         url: `${baseUrl}/login`,
         method: 'POST',
         data: {
-          data: {
-            email: 'joebob@gmail.com',
-            password: 'jsshjdjdjs',
-          },
+          email: 'joebob@gmail.com',
+          password: 'jsshjdjdjs',
         },
       });
 
