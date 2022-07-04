@@ -11,6 +11,8 @@ import {RegisterPage} from './pages/registerPage/registerPage';
 import {IndexPage} from './pages/indexPage/IndexPage';
 import {Provider} from 'react-redux';
 import {store} from './store/store';
+import {HomePage} from './pages/homePage/HomePage';
+import {LoggedInRouteGuard} from './components/routeGuards/LoggedInRouteGuard';
 
 
 const root = ReactDOM.createRoot(
@@ -23,7 +25,11 @@ root.render(
           <Routes>
             <Route path='/' element={<IndexPage />}/>
             <Route path='/login' element={<LoginPage />}/>
-            <Route path='/register' element={<RegisterPage />}/>
+            <Route path='/signup' element={<RegisterPage />}/>
+            <Route path='/home' element={
+              <LoggedInRouteGuard>
+                <HomePage></HomePage>
+              </LoggedInRouteGuard>}/>
           </Routes>
         </BrowserRouter>
       </Provider>

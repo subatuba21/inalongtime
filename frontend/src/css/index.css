@@ -11,7 +11,9 @@ body {
 
 :root {
   --faded-black: rgba(0, 0, 0, 0.6);
-  --pink: #F8ACFF
+  --pink: #F8ACFF;
+  --purple: #5F00FA;
+  --gradient-finish: #C808D9;
 }
 
 code {
@@ -51,6 +53,10 @@ code {
 
 .pinkText {
   color: var(--pink);
+}
+
+.gradientFinishText {
+  color: var(--gradient-finish);
 }
 
 a, a:hover, a:visited {

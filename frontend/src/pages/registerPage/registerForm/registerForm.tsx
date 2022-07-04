@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useRef, useState} from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import {InputBox} from '../../../components/inputBox/inputBox';
 import styles from './registerForm.module.css';
@@ -9,6 +9,7 @@ export const RegisterForm = () => {
   const [password2, setPassword2] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const errorMessageBox = useRef<HTMLParagraphElement>(null);
 
   const register = () => {
 
@@ -39,5 +40,6 @@ export const RegisterForm = () => {
       </div>
     </div>
     <Button variant='info' id={styles.button}>Sign Up</Button>
+    <p ref={errorMessageBox} id={styles.errorMessageBox}></p>
   </form>;
 };

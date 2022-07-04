@@ -6,17 +6,27 @@
     padding-right: 15px;
 }
 
-.navButton {
-    font-size: 15pt !important;
-    margin-left: 15px;
-    margin-right: 5px;
+#loginLink, #signupLink {
+    padding: 15px;
+    padding-top: 0px;
+    font-size: 15pt;
 }
 
+#loginLink {
+    color: white;
+}
+
+#signupLink {
+    color: var(--pink);
+}
+
+
+
 #navbarLeft {
-    padding-top: 1px;
-    padding-left: 10px;
+    padding-top: 15px;
+    padding-left: 15px;
 }
 
 #navbarRight {
-    padding-top: 15px;
+    padding-top: 4px;
 }
