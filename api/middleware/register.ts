@@ -56,28 +56,28 @@ export const registerUser =
         };
         res.end(JSON.stringify(response));
       } else {
-        const response : APIResponse = {
-          error: unknownError,
-          data: null,
-        };
-        res.status(response.error?.code as number)
-            .end(JSON.stringify(response));
+        if (user.error === DBError.UNIQUE_ENTITY_ALREADY_EXISTS) {
+          const response : APIResponse = {
+            error: alreadySignedUp,
+            data: null,
+          };
+          res.status(response.error?.code as number)
+              .end(JSON.stringify(response));
+        } else {
+          const response : APIResponse = {
+            error: unknownError,
+            data: null,
+          };
+          res.status(response.error?.code as number)
+              .end(JSON.stringify(response));
+        }
       }
     } catch (err) {
-      if (err === DBError.UNIQUE_ENTITY_ALREADY_EXISTS) {
-        const response : APIResponse = {
-          error: alreadySignedUp,
-          data: null,
-        };
-        res.status(response.error?.code as number)
-            .end(JSON.stringify(response));
-      } else {
-        const response : APIResponse = {
-          error: unknownError,
-          data: null,
-        };
-        res.status(response.error?.code as number)
-            .end(JSON.stringify(response));
-      }
+      const response : APIResponse = {
+        error: unknownError,
+        data: null,
+      };
+      res.status(response.error?.code as number)
+          .end(JSON.stringify(response));
     }
   };

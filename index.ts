@@ -30,9 +30,6 @@ app.use(session({
     mongoUrl: process.env.MONGO_URL,
     dbName: process.env.MONGO_DB_NAME,
   }),
-  cookie: {
-    maxAge: 43200000,
-  },
 }));
 
 app.use(express.json());

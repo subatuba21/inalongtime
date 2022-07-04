@@ -26,13 +26,21 @@ export const registerUser = async (userInput: RegisterUserInput) : Promise<UserD
     }
 
     const res = await userCol.insertOne(
-        {...userInput, passwordHash: hashedPass});
+        {
+          email: userInput.email,
+          firstname: userInput.firstname,
+          lastname: userInput.lastname,
+          passwordHash: hashedPass,
+        },
+    );
     if (res.acknowledged) {
       return {
         success: true,
         user: {
           _id: res.insertedId.toString(),
-          ...userInput,
+          email: userInput.email,
+          firstname: userInput.firstname,
+          lastname: userInput.lastname,
           passwordHash: hashedPass,
         },
       };
