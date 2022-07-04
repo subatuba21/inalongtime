@@ -17,13 +17,22 @@ export const registerUserInputSchema = userSchema.omit({
   password: z.string().min(8),
 });
 
-export const loginUserInputSchema = userSchema.pick({
-  email: true,
-}).extend({
-  password: z.string(),
-});
+export const APILoginInput = z.object({
+  data: z.object({
+    email: z.string(),
+    password: z.string(),
+  }),
+}).strict();
+
+export const APIRegisterInput = z.object({
+  data: registerUserInputSchema,
+}).strict();
 
 export type RegisterUserInput = z.infer<typeof registerUserInputSchema>;
 export type UserSchema = z.infer<typeof userSchema>;
-export type LoginInput = z.infer<typeof loginUserInputSchema>;
+export type PassportLoginInput = {
+  email: string;
+  password: string;
+}
+export type UserInput = Omit<UserSchema, '_id'>
 export type ClientUserData = Omit<UserSchema, 'passwordHash'>;

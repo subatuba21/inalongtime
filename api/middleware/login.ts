@@ -1,15 +1,16 @@
 import express from 'express';
 import passport from 'passport';
-import {ClientUserData, loginUserInputSchema,
+import {ClientUserData, APILoginInput,
   UserSchema} from '../../utils/schemas/user';
 import {credentialsInvalid} from '../errors';
 import {APIResponse} from '../../utils/types/apiStructure';
 import logger from '../../logger';
+
 export const extractLoginInput =
     async (req: express.Request, res: express.Response, next: Function) => {
       try {
-        const user = await loginUserInputSchema.parseAsync(req.body);
-        req.user = user;
+        const data = await APILoginInput.parseAsync(req.body);
+        req.user = data.data;
         next();
       } catch (err) {
         logger.verbose(
@@ -58,35 +59,20 @@ export const passportAuthenticateLocal =
             };
             res.status(response.error?.code as number)
                 .end(JSON.stringify(response));
-          }
-          logger.verbose(
-              `Successful login. User: ${JSON.stringify(req.user)}}`);
-          const clientUserData : ClientUserData = {
-            ...req.user as UserSchema,
-          };
+          } else {
+            logger.verbose(
+                `Successful login. User: ${JSON.stringify(req.user)}}`);
+            const clientUserData : ClientUserData = {
+              ...req.user as UserSchema,
+            };
 
-          const response : APIResponse = {
-            data: clientUserData,
-            error: null,
-          };
-          res.end(JSON.stringify(response));
+            const response : APIResponse = {
+              data: clientUserData,
+              error: null,
+            };
+            res.end(JSON.stringify(response));
+          }
         });
       }
     })(req, res, next);
-  };
-
-export const handleDeserializeError =
-  (err: Error, req: express.Request, res: express.Response, next: Function) => {
-    if (err) {
-      logger.warn(`Deserialize error: ${err}`);
-      logger.warn(`Error logging in: ${err}`);
-      const response: APIResponse = {
-        data: null,
-        error: credentialsInvalid,
-      };
-      res.status(response.error?.code as number)
-          .end(JSON.stringify(response));
-
-      req.logout(() => {});
-    }
   };

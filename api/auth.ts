@@ -1,17 +1,13 @@
 import {Router} from 'express';
 import {extractLoginInput,
-  handleDeserializeError,
-  passportAuthenticateLocal} from './middleware/auth';
+  passportAuthenticateLocal} from './middleware/login';
+import {extractRegisterInput, registerUser} from './middleware/register';
 
 
 // eslint-disable-next-line new-cap
 export const authRouter = Router();
 
 authRouter.post('/login', extractLoginInput,
-    passportAuthenticateLocal, handleDeserializeError);
+    passportAuthenticateLocal);
 
-authRouter.use('/login', handleDeserializeError);
-
-authRouter.get('/test', (req, res) => {
-  res.end(JSON.stringify(req.user));
-});
+authRouter.post('/register', extractRegisterInput, registerUser);

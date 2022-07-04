@@ -4,7 +4,7 @@
   "description": "A web app to communicate with yourself in the future.",
   "main": "index.ts",
   "scripts": {
-    "test": "jest ",
+    "test": "concurrently \"npm start\" \"jest\" ",
     "start": "tsc && node dist/index.js",
     "lint": "eslint *.ts",
     "watch": "nodemon index.ts"
@@ -18,19 +18,23 @@
     "@types/jest": "^28.1.2",
     "@types/passport": "^1.0.9",
     "@types/passport-local": "^1.0.34",
+    "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0",
+    "concurrently": "^7.2.2",
     "create-react-app": "^5.0.1",
     "eslint": "^8.18.0",
     "eslint-config-google": "^0.14.0",
-    "jest": "^28.1.1",
+    "jest": "^28.1.2",
     "nodemon": "^2.0.16",
+    "supertest": "^6.2.4",
     "ts-jest": "^28.0.5",
     "ts-node": "^10.8.1"
   },
   "dependencies": {
     "ajv": "^7.2.4",
     "ajv-formats": "^2.1.1",
+    "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.6.0",
     "dotenv": "^16.0.1",

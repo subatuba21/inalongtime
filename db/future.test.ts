@@ -5,7 +5,9 @@ import {addFuture,
 import {FutureSchema} from '../utils/schemas/future';
 import {getClient, getDb, setupDb} from './setup';
 
-config();
+config({
+  path: '../test.env',
+});
 
 beforeAll(async () => {
   await setupDb(process.env.MONGO_URL as string);

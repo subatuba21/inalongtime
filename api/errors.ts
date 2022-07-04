@@ -25,3 +25,19 @@ export const unknownError : APIError = {
   message: 'Unknown error. Please try again later.',
   code: StatusCodes.INTERNAL_SERVER_ERROR,
 };
+
+export const registerValidationError : APIError = {
+  // eslint-disable-next-line max-len
+  message: 'Validation failed. Please check your email, password, and other fields are correct and try again.',
+  code: StatusCodes.BAD_REQUEST,
+};
+
+export const unknownRegisterError : APIError = {
+  message: 'Unable to register user. Please try again later.',
+  code: StatusCodes.INTERNAL_SERVER_ERROR,
+};
+
+export const alreadySignedUp : APIError = {
+  message: 'Looks like you\'re already registered. Please log in.',
+  code: StatusCodes.CONFLICT,
+};

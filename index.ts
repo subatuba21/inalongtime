@@ -13,7 +13,6 @@ import {handleEndError} from './utils/handleEndError';
 import path from 'path';
 
 const app = express();
-config();
 
 app.use(session({
   secret: process.env.SESSION_SECRET as string,
@@ -41,16 +40,24 @@ app.use((req, res, next) => {
 });
 
 // For anything that is async and needed by the server.
-const start = async () => {
+export const start = async (options?: {
+  port?: number,
+  envFileName?: string,
+}) => {
+  config({
+    path: options?.envFileName || '.env',
+  });
+  const PORT = options?.port ||
+    parseInt(process.env.PORT as string) as number || 3000;
   await setupDb(process.env.MONGO_URL as string);
   const client = getDb();
   setUserDb(client);
-  app.listen(3000, () => logger.info('Server started on port 3000'));
+  app.listen(PORT, () => logger.info('Server started on port 3000'));
 };
 
 app.use(handleEndError);
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', (err) => {
   logger.error(err);
 });
 

@@ -5,7 +5,9 @@ import {addDraft, DraftEntry, setDraftDb, modifyDraft,
   getDraft, ModifyDraftInput, DraftInput} from './draft';
 import {getClient, getDb, setupDb} from './setup';
 
-config();
+config({
+  path: '../test.env',
+});
 
 beforeAll(async () => {
   await setupDb(process.env.MONGO_URL as string);

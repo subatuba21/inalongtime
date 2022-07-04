@@ -6,7 +6,9 @@ import {ObjectId} from 'mongodb';
 import {RegisterUserInput, UserSchema} from '../utils/schemas/user';
 import {hashPassword} from '../utils/hash';
 
-config();
+config({
+  path: '../test.env',
+});
 
 beforeAll(async () => {
   await setupDb(process.env.MONGO_URL as string);

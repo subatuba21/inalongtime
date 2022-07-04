@@ -9,5 +9,5 @@ export interface APIResponse {
 export const APIRequestSchema = z.object({
   data: z.object({
 
-  }),
+  }).optional(),
 }).strict();

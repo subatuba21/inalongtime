@@ -14,8 +14,6 @@ export interface UserDbResponse extends DbResponse {
     user: UserSchema | null;
 }
 
-export type UserInput = Omit<UserSchema, '_id'>
-
 // eslint-disable-next-line max-len
 export const registerUser = async (userInput: RegisterUserInput) : Promise<UserDbResponse> => {
   const hashedPass = await hashPassword(userInput.password);
