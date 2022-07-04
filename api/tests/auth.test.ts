@@ -1,7 +1,7 @@
-import {start} from '../../index';
+import {start, close} from '../../index';
 import axios, {AxiosError} from 'axios';
 import {StatusCodes} from 'http-status-codes';
-import {getDb} from '../../db/setup';
+import {getClient, getDb} from '../../db/setup';
 
 const port = 2500;
 const baseUrl = `http://localhost:${port}/api/auth`;
@@ -11,6 +11,12 @@ describe('API Tests for auth', () => {
     await start({
       port,
     });
+  });
+
+  afterAll(async () => {
+    const client = getClient();
+    await client.close();
+    await close();
   });
 
   describe('Testing register endpoint', () => {
