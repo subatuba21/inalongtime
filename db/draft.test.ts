@@ -4,9 +4,10 @@ import logger from '../logger';
 import {addDraft, DraftEntry, setDraftDb, modifyDraft,
   getDraft, ModifyDraftInput, DraftInput} from './draft';
 import {getClient, getDb, setupDb} from './setup';
+import path from 'path';
 
 config({
-  path: '../test.env',
+  path: path.join(__dirname, `../${process.env.NODE_ENV}.env`),
 });
 
 beforeAll(async () => {

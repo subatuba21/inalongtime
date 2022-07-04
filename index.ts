@@ -56,7 +56,8 @@ export const start = async (options?: {
   await setupDb(process.env.MONGO_URL as string);
   const client = getDb();
   setUserDb(client);
-  app.listen(PORT, () => logger.info('Server started on port 3000'));
+  app.listen(PORT,
+      () => logger.info('Server started on port ' + PORT));
 };
 
 app.use(handleEndError);
@@ -65,5 +66,5 @@ process.on('uncaughtException', (err) => {
   logger.error(err);
 });
 
-start();
+if (process.env.NODE_ENV!=='test') start();
 

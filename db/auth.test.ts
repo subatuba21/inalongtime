@@ -4,10 +4,11 @@ import {getClient, getDb, setupDb} from './setup';
 import {config} from 'dotenv';
 import {ObjectId} from 'mongodb';
 import {RegisterUserInput, UserSchema} from '../utils/schemas/user';
-import {hashPassword} from '../utils/password';
+import {validatePassword} from '../utils/password';
+import path from 'path';
 
 config({
-  path: '../test.env',
+  path: path.join(__dirname, `../${process.env.NODE_ENV}.env`),
 });
 
 beforeAll(async () => {
@@ -48,7 +49,8 @@ describe('Testing auth-related db queries', () => {
     expect(user.email).toBe(userInput.email);
     expect(user.firstname).toBe(userInput.firstname);
     expect(user.lastname).toBe(userInput.lastname);
-    expect(user.passwordHash).toBe(await hashPassword(userInput.password));
+    expect(await validatePassword(userInput.password,
+      user.passwordHash as string)).toBe(true);
   });
 
   test('adding a duplicate user should be stopped', async () => {

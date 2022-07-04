@@ -1,11 +1,11 @@
 import {z} from 'zod';
 
-
+const noSpacesRegex = /^[\S]+$/;
 // As stored in db
 const userSchema = z.object({
   _id: z.string().length(12),
-  firstname: z.string().min(1),
-  lastname: z.string().min(1),
+  firstname: z.string().min(1).regex(noSpacesRegex),
+  lastname: z.string().min(1).regex(noSpacesRegex),
   email: z.string().email(),
   passwordHash: z.string().optional(),
 });
@@ -14,7 +14,7 @@ export const registerUserInputSchema = userSchema.omit({
   _id: true,
   passwordHash: true,
 }).extend({
-  password: z.string().min(8),
+  password: z.string().min(8).regex(noSpacesRegex),
 });
 
 export const APILoginInput = z.object({

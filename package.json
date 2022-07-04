@@ -4,7 +4,7 @@
   "description": "A web app to communicate with yourself in the future.",
   "main": "index.ts",
   "scripts": {
-    "test": "concurrently \"npm start\" \"jest\" ",
+    "test": "jest --forceExit",
     "start": "tsc && node dist/index.js",
     "lint": "eslint *.ts",
     "watch": "nodemon index.ts"

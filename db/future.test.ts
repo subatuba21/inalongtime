@@ -4,9 +4,10 @@ import {addFuture,
   setFutureDb, getFuture, FutureInput} from './future';
 import {FutureSchema} from '../utils/schemas/future';
 import {getClient, getDb, setupDb} from './setup';
+import path from 'path';
 
 config({
-  path: '../test.env',
+  path: path.join(__dirname, `../${process.env.NODE_ENV}.env`),
 });
 
 beforeAll(async () => {

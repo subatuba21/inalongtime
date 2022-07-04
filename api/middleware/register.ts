@@ -1,6 +1,7 @@
 import {ZodError} from 'zod';
 import logger from '../../logger';
-import {APIRegisterInput, RegisterUserInput} from '../../utils/schemas/user';
+import {APIRegisterInput,
+  ClientUserData, RegisterUserInput} from '../../utils/schemas/user';
 import {APIResponse} from '../../utils/types/apiStructure';
 import {alreadySignedUp,
   registerValidationError, unknownError} from '../errors';
@@ -41,7 +42,27 @@ export const registerUser =
   async (req: express.Request, res: express.Response, next: Function) => {
     try {
       const userInfo = req.user as RegisterUserInput;
-      await registerUserToDb(userInfo);
+      const user = await registerUserToDb(userInfo);
+      if (user.success && user.user) {
+        const userData : ClientUserData = {
+          _id: user.user._id,
+          email: user.user.email,
+          firstname: user.user.firstname,
+          lastname: user.user.lastname,
+        };
+        const response : APIResponse = {
+          error: null,
+          data: userData,
+        };
+        res.end(JSON.stringify(response));
+      } else {
+        const response : APIResponse = {
+          error: unknownError,
+          data: null,
+        };
+        res.status(response.error?.code as number)
+            .end(JSON.stringify(response));
+      }
     } catch (err) {
       if (err === DBError.UNIQUE_ENTITY_ALREADY_EXISTS) {
         const response : APIResponse = {
