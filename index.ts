@@ -12,6 +12,14 @@ import MongoStore from 'connect-mongo';
 import {handleEndError} from './utils/handleEndError';
 import path from 'path';
 
+
+if (process.env.NODE_ENV === 'test') {
+  config({
+    path: './test.env',
+  });
+} else config();
+
+
 const app = express();
 
 app.use(session({
@@ -42,11 +50,7 @@ app.use((req, res, next) => {
 // For anything that is async and needed by the server.
 export const start = async (options?: {
   port?: number,
-  envFileName?: string,
 }) => {
-  config({
-    path: options?.envFileName || '.env',
-  });
   const PORT = options?.port ||
     parseInt(process.env.PORT as string) as number || 3000;
   await setupDb(process.env.MONGO_URL as string);

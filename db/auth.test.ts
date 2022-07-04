@@ -4,7 +4,7 @@ import {getClient, getDb, setupDb} from './setup';
 import {config} from 'dotenv';
 import {ObjectId} from 'mongodb';
 import {RegisterUserInput, UserSchema} from '../utils/schemas/user';
-import {hashPassword} from '../utils/hash';
+import {hashPassword} from '../utils/password';
 
 config({
   path: '../test.env',

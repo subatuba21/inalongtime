@@ -1,5 +1,5 @@
 import {Db, Collection, ObjectId} from 'mongodb';
-import {hashPassword} from '../utils/hash';
+import {hashPassword} from '../utils/password';
 import {DbResponse} from './setup';
 import {RegisterUserInput, UserSchema} from '../utils/schemas/user';
 import logger from '../logger';

@@ -1,7 +1,7 @@
 import {Strategy} from 'passport-local';
 import {getUserByEmail} from '../../db/auth';
 import logger from '../../logger';
-import {validatePassword} from '../hash';
+import {validatePassword} from '../password';
 
 export const localStrategy = new Strategy({
   usernameField: 'email',
@@ -15,7 +15,7 @@ export const localStrategy = new Strategy({
       return done(userResponse.error, false);
     } else return done(null, false);
   } else if (userResponse.user?.passwordHash &&
-    validatePassword(password, userResponse.user?.passwordHash)) {
+    await validatePassword(password, userResponse.user?.passwordHash)) {
     return done(null, userResponse.user);
   } else {
     return done(null, false);
