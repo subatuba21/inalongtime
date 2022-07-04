@@ -1,22 +1,24 @@
-import {start, close} from '../../index';
-import axios, {AxiosError} from 'axios';
+import {start} from '../../index';
 import {StatusCodes} from 'http-status-codes';
 import {getClient, getDb} from '../../db/setup';
+import request from 'supertest';
 
-const port = 2500;
-const baseUrl = `http://localhost:${port}/api/auth`;
+const port = 3000;
+let server : any;
+let agent : request.SuperAgentTest;
 
 describe('API Tests for auth', () => {
   beforeAll(async () => {
-    await start({
+    server = await start({
       port,
     });
+    agent = request.agent(server);
   });
 
   afterAll(async () => {
     const client = getClient();
     await client.close();
-    await close();
+    await server.close();
   });
 
   describe('Testing register endpoint', () => {
@@ -26,86 +28,55 @@ describe('API Tests for auth', () => {
     });
 
     test('Testing invalid email', async () => {
-      expect.assertions(1);
-      try {
-        await axios({
-          url: `${baseUrl}/register`,
-          method: 'POST',
-          data: {
+      await agent.post('/api/auth/register')
+          .send({
             data: {
-              firstname: 'Subha',
-              lastname: 'Das',
-              email: 'huhuhu',
-              password: '89839839839',
+              firstname: 'Joe',
+              lastname: 'Joe',
+              email: 'joejoe.net',
+              password: 'idhidhdih',
             },
-          },
-        });
-      } catch (err) {
-        const axerror = err as AxiosError;
-        expect(axerror.response?.status)
-            .toStrictEqual(StatusCodes.BAD_REQUEST);
-      }
+          })
+          .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('Testing invalid names', async () => {
-      expect.assertions(1);
-      try {
-        await axios({
-          url: `${baseUrl}/register`,
-          method: 'POST',
-          data: {
+      await agent.post('/api/auth/register')
+          .send({
             data: {
-              firstname: 'Su bha',
-              lastname: 'Da s',
-              email: 'sd7843@pleasantonusd.net',
+              firstname: 'Jo e',
+              lastname: 'Jo e',
+              email: 'joe@joe.net',
               password: 'idhidhdih',
             },
-          },
-        });
-      } catch (err) {
-        const axerror = err as AxiosError;
-        expect(axerror.response?.status)
-            .toStrictEqual(StatusCodes.BAD_REQUEST);
-      }
+          })
+          .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('Testing invalid passwords', async () => {
-      expect.assertions(1);
-      try {
-        await axios({
-          url: `${baseUrl}/register`,
-          method: 'POST',
-          data: {
+      await agent.post('/api/auth/register')
+          .send({
             data: {
-              firstname: 'Subha',
-              lastname: 'Das',
-              email: 'sd7843@pleasantonusd.net',
-              password: 'jsshs',
+              firstname: 'Joe',
+              lastname: 'Joe',
+              email: 'joejoe.net',
+              password: 'idhidhdih',
             },
-          },
-        });
-      } catch (err) {
-        const axerror = err as AxiosError;
-        expect(axerror.response?.status)
-            .toStrictEqual(StatusCodes.BAD_REQUEST);
-      }
+          })
+          .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('Should be successful', async () => {
-      const res = await axios({
-        url: `${baseUrl}/register`,
-        method: 'POST',
-        data: {
-          data: {
-            firstname: 'Joe',
-            lastname: 'Bob',
-            email: 'joebob@gmail.com',
-            password: 'jsshjdjdjs',
-          },
-        },
-      });
-      expect(res.data.error).toBeNull();
-      expect(res.data.data.firstname).toStrictEqual('Joe');
+      await agent.post('/api/auth/register')
+          .send({
+            data: {
+              firstname: 'Joe',
+              lastname: 'Joe',
+              email: 'joe@joe.net',
+              password: 'idhidhdih',
+            },
+          })
+          .expect(StatusCodes.OK);
     });
   });
 
@@ -116,52 +87,32 @@ describe('API Tests for auth', () => {
     });
 
     test('Testing blank username and password', async () => {
-      expect.assertions(1);
-      try {
-        await axios({
-          url: `${baseUrl}/login`,
-          method: 'POST',
-          data: {
-            data: {
-              email: '',
-              password: '',
-            },
-          },
-        });
-      } catch (err) {
-        const axerror = err as AxiosError;
-        expect(axerror.response?.status)
-            .toStrictEqual(StatusCodes.UNAUTHORIZED);
-      }
+      await agent.post('/api/auth/login')
+          .send({
+            email: 'joejoe.net',
+            password: 'idhidhdih',
+          })
+          .expect(StatusCodes.UNAUTHORIZED);
     });
 
     test('Should be successful', async () => {
-      let res = await axios({
-        url: `${baseUrl}/register`,
-        method: 'POST',
-        data: {
-          data: {
-            firstname: 'Joe',
-            lastname: 'Bob',
+      await agent.post('/api/auth/register')
+          .send({
+            data: {
+              firstname: 'Joe',
+              lastname: 'Joe',
+              email: 'joebob@gmail.com',
+              password: 'jsshjdjdjs',
+            },
+          })
+          .expect(StatusCodes.OK);
+
+      await agent.post('/api/auth/login')
+          .send({
             email: 'joebob@gmail.com',
             password: 'jsshjdjdjs',
-          },
-        },
-      });
-      expect(res.data.error).toBeNull();
-      expect(res.data.data.firstname).toStrictEqual('Joe');
-
-      res = await axios({
-        url: `${baseUrl}/login`,
-        method: 'POST',
-        data: {
-          email: 'joebob@gmail.com',
-          password: 'jsshjdjdjs',
-        },
-      });
-
-      expect(res.data.error).toBeNull();
-      expect(res.data.data.firstname).toStrictEqual('Joe');
+          })
+          .expect(StatusCodes.OK);
     });
   });
 });

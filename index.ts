@@ -45,7 +45,6 @@ app.use((req, res, next) => {
 });
 
 // For anything that is async and needed by the server.
-let server: any;
 export const start = async (options?: {
   port?: number,
 }) => {
@@ -54,14 +53,9 @@ export const start = async (options?: {
   await setupDb(process.env.MONGO_URL as string);
   const client = getDb();
   setUserDb(client);
-  server = app.listen(PORT,
+  const server = app.listen(PORT,
       () => logger.info('Server started on port ' + PORT));
-};
-
-export const close = async () => {
-  if (server.close) {
-    await server.close();
-  }
+  return server;
 };
 
 app.use(handleEndError);
