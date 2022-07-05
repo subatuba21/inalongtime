@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 import Button from 'react-bootstrap/esm/Button';
+import {Link} from 'react-router-dom';
 import {Footer} from '../../components/footer/footer';
 import {IndexNavbar} from '../../components/indexNavbar/indexNavbar';
 import {LoginForm} from './loginForm/loginForm';
@@ -16,7 +17,8 @@ export const LoginPage = () => {
         <Button variant='primary'>Sign Up With Facebook</Button>
       </div>
       <div className={`${styles.centeredDiv} block-centered whiteText`}>
-      Don&apos;t have an account? <a className='pinkText'>Sign Up.</a>
+      Forgot password?&nbsp;
+        <Link className='pinkText' to='/forgot'>Click here.</Link>
       </div>
     </div>
     <Footer></Footer>

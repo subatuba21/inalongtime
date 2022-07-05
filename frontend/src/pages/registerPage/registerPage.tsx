@@ -1,4 +1,5 @@
 import Button from 'react-bootstrap/esm/Button';
+import {Link} from 'react-router-dom';
 import {Footer} from '../../components/footer/footer';
 import {IndexNavbar} from '../../components/indexNavbar/indexNavbar';
 import {RegisterForm} from './registerForm/registerForm';
@@ -14,7 +15,7 @@ export const RegisterPage = () => {
         <Button variant='primary'>Sign Up With Facebook</Button>
       </div>
       <div className={`${styles.centeredDiv} block-centered whiteText`}>
-      Have an account? <a className='pinkText'>Log In.</a>
+      Have an account? <Link className='pinkText' to='/login'>Log in.</Link>
       </div>
     </div>
     <Footer></Footer>
