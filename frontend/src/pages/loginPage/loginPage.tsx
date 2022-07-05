@@ -15,7 +15,7 @@ export const LoginPage = () => {
         <Button variant='primary'>Sign Up With Google</Button>
         <Button variant='primary'>Sign Up With Facebook</Button>
       </div>
-      <div className={`${styles.centeredDiv} block-centered`}>
+      <div className={`${styles.centeredDiv} block-centered whiteText`}>
       Don&apos;t have an account? <a className='pinkText'>Sign Up.</a>
       </div>
     </div>

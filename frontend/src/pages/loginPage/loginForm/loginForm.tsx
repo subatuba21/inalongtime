@@ -1,16 +1,16 @@
-import {FormEvent, useRef, useState} from 'react';
+import {FormEvent, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import {InputBox} from '../../../components/inputBox/inputBox';
 import styles from './loginForm.module.css';
-import {login as loginAction, UserState} from '../../../store/user';
+import {login as loginAction} from '../../../store/user';
 import {useAppDispatch} from '../../../store/store';
 import {useSelector} from 'react-redux';
+import {CentralErrors, ErrorState} from '../../../store/error';
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const errorMessageBox = useRef<HTMLParagraphElement>(null);
-  const userState = useSelector((state) => (state as any).user) as UserState;
+  const errorState = useSelector((state) => (state as any).error) as ErrorState;
   const [errors, setErrors]:
   [Record<string, string[]>,
   React.Dispatch<React.SetStateAction<Record<string, string[]>>>] =
@@ -33,16 +33,7 @@ export const LoginForm = () => {
       password,
     }));
 
-    if (!userState.loggedIn) {
-      setProcessingLogin(false);
-      if (errorMessageBox.current) {
-        errorMessageBox.current.innerHTML =
-`Incorrect email or password.&nbsp;
-<a class="gradientFinishText"> Forgot Password?</a>`;
-      }
-    } else {
-      alert('loggedIn');
-    }
+    setProcessingLogin(false);
   };
 
   return <div className="box" id={styles.loginForm}>
@@ -81,7 +72,9 @@ export const LoginForm = () => {
       <Button variant='info' id={styles.button} type='submit' style={{
         opacity: processingLogin ? '.5' : '1',
       }}>Log In</Button>
-      <p ref={errorMessageBox} id={styles.errorMessageBox}></p>
+      <p id={styles.errorMessageBox}>
+        {errorState[CentralErrors.loginError]?.message}
+      </p>
     </form>
   </div>;
 };

@@ -13,7 +13,7 @@ export const RegisterPage = () => {
         <Button variant='primary'>Sign Up With Google</Button>
         <Button variant='primary'>Sign Up With Facebook</Button>
       </div>
-      <div className={`${styles.centeredDiv} block-centered`}>
+      <div className={`${styles.centeredDiv} block-centered whiteText`}>
       Have an account? <a className='pinkText'>Log In.</a>
       </div>
     </div>

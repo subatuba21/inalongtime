@@ -33,25 +33,27 @@ export interface RegisterResult extends LoginResult {
 
 export const authAPI = {
   login: async (credentials: LoginInput): Promise<LoginResult> => {
-    const res = await axios({
-      method: 'post',
-      url: '/api/auth/login',
-      data: credentials,
-    });
-    if (res.status===200) {
-      return {
-        success: true,
-        user: {
-          email: res.data.data.email,
-          firstName: res.data.data.firstName,
-          lastName: res.data.data.lastName,
-        },
-      };
-    } else {
-      return {
-        success: false,
-      };
-    }
+    try {
+      const res = await axios({
+        method: 'post',
+        url: '/api/auth/login',
+        data: credentials,
+      });
+
+      if (res.status===200) {
+        return {
+          success: true,
+          user: {
+            email: res.data.data.email,
+            firstName: res.data.data.firstName,
+            lastName: res.data.data.lastName,
+          },
+        };
+      }
+    } catch (err) {}
+    return {
+      success: false,
+    };
   },
 
   logout: async () : Promise<LogoutResult> => {
@@ -68,8 +70,10 @@ export const authAPI = {
     try {
       const res = await axios({
         method: 'post',
-        url: '/api/auth/login',
-        data: info,
+        url: '/api/auth/register',
+        data: {
+          data: info,
+        },
       });
 
       if (res.status===200) {

@@ -61,6 +61,7 @@ describe('Auth integration tests', () => {
 
       expect(store.getState().user.email).toStrictEqual('test@gmail.com');
       expect(store.getState().user.firstName).toStrictEqual('Test');
+      expect(window.location.pathname).toStrictEqual('/home');
     });
 
     test('Faulty login', async () => {

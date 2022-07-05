@@ -55,6 +55,10 @@ code {
   color: var(--pink);
 }
 
+.whiteText {
+  color: white;
+}
+
 .gradientFinishText {
   color: var(--gradient-finish);
 }

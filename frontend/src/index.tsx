@@ -13,6 +13,8 @@ import {Provider} from 'react-redux';
 import {store} from './store/store';
 import {HomePage} from './pages/homePage/HomePage';
 import {LoggedInRouteGuard} from './components/routeGuards/LoggedInRouteGuard';
+import {DontAllowIfLoggedIn}
+  from './components/routeGuards/DontAllowIfLoggedIn';
 
 
 const root = ReactDOM.createRoot(
@@ -23,9 +25,21 @@ root.render(
       <Provider store={store}>
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<IndexPage />}/>
-            <Route path='/login' element={<LoginPage />}/>
-            <Route path='/signup' element={<RegisterPage />}/>
+            <Route path='/' element={
+              <DontAllowIfLoggedIn>
+                <IndexPage></IndexPage>
+              </DontAllowIfLoggedIn>
+            }/>
+            <Route path='/login' element={
+              <DontAllowIfLoggedIn>
+                <LoginPage></LoginPage>
+              </DontAllowIfLoggedIn>
+            }/>
+            <Route path='/signup' element={
+              <DontAllowIfLoggedIn>
+                <RegisterPage></RegisterPage>
+              </DontAllowIfLoggedIn>
+            }/>
             <Route path='/home' element={
               <LoggedInRouteGuard>
                 <HomePage></HomePage>
