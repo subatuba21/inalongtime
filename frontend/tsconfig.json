@@ -21,6 +21,6 @@
     "jsx": "react-jsx",
   },
   "include": [
-    "src", "global.d.ts"
+    "src", "global.d.ts", "../shared"
 , "tests"  ],
 }

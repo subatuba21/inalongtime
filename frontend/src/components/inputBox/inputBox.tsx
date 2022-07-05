@@ -12,7 +12,7 @@ export const InputBox = (props:
     validation?: {
       formErrorState?: {value: Record<string, string[]>, set: Function}
       validationFunction: (input: string) => string[],
-      showErrors?: boolean
+      showErrors?: boolean,
     },
     type?: 'password'
   }) => {

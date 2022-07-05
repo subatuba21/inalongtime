@@ -1,5 +1,5 @@
+import {authAPI, LoginInput, RegisterInput} from '../api/auth';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {authAPI, LoginInput} from '../api/auth';
 
 export interface UserState {
     firstName: string;
@@ -21,6 +21,12 @@ export const login = createAsyncThunk('user/login',
       return result;
     });
 
+export const register = createAsyncThunk('user/register',
+    async (info: RegisterInput, thunkAPI) => {
+      const result = await authAPI.register(info);
+      return result;
+    });
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -32,6 +38,17 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (_state, action) => {
+      if (action.payload.success) {
+        return {
+          email: action.payload.user?.email as string,
+          firstName: action.payload.user?.firstName as string,
+          lastName: action.payload.user?.lastName as string,
+          loggedIn: true,
+        };
+      }
+    });
+
+    builder.addCase(register.fulfilled, (_state, action) => {
       if (action.payload.success) {
         return {
           email: action.payload.user?.email as string,

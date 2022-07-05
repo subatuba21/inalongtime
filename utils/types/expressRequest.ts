@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {APIError} from '../../api/errors';
+import {APIError} from '../../api/apiErrors';
 import {PassportLoginInput,
   RegisterUserInput, UserSchema} from '../schemas/user';
 

@@ -1,5 +1,5 @@
 import express from 'express';
-import {unknownError} from '../api/errors';
+import {unknownError} from '../api/apiErrors';
 import {APIResponse} from './types/apiStructure';
 
 export const handleEndError =
