@@ -40,8 +40,8 @@ app.use('/api/future', futureRouter);
 app.use('/api/auth', authRouter);
 app.use('/public', express.static('public'));
 app.use('/', express.static('frontend/build'));
-app.use((req, res, next) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'frontend/build', 'index.html'));
 });
 
 // For anything that is async and needed by the server.
