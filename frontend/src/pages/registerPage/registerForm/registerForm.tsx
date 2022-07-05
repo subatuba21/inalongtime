@@ -5,7 +5,7 @@ import {InputBox} from '../../../components/inputBox/inputBox';
 import {addError, CentralError, CentralErrors,
   clearError, ErrorState} from '../../../store/error';
 import {useAppDispatch} from '../../../store/store';
-import {register as registerAction, UserState} from '../../../store/user';
+import {register as registerAction} from '../../../store/user';
 import styles from './registerForm.module.css';
 
 export const RegisterForm = () => {
@@ -14,7 +14,6 @@ export const RegisterForm = () => {
   const [password2, setPassword2] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const userState = useSelector((state) => (state as any).user) as UserState;
   const errorState = useSelector((state) => (state as any).error) as ErrorState;
   const errorMessageBox = useRef<HTMLParagraphElement>(null);
   const [errors, setErrors]:
@@ -25,6 +24,7 @@ export const RegisterForm = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    dispatch(clearError(CentralErrors.signupError));
     const matchingPasswordsError = 'matchingPasswordsError';
     const matchingPasswordsErrorMessage = 'Passwords do not match';
     if (password!=password2 && errorMessageBox.current) {
@@ -61,11 +61,7 @@ export const RegisterForm = () => {
       password,
     }));
 
-    if (!userState.loggedIn) {
-      setProcessingRegister(false);
-    } else {
-      alert('loggedIn');
-    }
+    setProcessingRegister(false);
   };
 
   return <form className="box" id={styles.registerForm} onSubmit={register}>
