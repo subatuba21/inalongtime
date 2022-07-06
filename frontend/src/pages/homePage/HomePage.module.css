@@ -1,0 +1,21 @@
+#mainDiv {
+    width: 900px;
+    max-width: 80%;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+#mainDiv > h2 {
+    font-size: 25pt;
+    margin-bottom: 30px;
+}
+
+#futureText {
+    font-weight: 600;
+}
+
+#grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+}

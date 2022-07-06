@@ -2,8 +2,9 @@
 /* eslint-disable react/display-name */
 import Button from 'react-bootstrap/esm/Button';
 import {Link} from 'react-router-dom';
+import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
-import {IndexNavbar} from '../../components/indexNavbar/indexNavbar';
+import {IndexNavbar} from '../../components/navbars/indexNavbar';
 import {LoginForm} from './loginForm/loginForm';
 import styles from './loginPage.module.css';
 
@@ -20,6 +21,7 @@ export const LoginPage = () => {
       Forgot password?&nbsp;
         <Link className='pinkText' to='/forgot'>Click here.</Link>
       </div>
+      <BottomBuffer></BottomBuffer>
     </div>
     <Footer></Footer>
   </div>;

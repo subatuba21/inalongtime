@@ -44,6 +44,10 @@ root.render(
               <LoggedInRouteGuard>
                 <HomePage></HomePage>
               </LoggedInRouteGuard>}/>
+
+            <Route path='/hometest' element={
+              <HomePage></HomePage>
+            } />
           </Routes>
         </BrowserRouter>
       </Provider>
