@@ -1,15 +1,17 @@
 #navbar {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     padding-left: 15px;
     padding-right: 15px;
+    width: 100%;
 }
 
 #loginLink, #signupLink {
     padding: 15px;
     padding-top: 0px;
     font-size: 15pt;
+    font-weight: 500;
 }
 
 #loginLink {
@@ -23,10 +25,22 @@
 
 
 #navbarLeft {
-    padding-top: 15px;
+    padding-top: 11px;
     padding-left: 15px;
+    text-align: left;
 }
 
 #navbarRight {
     padding-top: 4px;
+    text-align: right;
+}
+
+#navbarMiddle {
+    padding-top: 15px;
+    text-align: center;
+}
+
+#navbarMiddle > a {
+    color: white;
+    padding: 15px;
 }

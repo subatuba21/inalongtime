@@ -7,6 +7,11 @@ export const IndexNavbar = () => {
       <div id={styles.navbarLeft} className="logo">
         In a long time
       </div>
+      <div id={styles.navbarMiddle}>
+        <Link to='/login'>Pricing</Link>
+        <Link to='/signup'>FAQs</Link>
+        <Link to='/signup'>About</Link>
+      </div>
       <div id={styles.navbarRight}>
         <Link to='/login' id={styles.loginLink}>Log In</Link>
         <Link to='/signup' id={styles.signupLink}>Sign Up</Link>

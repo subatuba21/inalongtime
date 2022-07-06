@@ -6,6 +6,8 @@ import {credentialsInvalid} from '../apiErrors';
 import {APIResponse} from '../../utils/types/apiStructure';
 import logger from '../../logger';
 
+// Passport reads directly from req.body.username/email and req.body.password
+// Defies request convention out of necessity.
 export const passportAuthenticateLocal =
   async (req: express.Request, res: express.Response, next: Function) => {
     passport.authenticate('local', (err, user) => {
