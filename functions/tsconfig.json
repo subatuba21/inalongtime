@@ -1,16 +1,12 @@
 {
-    "exclude": [
-        "frontend",
-        "node_modules",
-        "functions",
-    ],
     "ts-node": {
       "files": true
     },
+    "include": ["src", "../shared"],
     "compilerOptions": {
-      "lib": ["es2021"],
+      "lib": ["es2020"],
       "module": "commonjs",
-      "target": "es2021",
+      "target": "es2020",
       "strict": true,
       "esModuleInterop": true,
       "skipLibCheck": true,
