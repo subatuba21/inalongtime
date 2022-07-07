@@ -15,6 +15,8 @@ import {HomePage} from './pages/homePage/HomePage';
 import {LoggedInRouteGuard} from './components/routeGuards/LoggedInRouteGuard';
 import {DontAllowIfLoggedIn}
   from './components/routeGuards/DontAllowIfLoggedIn';
+import {DraftsPage} from './pages/draftsPage/DraftsPage';
+import {SentPage} from './pages/sentPage/SentPage';
 
 
 const root = ReactDOM.createRoot(
@@ -47,6 +49,14 @@ root.render(
 
             <Route path='/hometest' element={
               <HomePage></HomePage>
+            } />
+
+            <Route path='/drafttest' element={
+              <DraftsPage></DraftsPage>
+            } />
+
+            <Route path='/senttest' element={
+              <SentPage></SentPage>
             } />
           </Routes>
         </BrowserRouter>

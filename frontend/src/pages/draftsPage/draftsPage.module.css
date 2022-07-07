@@ -1,0 +1,19 @@
+#mainDiv {
+    width: 600px;
+    max-width: 80%;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+#mainDiv > h2 {
+    font-size: 25pt;
+    margin-bottom: 30px;
+}
+
+.question {
+    margin-top: 50px;
+}
+
+.question h3 {
+    font-size: 20pt;
+}
