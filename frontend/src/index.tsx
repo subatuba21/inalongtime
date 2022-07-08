@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
 import './css/buttons.css';
 import './css/box.css';
+import './api/setup';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import {LoginPage} from './pages/loginPage/loginPage';
 import {RegisterPage} from './pages/registerPage/registerPage';
@@ -17,6 +18,8 @@ import {DontAllowIfLoggedIn}
   from './components/routeGuards/DontAllowIfLoggedIn';
 import {DraftsPage} from './pages/draftsPage/DraftsPage';
 import {SentPage} from './pages/sentPage/SentPage';
+import {EditorPage} from './pages/editorPage/editorPage';
+import {LoadingPage} from './pages/loadingPage/loadingPage';
 
 
 const root = ReactDOM.createRoot(
@@ -57,6 +60,14 @@ root.render(
 
             <Route path='/senttest' element={
               <SentPage></SentPage>
+            } />
+
+            <Route path='/edittest' element={
+              <EditorPage></EditorPage>
+            } />
+
+            <Route path='/load' element={
+              <LoadingPage></LoadingPage>
             } />
           </Routes>
         </BrowserRouter>

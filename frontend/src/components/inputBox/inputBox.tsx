@@ -14,7 +14,7 @@ export const InputBox = (props:
       validationFunction: (input: string) => string[],
       showErrors?: boolean,
     },
-    type?: 'password'
+    type?: 'password',
   }) => {
   const [errors, setErrors]:
   [string[], React.Dispatch<React.SetStateAction<string[]>>] =
