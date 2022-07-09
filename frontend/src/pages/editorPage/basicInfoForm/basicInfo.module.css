@@ -1,0 +1,10 @@
+#basicInfo {
+    width: 600px;
+    min-height: 350px;
+}
+
+.fieldName {
+    display: block;
+    font-size: 13pt;
+    font-weight: 500;
+}

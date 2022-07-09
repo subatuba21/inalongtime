@@ -3,6 +3,7 @@
         "frontend",
         "node_modules",
         "functions",
+        "shared",
     ],
     "ts-node": {
       "files": true
@@ -18,4 +19,9 @@
       "moduleResolution": "node",
       "outDir": "dist",
     },
+    "references": [
+      {
+        "path": "shared"
+      }
+    ]
 }

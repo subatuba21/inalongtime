@@ -1,11 +1,14 @@
 import {z} from 'zod';
 
+export const draftTypeSchema =
+  z.enum(['memory', 'reminder', 'letter', 'journal', 'goals']);
+
 const draftSchema = z.object({
   _id: z.string().length(12),
   userId: z.string().length(12),
   sendDate: z.date().optional(),
   contentUrl: z.string().url(),
-  type: z.enum(['memory', 'reminder', 'letter', 'journal', 'goals']),
+  type: draftTypeSchema,
   title: z.string().min(1),
   description: z.string().min(1).optional(),
   confirmed: z.boolean(),
@@ -16,3 +19,5 @@ const draftSchema = z.object({
 });
 
 export type DraftSchema = z.infer<typeof draftSchema>;
+export type DraftType = z.infer<typeof draftTypeSchema>;
+
