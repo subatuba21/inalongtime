@@ -2,10 +2,13 @@ import {useState} from 'react';
 import {InputBox} from '../../../components/inputBox/inputBox';
 import styles from './basicInfo.module.css';
 import {SelectBox} from '../../../components/selectBox/selectBox';
+import {DraftType} from '../../../../../shared/types/draft';
 
-export const BasicInfo = () => {
+export const BasicInfo = (props: {draftType : DraftType}) => {
   const [titleState, setTitleState] = useState('');
-  const [typeState, setTypeState] = useState('');
+  const [typeState, setTypeState] :
+    [DraftType, React.Dispatch<React.SetStateAction<DraftType>>] =
+    useState(props.draftType);
   const [backupEmail, setBackUpEmail] = useState('');
   const [backupEmail2, setBackUpEmail2] = useState('');
   const [phoneNumber, setphoneNumber] = useState('');

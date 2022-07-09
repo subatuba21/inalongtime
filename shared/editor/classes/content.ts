@@ -1,7 +1,7 @@
+import {DraftType} from '../../types/draft';
 import {Component} from './component';
 
-export type ContentType = 'gallery' | 'letter'
-    | 'journal' | 'reminder' | 'goals';
+export type ContentType = DraftType;
 
 export abstract class Content extends Component {
   data: any;

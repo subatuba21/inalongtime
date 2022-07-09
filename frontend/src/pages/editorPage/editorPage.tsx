@@ -15,7 +15,7 @@ export const EditorPage = () => {
         <div>
           <h3>Basic Info</h3>
         </div>
-        <BasicInfo></BasicInfo>
+        <BasicInfo draftType='letter'></BasicInfo>
 
         <h3>Content</h3>
       </div>

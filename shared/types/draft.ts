@@ -1,7 +1,7 @@
 import {z} from 'zod';
 
 export const draftTypeSchema =
-  z.enum(['memory', 'reminder', 'letter', 'journal', 'goals']);
+  z.enum(['gallery', 'reminder', 'letter', 'journal', 'goals']);
 
 const draftSchema = z.object({
   _id: z.string().length(12),
