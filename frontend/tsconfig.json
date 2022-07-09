@@ -20,7 +20,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
   },
-  "include": [
-    "src", "global.d.ts", "../shared"
-, "tests"  ],
+  "include": ["src", "global.d.ts", "tests", "../shared"],
+
+  "references": [{
+    "path": "../shared",
+  }]
 }

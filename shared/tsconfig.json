@@ -1,9 +1,4 @@
 {
-    "exclude": [
-        "frontend",
-        "node_modules",
-        "functions",
-    ],
     "ts-node": {
       "files": true
     },
@@ -17,5 +12,7 @@
       "forceConsistentCasingInFileNames": true,
       "moduleResolution": "node",
       "outDir": "dist",
+      "composite": true,
     },
+    "references": []
 }
