@@ -21,3 +21,14 @@
     margin-top: 30px;
     margin-bottom: 30px;
 }
+
+.headerCollapseRow {
+    width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerCollapseRow > span {
+    cursor: pointer;
+}

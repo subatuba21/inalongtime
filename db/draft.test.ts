@@ -37,6 +37,7 @@ describe('Testing draft related db functionalities', () => {
       description: 'Test description',
       sendDate: new Date('2025-01-01'),
       type: 'letter',
+      confirmed: false,
     };
     const res = await addDraft(draftInput);
     expect(res.success).toBe(true);
@@ -58,6 +59,7 @@ describe('Testing draft related db functionalities', () => {
       description: 'Test description',
       sendDate: new Date('2025-01-01'),
       type: 'letter',
+      confirmed: false,
     };
     const res = await addDraft(draftInput);
     expect(res.success).toBe(true);
@@ -74,6 +76,7 @@ describe('Testing draft related db functionalities', () => {
       description: 'Test description',
       sendDate: new Date('2025-01-01'),
       type: 'letter',
+      confirmed: false,
     };
     const res = await addDraft(draftInput);
     logger.verbose(res);

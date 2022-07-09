@@ -5,6 +5,12 @@ import {SelectBox} from '../../../components/selectBox/selectBox';
 import {DraftType} from '../../../../../shared/types/draft';
 
 export const BasicInfo = (props: {draftType : DraftType}) => {
+  type RecipientType = 'Myself' | 'Someone Else';
+
+  const options: RecipientType[] = ['Myself', 'Someone Else'];
+  const [recipientState, setRecipientState] :
+    [RecipientType, React.Dispatch<React.SetStateAction<RecipientType>>] =
+    useState(options[0]);
   const [titleState, setTitleState] = useState('');
   const [typeState, setTypeState] :
     [DraftType, React.Dispatch<React.SetStateAction<DraftType>>] =
@@ -30,9 +36,21 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
     <div>
       <span className={styles.fieldName}>Recipient</span>
       <SelectBox name='recipient'
-        options={['Myself', 'Someone else']}
-        valueState={{value: typeState, set: setTypeState}}></SelectBox>
+        options={options}
+        valueState=
+          {{value: recipientState, set: setRecipientState}}></SelectBox>
     </div>
+    {recipientState === options[1] ?
+      <>
+        <br />
+        <div>
+          <span className={styles.fieldName}>Recipient email</span>
+          <InputBox name='Recipient email'
+            placeholder='recipientemail@gmail.com'
+            valueState={{value: backupEmail, set: setBackUpEmail}}></InputBox>
+        </div>
+      </> : <></>
+    }
     <br />
     <div>
       <span className={styles.fieldName}>Backup email 1</span>

@@ -15,7 +15,7 @@ const draftSchema = z.object({
   payment: z.object({
     required: z.boolean(),
     completed: z.boolean(),
-  }),
+  }).optional(),
 });
 
 export type DraftSchema = z.infer<typeof draftSchema>;

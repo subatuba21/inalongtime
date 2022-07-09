@@ -3,7 +3,7 @@ import styles from './selectBox.module.css';
 export const SelectBox = (props: {
      options: string[],
      name: string,
-     valueState: {value: string, set: Function},
+     valueState: {value: string, set: Function}
 }) => {
   const onChange : React.ChangeEventHandler<HTMLSelectElement> = (event) => {
     props.valueState.set(event.currentTarget.value);
