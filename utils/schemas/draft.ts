@@ -8,6 +8,11 @@ const draftSchema = z.object({
   type: z.enum(['memory', 'reminder', 'letter', 'journal', 'goals']),
   title: z.string().min(1),
   description: z.string().min(1).optional(),
+  confirmed: z.boolean(),
+  payment: z.object({
+    required: z.boolean(),
+    completed: z.boolean(),
+  }),
 });
 
 export type DraftSchema = z.infer<typeof draftSchema>;

@@ -73,14 +73,7 @@ export const getDraft = async (_id: string) : Promise<DraftDbResponse> => {
   }
 };
 
-export interface ModifyDraftInput {
-    sendDate?: Date;
-    contentUrl?: string;
-    type?: FutureType;
-    title?: string;
-    description?: string;
-}
-
+export type ModifyDraftInput = Partial<DraftInput>;
 export const modifyDraft =
     async (_id: string, draft : ModifyDraftInput)
     : Promise<DraftDbResponse> => {

@@ -2,7 +2,7 @@ import express from 'express';
 import passport from 'passport';
 import {ClientUserData,
   UserSchema} from '../../utils/schemas/user';
-import {credentialsInvalid} from '../apiErrors';
+import {credentialsInvalid, needToLogin} from '../apiErrors';
 import {APIResponse} from '../../utils/types/apiStructure';
 import logger from '../../logger';
 
@@ -59,4 +59,16 @@ export const passportAuthenticateLocal =
         });
       }
     })(req, res, next);
+  };
+
+export const mustBeLoggedIn =
+  async (req: express.Request, res: express.Response, next: Function) => {
+    if (req.user) next();
+    else {
+      const response: APIResponse = {
+        data: null,
+        error: needToLogin,
+      };
+      res.status(response.error?.code as number).end(response);
+    }
   };

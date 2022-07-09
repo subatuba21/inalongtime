@@ -41,3 +41,8 @@ export const alreadySignedUp : APIError = {
   message: 'Looks like you\'re already registered. Please log in.',
   code: StatusCodes.CONFLICT,
 };
+
+export const needToLogin : APIError = {
+  message: 'Looks like you\'re not logged in. Please log in to access the app.',
+  code: StatusCodes.UNAUTHORIZED,
+};
