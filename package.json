@@ -1,4 +1,7 @@
 {
     "private": true,
-    "workspaces": ["backend", "frontend", "shared"]
+    "workspaces": {
+        "packages": ["frontend", "backend", "shared"],
+        "nohoist": ["**/eslint-config-google", "**/eslint-config-google/**"]
+    }
 }

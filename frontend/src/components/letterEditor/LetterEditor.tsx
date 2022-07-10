@@ -17,19 +17,28 @@ const emojiPlugin = createEmojiPlugin();
 const {EmojiSuggestions, EmojiSelect} = emojiPlugin;
 
 export const LetterEditor = (props: {letterContent? : LetterContent}) => {
-  const letterContent : LetterContent =
-    props.letterContent || new LetterContent('');
-  const [letterContentState,
-    setLetterContentState] = useState(letterContent);
   const [editorState, setEditorState] = useState(
-      () => EditorState.createEmpty(),
+      () => props.letterContent?.data || EditorState.createEmpty(),
   );
+  const [letterContentState,
+    setLetterContentState] = useState(props.letterContent ||
+      new LetterContent(editorState));
+
+  const onChange = (editor: EditorState) => {
+    setEditorState(editor);
+    letterContentState.data = editor;
+    setLetterContentState(letterContentState);
+  };
+
+  const save = () => {
+
+  };
 
   return <>
     <Toolbar/>
     <Editor
       editorState={editorState}
-      onChange={setEditorState} plugins={[toolbarPlugin, emojiPlugin]}/>
+      onChange={onChange} onBlur={save} plugins={[toolbarPlugin, emojiPlugin]}/>
     <EmojiSuggestions/>
     <EmojiSelect/>
   </>;

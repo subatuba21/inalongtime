@@ -1,8 +1,9 @@
 import {Content, ContentType} from './content';
+import {EditorState} from 'draft-js';
 
 export class LetterContent implements Content {
   type: ContentType;
-  data: string;
+  data: EditorState;
 
   toJson() : Object {
     return {};
@@ -21,7 +22,7 @@ export class LetterContent implements Content {
     } return false;
   }
 
-  constructor(data: string) {
+  constructor(data: EditorState) {
     this.data = data;
     this.type = 'letter';
   }
