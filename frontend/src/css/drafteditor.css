@@ -1,0 +1,20 @@
+div.DraftEditor-root {
+    background-color: white;
+    min-height: 400px;
+    overflow-y: auto;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+  }
+  div.DraftEditor-editorContainer,
+  div.public-DraftEditor-content {
+    height: 100%;
+  }
+
+.t16lpgj {
+    box-shadow: 0px 0px 0px 0px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+    overflow: hidden;
+}

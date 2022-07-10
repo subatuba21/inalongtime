@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
+import {LetterEditor} from '../../components/letterEditor/LetterEditor';
 import {LoggedInNavbar} from '../../components/navbars/homeNavbar';
 import {BasicInfo} from './basicInfoForm/basicInfo';
 import styles from './editorPage.module.css';
@@ -22,6 +23,7 @@ export const EditorPage = () => {
         </div>
         {!infoHidden ? <BasicInfo draftType='letter'></BasicInfo> : ''}
         <h3>Content</h3>
+        <LetterEditor></LetterEditor>
       </div>
       <BottomBuffer></BottomBuffer>
     </div>
