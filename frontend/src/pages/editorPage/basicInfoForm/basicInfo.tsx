@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {InputBox} from '../../../components/inputBox/inputBox';
 import styles from './basicInfo.module.css';
 import {SelectBox} from '../../../components/selectBox/selectBox';
-import {DraftType} from '../../../../../shared/types/draft';
+import {DraftType} from 'shared/types/draft';
 
 export const BasicInfo = (props: {draftType : DraftType}) => {
   type RecipientType = 'Myself' | 'Someone Else';

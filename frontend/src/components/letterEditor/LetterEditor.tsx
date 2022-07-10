@@ -8,7 +8,7 @@ import createEmojiPlugin from '@draft-js-plugins/emoji';
 import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
 import {useState} from 'react';
 import {LetterContent} from
-  '../../../../shared/dist/editor/classes/letterContent';
+  'shared/editor/classes/letterContent';
 
 
 const toolbarPlugin = createToolbarPlugin();
@@ -20,7 +20,8 @@ const {EmojiSuggestions, EmojiSelect} = emojiPlugin;
 export const LetterEditor = (props: {letterContent? : LetterContent}) => {
   const letterContent : LetterContent =
     props.letterContent || new LetterContent('');
-  const [letterContentState, setLetterContentState] = useState(letterContent);
+  const [letterContentState,
+    setLetterContentState] = useState(letterContent);
   const [editorState, setEditorState] = useState(
       () => EditorState.createEmpty(),
   );

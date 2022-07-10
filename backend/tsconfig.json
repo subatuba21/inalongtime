@@ -18,10 +18,5 @@
       "forceConsistentCasingInFileNames": true,
       "moduleResolution": "node",
       "outDir": "dist",
-    },
-    "references": [
-      {
-        "path": "shared"
-      }
-    ]
+    }
 }

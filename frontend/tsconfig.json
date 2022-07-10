@@ -20,5 +20,5 @@
     "noEmit": true,
     "jsx": "react-jsx",
   },
-  "include": ["src", "global.d.ts", "tests", "../shared"],
+  "include": ["src", "global.d.ts", "tests"],
 }

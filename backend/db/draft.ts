@@ -1,6 +1,6 @@
 import {Db, Collection, ObjectId} from 'mongodb';
 import logger from '../logger';
-import {DraftSchema} from '../shared/types/draft';
+import {DraftSchema} from 'shared/types/draft';
 import {FutureType} from '../utils/schemas/future';
 import {DbResponse} from './setup';
 
