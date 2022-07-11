@@ -1,7 +1,7 @@
 import styles from './inputBox.module.css';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
-import {useState, useRef, useEffect} from 'react';
+import {useState, useRef, useEffect, FocusEventHandler} from 'react';
 import {XLg} from 'react-bootstrap-icons';
 
 export const InputBox = (props:
@@ -15,6 +15,7 @@ export const InputBox = (props:
       showErrors?: boolean,
     },
     type?: 'password',
+    onBlur?: FocusEventHandler<HTMLInputElement>,
   }) => {
   const [errors, setErrors]:
   [string[], React.Dispatch<React.SetStateAction<string[]>>] =
@@ -50,7 +51,7 @@ export const InputBox = (props:
         onChange={onChange} type={props.type} style={{
           color: errors.length===0 ? '' : '#fc497f',
           caretColor: 'black',
-        }} ref={inputRef}></input>
+        }} ref={inputRef} onBlur={props.onBlur}></input>
     </div>;
     return <OverlayTrigger placement='bottom-start'
       trigger={['hover', 'focus']} overlay={
@@ -77,7 +78,8 @@ export const InputBox = (props:
   } else {
     return <div style={styles}>
       <input className='inputBox' placeholder={props.placeholder}
-        onInput={onChange} type={props.type}></input>
+        onInput={onChange} type={props.type}
+        onBlur={props.onBlur ? props.onBlur : () => null}></input>
     </div>;
   }
 };

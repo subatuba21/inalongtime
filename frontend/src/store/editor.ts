@@ -1,41 +1,31 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {LetterContent} from 'shared/dist/editor/classes/letterContent';
-import {DraftType} from 'shared/types/draft';
+import {DraftFrontendState, DraftType} from 'shared/types/draft';
+import {editorAPI} from '../api/editor';
 import {RootState} from './store';
 
 
-export type DraftEditorState = {
-    name: String,
-    contentType: DraftType,
-    recipientType: String,
-    recipientEmail?: String,
-    backupEmail1: String,
-    backupEmail2: String,
-    phoneNumber: String,
-    content?: LetterContent
-}
-
-const initialState : DraftEditorState = {
-  name: '',
-  contentType: 'letter',
-  recipientType: '',
-  recipientEmail: '',
+const initialState : DraftFrontendState = {
+  _id: '',
+  userId: '',
+  title: '',
+  type: 'letter',
+  recipientType: 'myself',
+  confirmed: false,
   backupEmail1: '',
   backupEmail2: '',
   phoneNumber: '',
-  content: undefined,
 };
 
 export const editorSlice = createSlice({
   name: 'editor',
   initialState,
   reducers: {
-    changeName: (state: DraftEditorState, action: PayloadAction<String>) => {
-      state.name = action.payload;
+    changeTitle: (state: DraftFrontendState, action: PayloadAction<string>) => {
+      state.title = action.payload;
     },
     changeContentType:
-    (state: DraftEditorState, action: PayloadAction<DraftType>) => {
-      state.contentType = action.payload;
+    (state: DraftFrontendState, action: PayloadAction<DraftType>) => {
+      state.type = action.payload;
       state.content = undefined;
     },
   },
@@ -43,7 +33,10 @@ export const editorSlice = createSlice({
 
 export const save = createAsyncThunk('editor/save', async (_, thunkApi) => {
   const rootState = thunkApi.getState() as RootState;
-  rootState.editor;
+  const success = await editorAPI.save(rootState.editor);
+  if (!success) {
+
+  }
 });
 
-export const {changeName} = editorSlice.actions;
+export const {changeTitle} = editorSlice.actions;

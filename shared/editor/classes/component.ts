@@ -1,4 +1,4 @@
-export abstract class Component {
+export class Component {
   static validate() {}
   toJson() {}
   static fromJson() {}

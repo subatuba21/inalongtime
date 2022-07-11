@@ -3,7 +3,7 @@ import {Component} from './component';
 
 export type ContentType = DraftType;
 
-export abstract class Content extends Component {
+export class Content extends Component {
   data: any;
   type: ContentType;
 
