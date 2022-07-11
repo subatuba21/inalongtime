@@ -16,8 +16,8 @@ export const googleStrategy = new Strategy({
     if (profile.email) {
       const registerUserResponse = await registerGoogleUser({
         email: profile.email,
-        firstname: profile.firstName,
-        lastname: profile.lastName,
+        firstname: profile.given_name,
+        lastname: profile.family_name,
       });
 
       if (registerUserResponse.success) {
