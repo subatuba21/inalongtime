@@ -17,7 +17,7 @@ export const LoginPage = () => {
       <div className={`${styles.centeredDiv} block-centered`}>
         <Button variant='primary'>
           <a href=
-            {`http://${process.env.REACT_APP_BASE_URL ? process.env.REACT_APP_BASE_URL : ''}/api/auth/login/google`}>
+            {`http://${process.env.REACT_APP_BASE_URL ? process.env.REACT_APP_BASE_URL : ''}/api/auth/google`}>
             <img src='/g-logo.png' id={styles.googleLogo}></img>
           Sign In With Google
           </a>

@@ -1,7 +1,8 @@
 import {Db, Collection, ObjectId} from 'mongodb';
 import {hashPassword} from '../utils/password';
 import {DbResponse} from './setup';
-import {RegisterUserInput, UserSchema} from '../utils/schemas/user';
+import {GoogleUserInput, RegisterUserInput,
+  UserSchema} from '../utils/schemas/user';
 import logger from '../logger';
 import {DBError} from './errors';
 
@@ -53,6 +54,46 @@ export const registerUser = async (userInput: RegisterUserInput) : Promise<UserD
     };
   }
 };
+
+export const registerGoogleUser =
+  async (input: GoogleUserInput) : Promise<UserDbResponse> => {
+    try {
+      logger.verbose(`registering google user user: ${input.email}`);
+      const user = await userCol.findOne({email: input.email});
+      if (user) {
+        return {
+          success: false,
+          error: DBError.UNIQUE_ENTITY_ALREADY_EXISTS, user: null};
+      }
+
+      const res = await userCol.insertOne(
+          {
+            email: input.email,
+            firstname: input.firstname,
+            lastname: input.lastname,
+            method: 'google',
+          },
+      );
+
+      if (res.acknowledged) {
+        return {
+          success: true,
+          user: {
+            _id: res.insertedId.toString(),
+            email: input.email,
+            firstname: input.firstname,
+            lastname: input.lastname,
+          },
+        };
+      } else throw new Error('MongoDB error: write not allowed.');
+    } catch (err: any) {
+      return {
+        success: false,
+        error: err.message,
+        user: null,
+      };
+    }
+  };
 
 export const getUser = async (_id: string) : Promise<UserDbResponse> => {
   try {

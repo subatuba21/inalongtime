@@ -1,8 +1,8 @@
 import {config} from 'dotenv';
 import {ObjectId} from 'mongodb';
 import logger from '../logger';
-import {addDraft, DraftEntry, setDraftDb, modifyDraft,
-  getDraft, ModifyDraftInput, DraftInput} from './draft';
+import {addDraft, setDraftDb, modifyDraft,
+  getDraft, ModifyDraftInput, DraftInput, DraftDbResponse} from './draft';
 import {getClient, getDb, setupDb} from './setup';
 import path from 'path';
 
@@ -45,13 +45,13 @@ describe('Testing draft related db functionalities', () => {
     };
     const res = await addDraft(draftInput);
     expect(res.success).toBe(true);
-    let draft = await db.collection('drafts').
-        findOne({_id: new ObjectId(res.draft?._id)}) as DraftEntry | null;
-    expect(draft).toBeTruthy();
-    draft = draft as DraftEntry;
-    expect(draft.userId.toString()).toBe(draftInput.userId.toString());
-    expect(draft.contentUrl).toBe(draftInput.contentUrl);
-    expect(draft.sendDate).toStrictEqual(draftInput.sendDate);
+    const draftRes = await db.collection('drafts').
+        findOne({_id: new ObjectId(res.draft?._id)}) as DraftDbResponse | null;
+    expect(draftRes?.draft).toBeTruthy();
+    const draft = draftRes?.draft;
+    expect(draft?.toString()).toBe(draftInput.userId.toString());
+    expect(draft?.contentUrl).toBe(draftInput.contentUrl);
+    expect(draft?.sendDate).toStrictEqual(draftInput.sendDate);
   });
 
   test('Testing getDraft', async () => {

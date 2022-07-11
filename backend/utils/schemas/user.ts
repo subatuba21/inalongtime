@@ -29,6 +29,7 @@ export const APIRegisterInput = z.object({
 }).strict();
 
 export type RegisterUserInput = z.infer<typeof registerUserInputSchema>;
+export type GoogleUserInput = Omit<RegisterUserInput, 'password'>;
 export type UserSchema = z.infer<typeof userSchema>;
 export type PassportLoginInput = {
   email: string;

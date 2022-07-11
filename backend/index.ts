@@ -44,8 +44,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
 });
 
-console.log(path.resolve(__dirname, '../frontend/build', 'index.html'));
-
 // For anything that is async and needed by the server.
 export const start = async (options?: {
   port?: number,

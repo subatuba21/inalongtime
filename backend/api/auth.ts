@@ -8,10 +8,10 @@ import {extractRegisterInput, registerUser} from './middleware/register';
 // eslint-disable-next-line new-cap
 export const authRouter = Router();
 
-authRouter.get('/login/google',
-    passport.authenticate('google', {scope: ['profile']}));
+authRouter.get('/google',
+    passport.authenticate('google', {scope: ['profile', 'email']}));
 
-authRouter.get('/login/google/callback',
+authRouter.get('/google/callback',
     passport.authenticate('google', {failureRedirect: '/login'}),
     function(req, res) {
       res.redirect('/');
