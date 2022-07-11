@@ -5,7 +5,13 @@
 }
 
 .centeredDiv button {
-    font-size: 14pt;
+    font-size: 12pt;
     margin-right: 30px;
-    margin-top: 15px;
+    margin-top: 20px;
+}
+
+#googleLogo {
+    display: inline-block;
+    height: 25px;
+    margin-right: 10px;
 }

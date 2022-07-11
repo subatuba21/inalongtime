@@ -12,8 +12,10 @@ export const RegisterPage = () => {
       <IndexNavbar></IndexNavbar>
       <RegisterForm></RegisterForm>
       <div className={`${styles.centeredDiv} block-centered`}>
-        <Button variant='primary'>Sign Up With Google</Button>
-        <Button variant='primary'>Sign Up With Facebook</Button>
+        <Button variant='primary'>
+          <img src='/g-logo.png' id={styles.googleLogo}></img>
+          Sign Up With Google
+        </Button>
       </div>
       <div className={`${styles.centeredDiv} block-centered whiteText`}>
       Have an account? <Link className='pinkText' to='/login'>Log in.</Link>

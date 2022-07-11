@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 import Button from 'react-bootstrap/esm/Button';
@@ -14,8 +15,13 @@ export const LoginPage = () => {
       <IndexNavbar></IndexNavbar>
       <LoginForm></LoginForm>
       <div className={`${styles.centeredDiv} block-centered`}>
-        <Button variant='primary'>Sign Up With Google</Button>
-        <Button variant='primary'>Sign Up With Facebook</Button>
+        <Button variant='primary'>
+          <a href=
+            {`http://${process.env.REACT_APP_BASE_URL ? process.env.REACT_APP_BASE_URL : ''}/api/auth/login/google`}>
+            <img src='/g-logo.png' id={styles.googleLogo}></img>
+          Sign In With Google
+          </a>
+        </Button>
       </div>
       <div className={`${styles.centeredDiv} block-centered whiteText`}>
       Forgot password?&nbsp;

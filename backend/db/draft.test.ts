@@ -34,10 +34,14 @@ describe('Testing draft related db functionalities', () => {
       title: 'Test title',
       userId: new ObjectId().toString(),
       contentUrl: 'https://www.google.com',
-      description: 'Test description',
       sendDate: new Date('2025-01-01'),
       type: 'letter',
       confirmed: false,
+      recipientType: 'myself',
+      recipientEmail: '',
+      backupEmail1: '',
+      backupEmail2: '',
+      phoneNumber: '',
     };
     const res = await addDraft(draftInput);
     expect(res.success).toBe(true);
@@ -47,7 +51,6 @@ describe('Testing draft related db functionalities', () => {
     draft = draft as DraftEntry;
     expect(draft.userId.toString()).toBe(draftInput.userId.toString());
     expect(draft.contentUrl).toBe(draftInput.contentUrl);
-    expect(draft.description).toBe(draftInput.description);
     expect(draft.sendDate).toStrictEqual(draftInput.sendDate);
   });
 
@@ -56,10 +59,14 @@ describe('Testing draft related db functionalities', () => {
       title: 'Test title',
       userId: new ObjectId().toString(),
       contentUrl: 'https://www.google.com',
-      description: 'Test description',
       sendDate: new Date('2025-01-01'),
       type: 'letter',
       confirmed: false,
+      recipientType: 'myself',
+      recipientEmail: '',
+      backupEmail1: '',
+      backupEmail2: '',
+      phoneNumber: '',
     };
     const res = await addDraft(draftInput);
     expect(res.success).toBe(true);
@@ -73,10 +80,14 @@ describe('Testing draft related db functionalities', () => {
       title: 'Test title',
       userId: new ObjectId().toString(),
       contentUrl: 'https://www.google.com',
-      description: 'Test description',
       sendDate: new Date('2025-01-01'),
       type: 'letter',
       confirmed: false,
+      recipientType: 'myself',
+      recipientEmail: '',
+      backupEmail1: '',
+      backupEmail2: '',
+      phoneNumber: '',
     };
     const res = await addDraft(draftInput);
     logger.verbose(res);

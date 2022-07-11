@@ -21,6 +21,7 @@ export const InputBox = (props:
   [string[], React.Dispatch<React.SetStateAction<string[]>>] =
   useState([] as string[]);
   const inputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     const value = inputRef.current?.value as string;
     errorCheck(value);

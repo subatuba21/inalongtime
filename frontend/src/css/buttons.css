@@ -12,6 +12,9 @@
   color: black;
   font-weight: 500;
   border-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-primary a, .btn-primary a:hover, .btn-primary a:visited {

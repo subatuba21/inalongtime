@@ -1,8 +1,10 @@
 import passport from 'passport';
 import {getUser} from '../../db/auth';
+import {googleStrategy} from './googleStrategy';
 import {localStrategy} from './localStrategy';
 
 passport.use(localStrategy);
+passport.use(googleStrategy);
 
 passport.serializeUser((user: any, done) => {
   done(null, user._id);

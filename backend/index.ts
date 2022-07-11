@@ -1,9 +1,16 @@
+import {config} from 'dotenv';
+
+if (process.env.NODE_ENV === 'test') {
+  config({
+    path: './test.env',
+  });
+} else config();
+
 import express from 'express';
 import {authRouter} from './api/auth';
 import {futureRouter} from './api/future';
 import {getDb, setupDb} from './db/setup';
 import logger from './logger';
-import {config} from 'dotenv';
 import {setUserDb} from './db/auth';
 import passport from 'passport';
 import './utils/passport/setup';
@@ -11,13 +18,6 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import {handleEndError} from './utils/handleEndError';
 import path from 'path';
-
-
-if (process.env.NODE_ENV === 'test') {
-  config({
-    path: './test.env',
-  });
-} else config();
 
 
 const app = express();
