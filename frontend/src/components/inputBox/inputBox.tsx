@@ -44,15 +44,26 @@ export const InputBox = (props:
     errorCheck(value);
   };
 
+  let inputStyle = {
+
+  };
+
   if (props.validation?.showErrors) {
-    const Input = <div style={styles}>
-      <input className='inputBox'
-        placeholder={props.placeholder}
-        onChange={onChange} type={props.type} style={{
-          color: errors.length===0 ? '' : '#fc497f',
-          caretColor: 'black',
-        }} ref={inputRef} onBlur={props.onBlur}></input>
-    </div>;
+    inputStyle = {
+      color: errors.length===0 ? '' : '#fc497f',
+      caretColor: 'black',
+    };
+  }
+
+  const Input = <input className='inputBox'
+    placeholder={props.placeholder}
+    onChange={onChange} type={props.type}
+    ref={inputRef} onBlur={props.onBlur} style={inputStyle}
+    value={props.valueState.value}
+  />;
+
+
+  if (props.validation?.showErrors) {
     return <OverlayTrigger placement='bottom-start'
       trigger={['hover', 'focus']} overlay={
         <Popover style={{
@@ -77,9 +88,7 @@ export const InputBox = (props:
     </OverlayTrigger>;
   } else {
     return <div style={styles}>
-      <input className='inputBox' placeholder={props.placeholder}
-        onInput={onChange} type={props.type}
-        onBlur={props.onBlur ? props.onBlur : () => null}></input>
+      {Input}
     </div>;
   }
 };
