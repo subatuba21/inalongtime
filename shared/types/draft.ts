@@ -10,7 +10,8 @@ const draftSchema = z.object({
   _id: z.string().length(12),
   userId: z.string().length(12),
   recipientType: recipientTypeSchema,
-  sendDate: z.date().optional(),
+  recipientEmail: z.string(),
+  sendDate: z.date(),
   contentUrl: z.string().url(),
   type: draftTypeSchema,
   title: z.string().min(1),
@@ -19,9 +20,9 @@ const draftSchema = z.object({
     required: z.boolean(),
     completed: z.boolean(),
   }).optional(),
-  backupEmail1: z.string().optional(),
-  backupEmail2: z.string().optional(),
-  phoneNumber: z.string().optional(),
+  backupEmail1: z.string(),
+  backupEmail2: z.string(),
+  phoneNumber: z.string(),
 });
 
 export const draftFrontendState = draftSchema.omit({
@@ -32,5 +33,6 @@ export const draftFrontendState = draftSchema.omit({
 
 export type DraftSchema = z.infer<typeof draftSchema>;
 export type DraftType = z.infer<typeof draftTypeSchema>;
-export type DraftFrontendState = z.infer<typeof draftFrontendState>
+export type DraftFrontendState = z.infer<typeof draftFrontendState>;
+export type RecipientType = z.infer<typeof recipientTypeSchema>;
 

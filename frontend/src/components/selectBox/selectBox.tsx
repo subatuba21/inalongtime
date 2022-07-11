@@ -2,6 +2,7 @@ import styles from './selectBox.module.css';
 
 export const SelectBox = (props: {
      options: string[],
+     values: string[],
      name: string,
      valueState: {value: string, set: Function},
      onChange?: React.ChangeEventHandler<HTMLSelectElement>
@@ -14,8 +15,8 @@ export const SelectBox = (props: {
     <select onInput={onChange}
       onChange={props.onChange ? props.onChange : () => null}>
       {
-        props.options.map((str) =>
-          <option key={str} value={str}>{str}</option>)
+        props.options.map((str, index) =>
+          <option key={str} value={props.values[index]}>{str}</option>)
       }
     </select>
   </div>;
