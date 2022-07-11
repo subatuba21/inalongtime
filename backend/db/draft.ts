@@ -1,22 +1,11 @@
 import {Db, Collection, ObjectId} from 'mongodb';
 import logger from '../logger';
 import {DraftSchema} from 'shared/types/draft';
-import {FutureType} from '../utils/schemas/future';
 import {DbResponse} from './setup';
 
 let draftCol : Collection;
 export const setDraftDb = async (db: Db) => {
   draftCol = db.collection('drafts');
-};
-
-export interface DraftEntry {
-    _id: string;
-    userId: string;
-    sendDate?: Date;
-    contentUrl: string;
-    type: FutureType;
-    title: string;
-    description?: string;
 };
 
 export type DraftInput = Omit<DraftSchema, '_id'>
