@@ -46,8 +46,13 @@ export const passportAuthenticateLocal =
           } else {
             logger.verbose(
                 `Successful login. User: ${JSON.stringify(req.user)}}`);
+            const user = req.user as UserSchema;
+
             const clientUserData : ClientUserData = {
-              ...req.user as UserSchema,
+              email: user.email,
+              _id: user._id,
+              firstname: user.firstname,
+              lastname: user.lastname,
             };
 
             const response : APIResponse = {
@@ -70,5 +75,34 @@ export const mustBeLoggedIn =
         error: needToLogin,
       };
       res.status(response.error?.code as number).end(response);
+    }
+  };
+
+export const returnCurrentUser =
+  async (req: express.Request, res: express.Response, next: Function) => {
+    if (req.user) {
+      const user = req.user as UserSchema;
+
+      const clientUserData : ClientUserData = {
+        email: user.email,
+        _id: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+      };
+
+      const response : APIResponse = {
+        data: clientUserData,
+        error: null,
+      };
+
+      res.end(JSON.stringify(response));
+      return;
+    } else {
+      const response : APIResponse = {
+        data: null,
+        error: null,
+      };
+
+      res.end(JSON.stringify(response));
     }
   };
