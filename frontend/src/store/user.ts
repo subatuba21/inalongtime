@@ -34,7 +34,11 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     logout: (state: UserState) => {
-      state = initialState;
+      state.loggedIn = false;
+      state._id = '';
+      state.email = '';
+      state.firstName = '';
+      state.lastName = '';
       authAPI.logout();
     },
 

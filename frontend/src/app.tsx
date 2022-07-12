@@ -67,6 +67,11 @@ export const App = () => {
           <HomePage></HomePage>
         </LoggedInRouteGuard>}/>
 
+      <Route path='/drafts' element={
+        <LoggedInRouteGuard>
+          <DraftsPage></DraftsPage>
+        </LoggedInRouteGuard>}/>
+
       <Route path='/hometest' element={
         <HomePage></HomePage>
       } />

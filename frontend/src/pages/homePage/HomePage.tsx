@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
 import {LoggedInNavbar} from '../../components/navbars/homeNavbar';
@@ -21,6 +22,14 @@ export const HomePage = () => {
           <FutureType typeId='goals' smallImage={true}></FutureType>
           <FutureType typeId='journal'></FutureType>
         </div>
+        <h3 className='pinkText'>Want to send something else?</h3>
+        <p className='whiteText'>
+          We&apos;re open to ideas! Send an email to contact@inalongtime.com
+          and we&apos;ll do our best to accomodate your request!
+
+          Additionally, any other feature requests or feedback you have, please send
+          them over to contact@inalongtime.com.
+        </p>
       </div>
       <BottomBuffer></BottomBuffer>
     </div>
