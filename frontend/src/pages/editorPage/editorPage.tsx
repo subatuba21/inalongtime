@@ -15,6 +15,8 @@ export const EditorPage = () => {
         <p id={styles.autosavedMessage} className='whiteText'>
             All fields are autosaved.
         </p>
+        <h3>Preview Url</h3>
+        <h3>Steps</h3>
         <div className={styles.headerCollapseRow}>
           <h3>Basic Info</h3>
           <span className="pinkText"
