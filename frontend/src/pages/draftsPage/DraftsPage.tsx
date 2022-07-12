@@ -28,7 +28,7 @@ export const DraftsPage = () => {
         </p>
       </div>
       <BottomBuffer></BottomBuffer>
-    </div>;
-    <Footer></Footer>;
+    </div>
+    <Footer></Footer>
   </div>;
 };
