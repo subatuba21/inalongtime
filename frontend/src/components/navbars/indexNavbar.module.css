@@ -45,3 +45,60 @@
     color: white;
     padding: 15px;
 }
+
+#mobileMenuContainer {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    #navbarMiddle {
+        display: none;
+    }
+
+
+    #navbarRight {
+        display: none;
+    }
+
+    #navbar {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #mobileMenuHamburger {
+        display: block;
+        color: white;
+        font-size: 27pt;
+        position: relative;
+        top: 4px;
+    }
+
+    #navbarLeft {
+        font-size: 19pt;
+        padding-left: 5px;
+    }
+
+    #mobileMenu {
+        position: absolute;
+        top: 130%;
+        background-color: black;
+        opacity: .9;
+        right: 0px;
+        min-width: 200px;
+        min-height: 100px;
+        border-radius: 5px;
+        padding: 15px;
+
+    }
+
+    #mobileMenuContainer {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    #mobileMenu a {
+        display: block;
+        padding: 3px;
+    }
+}
