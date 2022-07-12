@@ -43,36 +43,40 @@ export const LoginForm = () => {
   return <div className="box" id={styles.loginForm}>
     <h2>Log In</h2>
     <form id={styles.container} onSubmit={login}>
-      <InputBox placeholder='Email' name='email' valueState={
-        {value: email, set: setEmail}}
-      validation={{
-        showErrors: true,
-        validationFunction: (input) => {
-          const errors: string[] = [];
-          if (input.length===0) errors.push('Email cannot be blank');
-          return errors;
-        },
-        formErrorState: {
-          set: setErrors,
-          value: errors,
-        },
-      }}
-      ></InputBox>
-      <InputBox placeholder='Password' name='password' valueState={
-        {value: password, set: setPassword}} type='password'
-      validation={{
-        showErrors: true,
-        validationFunction: (input) => {
-          const errors: string[] = [];
-          if (input.length===0) errors.push('Password cannot be blank');
-          return errors;
-        },
-        formErrorState: {
-          set: setErrors,
-          value: errors,
-        },
-      }}
-      ></InputBox>
+      <div>
+        <InputBox placeholder='Email' name='email' valueState={
+          {value: email, set: setEmail}}
+        validation={{
+          showErrors: true,
+          validationFunction: (input) => {
+            const errors: string[] = [];
+            if (input.length===0) errors.push('Email cannot be blank');
+            return errors;
+          },
+          formErrorState: {
+            set: setErrors,
+            value: errors,
+          },
+        }}
+        ></InputBox>
+      </div>
+      <div>
+        <InputBox placeholder='Password' name='password' valueState={
+          {value: password, set: setPassword}} type='password'
+        validation={{
+          showErrors: true,
+          validationFunction: (input) => {
+            const errors: string[] = [];
+            if (input.length===0) errors.push('Password cannot be blank');
+            return errors;
+          },
+          formErrorState: {
+            set: setErrors,
+            value: errors,
+          },
+        }}
+        ></InputBox>
+      </div>
       <Button variant='info' id={styles.button} type='submit' style={{
         opacity: processingLogin ? '.5' : '1',
       }}>Log In</Button>

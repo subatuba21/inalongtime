@@ -56,5 +56,9 @@
     #registerForm > h2 {
         font-size: 17pt;
     }
+
+    #container > div {
+        margin-bottom: 5px;
+    }
 }
 
