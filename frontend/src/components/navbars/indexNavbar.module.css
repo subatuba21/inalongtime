@@ -12,6 +12,7 @@
     padding-top: 0px;
     font-size: 15pt;
     font-weight: 500;
+    cursor: pointer;
 }
 
 #loginLink {
