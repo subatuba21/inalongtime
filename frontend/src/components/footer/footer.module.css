@@ -1,45 +1,87 @@
 #footer {
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 1em;
-    font-size: 15pt;
-    padding-top: 30px;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 1em;
+  font-size: 15pt;
+  padding-top: 30px;
 }
 
 .column {
-    margin: 10px;
-    margin-right: 50px;
-    color: var(--pink);
-    display: inline-flex;
-    flex-direction: column;
-
+  margin: 10px;
+  margin-right: 50px;
+  color: var(--pink);
+  display: inline-flex;
+  flex-direction: column;
 }
 
 .column h3 {
-    font-weight: 700;
-    color: white;
+  font-weight: 700;
+  color: white;
 }
 
 #columnContainer {
-    padding: 40px;
-    padding-top: 30px;
+  padding: 40px;
+  padding-top: 30px;
 }
 
 #firstRow > span.link {
-    margin-left: 10px;
-    margin-right: 10px;
-    color: var(--pink);
+  margin-left: 10px;
+  margin-right: 10px;
+  color: var(--pink);
 }
 
 #logo {
-    margin-right: 20px;
+  margin-right: 20px;
+  margin-left: 20px;
 }
 
 #legalDiv {
-    font-size: 11pt; 
-    color: white; 
+  font-size: 11pt;
+  color: white;
 }
 
 #legalDiv > span {
-    margin-left: 2em;
-    margin-right: 2em;
+  margin-left: 2em;
+  margin-right: 2em;
+}
+
+@media (max-width: 700px) {
+  #footer {
+    font-size: 12pt;
+    padding: 6vw;
+  }
+
+  #legalDiv > span {
+    margin-right: 1em;
+    margin-left: 0px;
+    font-size: 7pt;
+  }
+
+  #logo {
+    font-size: 15pt;
+    display: block;
+    margin-left: 0px;
+  }
+
+  #firstRow > span.link {
+    margin-left: 0px;
+    margin-right: 20px;
+    margin-top: 4000px;
+  }
+
+  #columnContainer {
+    padding: 0px;
+    padding-top: 10px;
+  }
+
+  .column {
+    margin-right: 20px;
+    margin-left: 0px;
+    color: var(--pink);
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  #legalDiv {
+    margin-top: 10px;
+  }
 }
