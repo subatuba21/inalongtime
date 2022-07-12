@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import passport from 'passport';
 import {
+  logoutMiddleware,
   passportAuthenticateLocal, returnCurrentUser} from './middleware/login';
 import {extractRegisterInput, registerUser} from './middleware/register';
 
@@ -17,6 +18,7 @@ authRouter.get('/google/callback',
       res.redirect('/');
     });
 
+authRouter.post('/logout', logoutMiddleware);
 authRouter.get('/current', returnCurrentUser);
 authRouter.post('/login', passportAuthenticateLocal);
 authRouter.post('/register', extractRegisterInput, registerUser);

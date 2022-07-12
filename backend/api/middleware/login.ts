@@ -106,3 +106,9 @@ export const returnCurrentUser =
       res.end(JSON.stringify(response));
     }
   };
+
+export const logoutMiddleware =
+  async (req: express.Request, res: express.Response, next: Function) => {
+    req.logout({}, () => null);
+    res.end();
+  };
