@@ -28,3 +28,9 @@
     font-size: 12pt;
     color: black;
 }
+
+@media (max-width: 650px) {
+    #loginForm {
+        margin-top: 7vh;
+    }
+}

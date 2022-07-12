@@ -1,7 +1,7 @@
 #registerForm {
     margin: 0 auto;
     display: block;
-    width: 95%;
+    width: 85%;
     max-width: 600px;
     margin-top: 10vh;
 }
@@ -33,5 +33,16 @@
     margin-left: 1em;
     font-size: 12pt;
     color: black;
+}
+
+@media (max-width: 450px) {
+    #container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #registerForm {
+        margin-top: 7vh;
+    }
 }
 
