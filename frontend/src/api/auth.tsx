@@ -12,6 +12,7 @@ export interface LoginResult {
         email: string;
         firstName: string;
         lastName: string;
+        _id: string;
     };
 }
 
@@ -47,6 +48,7 @@ export const authAPI = {
             email: res.data.data.email,
             firstName: res.data.data.firstName,
             lastName: res.data.data.lastName,
+            _id: res.data.data._id,
           },
         };
       }
@@ -81,8 +83,9 @@ export const authAPI = {
           success: true,
           user: {
             email: res.data.data.email,
-            firstName: res.data.data.firstName,
-            lastName: res.data.data.lastName,
+            firstName: res.data.data.firstname,
+            lastName: res.data.data.lastname,
+            _id: res.data.data._id,
           },
         };
       }
@@ -106,6 +109,31 @@ export const authAPI = {
         type: CentralErrors.signupError,
         message: 'Unknown error while signing up. Please try again.',
       },
+    };
+  },
+
+  getCurrentUser: async () : Promise<LoginResult> => {
+    try {
+      const res = await axios({
+        method: 'get',
+        url: '/api/auth/current',
+      });
+
+      if (res.status===200 && res.data.data!=null) {
+        return {
+          success: true,
+          user: {
+            email: res.data.data.email,
+            firstName: res.data.data.firstname,
+            lastName: res.data.data.lastname,
+            _id: res.data.data._id,
+          },
+        };
+      }
+    } catch (err) {}
+
+    return {
+      success: false,
     };
   },
 };

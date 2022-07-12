@@ -1,7 +1,8 @@
 import {authAPI, LoginInput, RegisterInput} from '../api/auth';
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export interface UserState {
+  _id: string,
     firstName: string;
     lastName: string;
     email: string;
@@ -9,6 +10,7 @@ export interface UserState {
 }
 
 const initialState: UserState = {
+  _id: '',
   firstName: '',
   lastName: '',
   email: '',
@@ -35,11 +37,20 @@ export const userSlice = createSlice({
       state = initialState;
       authAPI.logout();
     },
+
+    setUserState: (state: UserState, action : PayloadAction<UserState>) => {
+      state.loggedIn = action.payload.loggedIn;
+      state._id = action.payload._id;
+      state.email = action.payload.email;
+      state.firstName = action.payload.firstName;
+      state.lastName = action.payload.lastName;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (_state, action) => {
       if (action.payload.success) {
         return {
+          _id: action.payload.user?._id as string,
           email: action.payload.user?.email as string,
           firstName: action.payload.user?.firstName as string,
           lastName: action.payload.user?.lastName as string,
@@ -51,6 +62,7 @@ export const userSlice = createSlice({
     builder.addCase(register.fulfilled, (_state, action) => {
       if (action.payload.success) {
         return {
+          _id: action.payload.user?._id as string,
           email: action.payload.user?.email as string,
           firstName: action.payload.user?.firstName as string,
           lastName: action.payload.user?.lastName as string,
@@ -61,6 +73,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const {logout} = userSlice.actions;
+export const {logout, setUserState} = userSlice.actions;
 
 
