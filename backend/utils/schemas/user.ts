@@ -8,6 +8,7 @@ const userSchema = z.object({
   lastname: z.string().min(1).regex(noSpacesRegex),
   email: z.string().email(),
   passwordHash: z.string().optional(),
+  method: z.enum(['google']).optional(),
 });
 
 export const registerUserInputSchema = userSchema.omit({

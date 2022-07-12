@@ -29,6 +29,8 @@ export const googleStrategy = new Strategy({
       return done(null, false);
     }
   } else {
-    return done(null, userResponse.user);
+    if (userResponse?.user?.method==='google') {
+      return done(null, userResponse.user);
+    } else return done(null, false);
   }
 });
