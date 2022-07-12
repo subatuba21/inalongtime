@@ -3,14 +3,14 @@ import Button from 'react-bootstrap/esm/Button';
 import {Link} from 'react-router-dom';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
-import {IndexNavbar} from '../../components/navbars/indexNavbar';
+import {Navbar} from '../../components/navbars/Navbar';
 import {RegisterForm} from './registerForm/registerForm';
 import styles from './registerPage.module.css';
 
 export const RegisterPage = () => {
   return <div>
     <div className='fillPage'>
-      <IndexNavbar></IndexNavbar>
+      <Navbar type='index'></Navbar>
       <RegisterForm></RegisterForm>
       <div className={`${styles.centeredDiv} block-centered`}>
         <Button variant='primary'>

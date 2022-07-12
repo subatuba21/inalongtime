@@ -1,14 +1,14 @@
 /* eslint-disable max-len */
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
-import {LoggedInNavbar} from '../../components/navbars/homeNavbar';
+import {Navbar} from '../../components/navbars/Navbar';
 import {FutureType} from './futureType/futureType';
 import styles from './HomePage.module.css';
 
 export const HomePage = () => {
   return <div style={styles}>
     <div className=' fillPage'>
-      <LoggedInNavbar></LoggedInNavbar>
+      <Navbar></Navbar>
       <div id={styles.mainDiv}>
         <h2 className='pinkText'>What do you want to send&nbsp;
           <span style={{color: 'lightcyan'}} id={styles.futureText}>

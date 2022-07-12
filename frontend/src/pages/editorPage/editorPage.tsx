@@ -2,14 +2,14 @@ import {useState} from 'react';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
 import {LetterEditor} from '../../components/letterEditor/LetterEditor';
-import {LoggedInNavbar} from '../../components/navbars/homeNavbar';
+import {Navbar} from '../../components/navbars/Navbar';
 import {BasicInfo} from './basicInfoForm/basicInfo';
 import styles from './editorPage.module.css';
 export const EditorPage = () => {
   const [infoHidden, setInfoHidden] = useState(false);
   return <div style={styles}>
     <div className='fillPage'>
-      <LoggedInNavbar></LoggedInNavbar>
+      <Navbar></Navbar>
       <div id={styles.mainDiv}>
         <h2 className='pinkText'>Draft Editor</h2>
         <p id={styles.autosavedMessage} className='whiteText'>

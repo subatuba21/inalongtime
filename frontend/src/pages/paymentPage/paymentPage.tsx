@@ -1,4 +1,4 @@
-import {LoggedInNavbar} from '../../components/navbars/homeNavbar';
+import {Navbar} from '../../components/navbars/Navbar';
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 import {CheckoutForm} from './checkoutForm';
@@ -11,7 +11,7 @@ const stripePromise = loadStripe('pk_test_51LEh4FF1IICh0j2EV4ziKndA0Yugde8UbOreh
 
 export const PaymentPage = () => {
   return <div className="fillPage">
-    <LoggedInNavbar></LoggedInNavbar>
+    <Navbar></Navbar>
     <Elements stripe={stripePromise}>
       <CheckoutForm />
     </Elements>

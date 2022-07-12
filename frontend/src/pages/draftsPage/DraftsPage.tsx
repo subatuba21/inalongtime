@@ -1,13 +1,13 @@
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
-import {LoggedInNavbar} from '../../components/navbars/homeNavbar';
+import {Navbar} from '../../components/navbars/Navbar';
 import {Draft} from './Draft';
 import styles from './draftsPage.module.css';
 
 export const DraftsPage = () => {
   return <div>
     <div className="fillPage">
-      <LoggedInNavbar></LoggedInNavbar>
+      <Navbar></Navbar>
       <div id={styles.mainDiv}>
         <h2 className='pinkText'>Drafts</h2>
         <Draft></Draft>

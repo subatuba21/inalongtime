@@ -5,14 +5,14 @@ import Button from 'react-bootstrap/esm/Button';
 import {Link} from 'react-router-dom';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
-import {IndexNavbar} from '../../components/navbars/indexNavbar';
+import {Navbar} from '../../components/navbars/Navbar';
 import {LoginForm} from './loginForm/loginForm';
 import styles from './loginPage.module.css';
 
 export const LoginPage = () => {
   return <div>
     <div className=' fillPage'>
-      <IndexNavbar></IndexNavbar>
+      <Navbar type='index'></Navbar>
       <LoginForm></LoginForm>
       <div className={`${styles.centeredDiv} block-centered`}>
         <Button variant='primary'>
