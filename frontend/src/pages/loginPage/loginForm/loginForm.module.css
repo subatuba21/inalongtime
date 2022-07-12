@@ -30,7 +30,15 @@
 }
 
 @media (max-width: 650px) {
-    #loginForm {
-        margin-top: 7vh;
+    #container input {
+        font-size: 13pt;
+    }
+
+    #button {
+        font-size: 13pt;
+    }
+
+    #loginForm > h2 {
+        font-size: 17pt;
     }
 }

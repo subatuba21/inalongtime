@@ -22,4 +22,13 @@
     #mainDiv {
         margin-top: 30px;
     }
+
+    #mainDiv > h2 {
+        font-size: 20pt;
+        margin-bottom: 20px;
+    }
+
+    .question h3 {
+        font-size: 15pt;
+    }
 }

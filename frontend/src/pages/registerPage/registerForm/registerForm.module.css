@@ -41,8 +41,20 @@
         flex-direction: column;
     }
 
+    #container input {
+        font-size: 13pt;
+    }
+
+    #button {
+        font-size: 13pt;
+    }
+
     #registerForm {
         margin-top: 7vh;
+    }
+
+    #registerForm > h2 {
+        font-size: 17pt;
     }
 }
 
