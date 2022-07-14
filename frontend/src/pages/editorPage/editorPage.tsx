@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {StepType} from 'shared/types/draft';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
 // import {LetterEditor} from '../../components/letterEditor/LetterEditor';
@@ -6,7 +7,6 @@ import {Navbar} from '../../components/navbars/Navbar';
 import {BasicInfo} from './basicInfoForm/basicInfo';
 import styles from './editorPage.module.css';
 import {Step} from './step/step';
-export type StepType = 'info' | 'content' | 'customize' | 'confirm';
 
 export const EditorPage = () => {
   const [currentStep, setStepState] = useState<StepType>('info');

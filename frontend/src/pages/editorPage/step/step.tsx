@@ -1,6 +1,5 @@
 import {useSelector} from 'react-redux';
-import {DraftFrontendState} from 'shared/types/draft';
-import {StepType} from '../editorPage';
+import {DraftFrontendState, StepType} from 'shared/types/draft';
 import styles from './step.module.css';
 import {ExclamationOctagon, Check2Circle} from 'react-bootstrap-icons';
 

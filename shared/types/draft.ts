@@ -41,4 +41,5 @@ export type DraftSchema = z.infer<typeof draftSchema>;
 export type DraftType = z.infer<typeof draftTypeSchema>;
 export type DraftFrontendState = z.infer<typeof draftFrontendState>;
 export type RecipientType = z.infer<typeof recipientTypeSchema>;
+export type StepType = 'info' | 'content' | 'customize' | 'confirm';
 

@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {DraftFrontendState, DraftType, RecipientType} from 'shared/types/draft';
 import {editorAPI} from '../api/editor';
+import {StepType} from 'shared/types/draft';
 import {RootState} from './store';
 
 
@@ -57,6 +58,14 @@ export const editorSlice = createSlice({
           state.recipientType = action.payload;
           if (action.payload === 'myself') state.recipientEmail = '';
         },
+    setStepFinished:
+      (state: DraftFrontendState, action: PayloadAction<StepType>) => {
+        state.progress[action.payload] = true;
+      },
+    setStepUnfinished:
+      (state: DraftFrontendState, action: PayloadAction<StepType>) => {
+        state.progress[action.payload] = false;
+      },
   },
 });
 
@@ -71,6 +80,7 @@ export const save = createAsyncThunk('editor/save', async (_, thunkApi) => {
 export const {changeTitle, changePhoneNumber,
   changeBackupEmail1, changeBackupEmail2,
   changeRecipientEmail, changeContentType,
-  changeRecipientType,
+  changeRecipientType, setStepFinished,
+  setStepUnfinished,
 } =
    editorSlice.actions;
