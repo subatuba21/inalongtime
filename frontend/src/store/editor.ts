@@ -16,6 +16,12 @@ const initialState : DraftFrontendState = {
   backupEmail2: '',
   phoneNumber: '',
   sendDate: new Date(),
+  progress: {
+    info: true,
+    content: false,
+    customize: false,
+    confirm: false,
+  },
 };
 
 export const editorSlice = createSlice({

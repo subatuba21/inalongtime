@@ -32,3 +32,35 @@
 .headerCollapseRow > span {
     cursor: pointer;
 }
+
+#previewURL {
+   display: inline-block;
+   border-radius: 5px;
+   font-weight: 500;
+   cursor: pointer;
+   color: white;
+   margin-bottom: 0px;
+   margin-top: 0px;
+}
+
+#previewURL > a {
+    color: lightcyan;
+}
+
+.step {
+    display: inline-block;
+    background-color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-weight: 500;
+    border-radius: 5px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.step.active {
+    background-color: var(--pink);
+    cursor:unset;
+}

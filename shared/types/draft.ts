@@ -28,7 +28,13 @@ const draftSchema = z.object({
 export const draftFrontendState = draftSchema.omit({
   contentUrl: true,
 }).extend({
-  content: z.instanceof(Content).optional()
+  content: z.instanceof(Content).optional(),
+  progress: z.object({
+    'info': z.boolean(),
+    'content': z.boolean(),
+    'customize': z.boolean(),
+    'confirm': z.boolean(),
+  }).strict(),
 })
 
 export type DraftSchema = z.infer<typeof draftSchema>;
