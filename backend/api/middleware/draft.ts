@@ -3,8 +3,7 @@ import express from 'express';
 import {draftFrontendState,
   DraftType,
   draftTypeSchema} from 'shared/dist/types/draft';
-import {addDraft} from '../../db/draft';
-import {DBError} from '../../db/errors';
+import {addDraft, getNumberOfUserDrafts} from '../../db/draft';
 import logger from '../../logger';
 import {getContentFilename} from '../../utils/contentStorage/draft';
 import {UserSchema} from '../../utils/schemas/user';
@@ -69,6 +68,19 @@ export const addNewDraft =
     async (req: express.Request, res: express.Response, next: Function) => {
       const draftType = req.draft?.type as DraftType;
       const user = req.user as UserSchema;
+      const numDrafts = await getNumberOfUserDrafts(user._id);
+
+      if (numDrafts===undefined || numDrafts >= 3) {
+        const response : APIResponse = {
+          data: null,
+          error: alreadyThreeDrafts,
+        };
+        res.status(response.error?.code as number)
+            .end(JSON.stringify(response));
+        return;
+      }
+
+
       const draftID = new ObjectID();
       const result = await addDraft({
         userId: user._id,
@@ -93,13 +105,12 @@ export const addNewDraft =
 
         res.end(JSON.stringify(response));
       } else {
-        if (result.error === DBError.ALREADY_THREE_DRAFTS) {
-          const response : APIResponse = {
-            data: null,
-            error: alreadyThreeDrafts,
-          };
-          res.status(response.error?.code as number)
-              .end(JSON.stringify(response));
-        }
+        const response : APIResponse = {
+          data: null,
+          error: unknownError,
+        };
+        res.status(response.error?.code as number)
+            .end(JSON.stringify(response));
+        return;
       }
     };

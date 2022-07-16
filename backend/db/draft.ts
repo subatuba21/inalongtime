@@ -63,6 +63,18 @@ export const getDraft = async (_id: string) : Promise<DraftDbResponse> => {
   }
 };
 
+export const getNumberOfUserDrafts =
+  async (userId: string) : Promise<number | undefined> => {
+    try {
+      const res = await draftCol.countDocuments({userId: {
+        $eq: new ObjectId(userId),
+      }});
+      return res;
+    } catch {
+      return undefined;
+    }
+  };
+
 export type ModifyDraftInput = Partial<DraftInput>;
 export const modifyDraft =
     async (_id: string, draft : ModifyDraftInput)
