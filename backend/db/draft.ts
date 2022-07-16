@@ -103,3 +103,26 @@ export const modifyDraft =
         };
       }
     };
+
+export const deleteDraft = async (_id: string) : Promise<DraftDbResponse> => {
+  try {
+    const res = await draftCol.findOneAndDelete({_id: new ObjectId(_id)});
+    if (res && res.value) {
+      logger.verbose(`Found draft with id ${_id}`);
+      return {
+        success: true,
+        draft: {...res.value, _id, userId:
+              res.value.userId.toString()} as DraftSchema,
+      };
+    } else {
+      throw new Error('Draft not found.');
+    }
+  } catch (err: any) {
+    logger.warn(`Unable to find draft with id ${_id}: ${err.message}`);
+    return {
+      success: false,
+      error: err.message,
+      draft: null,
+    };
+  }
+};

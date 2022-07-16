@@ -133,3 +133,63 @@ export const getUserByEmail = async (email: string) : Promise<UserDbResponse> =>
     };
   }
 };
+
+export const addDraftIdToUser = async (userID: string, draftID: string) => {
+  try {
+    const result = await userCol.updateOne({
+      _id: new ObjectId(userID),
+    }, {
+      $addToSet: {
+        draftIDs: draftID,
+      },
+    });
+
+    if (!result.acknowledged) throw new Error();
+  } catch (err) {
+    return DBError.ENTITY_NOT_FOUND;
+  }
+};
+
+export const deleteDraftIdFromUser =
+  async (userID: string, draftID: string) => {
+    try {
+      await userCol.updateOne({
+        _id: new ObjectId(userID),
+      }, {
+        $pull: {
+          draftIDs: draftID,
+        },
+      });
+    } catch (err) {
+      return DBError.ENTITY_NOT_FOUND;
+    }
+  };
+
+export const addFutureIdToUser = async (userID: string, futureID: string) => {
+  try {
+    await userCol.updateOne({
+      _id: new ObjectId(userID),
+    }, {
+      $addToSet: {
+        futureIDs: futureID,
+      },
+    });
+  } catch (err) {
+    return DBError.ENTITY_NOT_FOUND;
+  }
+};
+
+export const deleteFutureIdFromUser =
+  async (userID: string, futureID: string) => {
+    try {
+      await userCol.updateOne({
+        _id: new ObjectId(userID),
+      }, {
+        $addToSet: {
+          futureIDs: futureID,
+        },
+      });
+    } catch (err) {
+      return DBError.ENTITY_NOT_FOUND;
+    }
+  };

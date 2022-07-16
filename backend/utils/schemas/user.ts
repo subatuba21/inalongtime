@@ -9,11 +9,15 @@ const userSchema = z.object({
   email: z.string().email(),
   passwordHash: z.string().optional(),
   method: z.enum(['google']).optional(),
+  draftIDs: z.array(z.string()).optional(),
+  futureIDs: z.array(z.string()).optional(),
 });
 
 export const registerUserInputSchema = userSchema.omit({
   _id: true,
   passwordHash: true,
+  draftIDs: true,
+  futureIDs: true,
 }).extend({
   password: z.string().min(8).regex(noSpacesRegex),
 });
