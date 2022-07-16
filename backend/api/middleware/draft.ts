@@ -13,6 +13,7 @@ import {addDraft, modifyDraft,
   getDraft as getDraftFromDB} from '../../db/draft';
 import logger from '../../logger';
 import {getContentFilename,
+  getDraftContent,
   postDraftContent} from '../../utils/contentStorage/draft';
 import {UserSchema} from '../../utils/schemas/user';
 import {APIResponse} from '../../utils/types/apiStructure';
@@ -231,9 +232,10 @@ export const deleteDraft =
 export const getDraft =
   async (req: express.Request, res: express.Response, next: Function) => {
     const draftId = req.draft?.id as string;
-    const draftRes = await getDraftFromDB(draftId);
+    const result = await getDraftFromDB(draftId);
+    const user = req.user as UserSchema;
 
-    if (draftRes.error === DBError.ENTITY_NOT_FOUND) {
+    if (result.error === DBError.ENTITY_NOT_FOUND) {
       const response : APIResponse = {
         data: null,
         error: notFoundError,
@@ -241,7 +243,7 @@ export const getDraft =
       res.status(response.error?.code as number)
           .end(JSON.stringify(response));
       return;
-    } else if (draftRes.error) {
+    } else if (result.error) {
       const response : APIResponse = {
         data: null,
         error: notFoundError,
@@ -251,8 +253,16 @@ export const getDraft =
       return;
     }
 
+    const draftContent = await getDraftContent(user._id,
+        draftId, result.draft?.type as DraftType);
+
+    const draftRes : DraftResponseBody = await draftResponseBody.parseAsync({
+      content: draftContent,
+      properties: result.draft,
+    });
+
     const response : APIResponse = {
-      data: draftRes.draft,
+      data: draftRes,
       error: null,
     };
     res.end(JSON.stringify(response));
