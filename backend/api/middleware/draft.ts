@@ -5,7 +5,9 @@ import {editDraftRequestBody,
   DraftType,
   draftTypeSchema} from 'shared/dist/types/draft';
 import {LetterContent} from 'shared/dist/editor/classes/letterContent';
-import {EditDraftRequestBody} from 'shared/types/draft';
+import {DraftResponseBody,
+  EditDraftRequestBody} from 'shared/types/draft';
+import {draftResponseBody} from 'shared/dist/types/draft';
 import {addDraft, modifyDraft,
   deleteDraft as deleteDraftFromDB,
   getDraft as getDraftFromDB} from '../../db/draft';
@@ -123,9 +125,14 @@ export const addNewDraft =
 
       const error = await addDraftIdToUser(user._id, draftID.toString());
 
+      const draftRes : DraftResponseBody = await draftResponseBody.parseAsync({
+        content: {},
+        properties: result.draft,
+      });
+
       if (result.success && !error) {
         const response : APIResponse = {
-          data: result.draft,
+          data: draftRes,
           error: null,
         };
         res.end(JSON.stringify(response));
@@ -145,12 +152,21 @@ export const editDraft =
       const draftData = req.draft?.editDraftData as EditDraftRequestBody;
       const draftId = req.draft?.id as string;
       const draftType =
-        draftData?.dbModifiers?.type || req.draft?.type as DraftType;
+        draftData?.properties?.type || req.draft?.type as DraftType;
 
       const user = req.user as UserSchema;
 
-      if (draftData.dbModifiers) {
-        await modifyDraft(draftId, draftData.dbModifiers);
+      if (draftData.properties) {
+        const draftRes = await modifyDraft(draftId, draftData.properties);
+        if (draftRes.error) {
+          const response : APIResponse = {
+            data: null,
+            error: unknownError,
+          };
+          res.status(response.error?.code as number)
+              .end(JSON.stringify(response));
+          return;
+        }
       }
 
       if (draftData.content) {
@@ -167,8 +183,25 @@ export const editDraft =
           }
         }
 
-        await postDraftContent(user._id, draftId, content);
+        try {
+          await postDraftContent(user._id, draftId, content);
+        } catch (err) {
+          const response : APIResponse = {
+            data: null,
+            error: unknownError,
+          };
+          res.status(response.error?.code as number)
+              .end(JSON.stringify(response));
+          return;
+        }
       }
+
+      const response : APIResponse = {
+        data: null,
+        error: null,
+      };
+      res.end(JSON.stringify(response));
+      return;
     };
 
 export const deleteDraft =
@@ -216,12 +249,12 @@ export const getDraft =
       res.status(response.error?.code as number)
           .end(JSON.stringify(response));
       return;
-    } else {
-      const response : APIResponse = {
-        data: draftRes.draft,
-        error: null,
-      };
-      res.end(JSON.stringify(response));
     }
+
+    const response : APIResponse = {
+      data: draftRes.draft,
+      error: null,
+    };
+    res.end(JSON.stringify(response));
   };
 

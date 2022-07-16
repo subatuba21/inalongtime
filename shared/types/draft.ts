@@ -7,14 +7,14 @@ export const draftTypeSchema =
 export const recipientTypeSchema = z.enum(['myself', 'someone else']);
 
 const draftSchema = z.object({
-  _id: z.string().length(12),
-  userId: z.string().length(12),
+  _id: z.string().length(24),
+  userId: z.string().length(24),
   recipientType: recipientTypeSchema,
   recipientEmail: z.string(),
   sendDate: z.date(),
   contentCloudStoragePath: z.string().url(),
   type: draftTypeSchema,
-  title: z.string().min(1),
+  title: z.string(),
   confirmed: z.boolean(),
   payment: z.object({
     required: z.boolean(),
@@ -39,13 +39,20 @@ export const draftFrontendState = draftSchema.omit({
 
 export const editDraftRequestBody = z.object({
   content: z.any(),
-  dbModifiers: draftSchema.omit({
+  properties: draftSchema.omit({
     contentCloudStoragePath: true,
     _id: true,
     userId: true,
     payment: true,
-  })
-}).partial();
+  }).partial().strict()
+}).partial().strict();
+
+export const draftResponseBody = z.object({
+  content: z.any(),
+  properties: draftSchema.omit({
+    contentCloudStoragePath: true,
+  }).strip()
+});
 
 draftSchema.omit({
   contentCloudStoragePath: true,
@@ -55,6 +62,7 @@ draftSchema.omit({
 
 export type DraftSchema = z.infer<typeof draftSchema>;
 export type EditDraftRequestBody = z.infer<typeof editDraftRequestBody>;
+export type DraftResponseBody = z.infer<typeof draftResponseBody>;
 export type DraftType = z.infer<typeof draftTypeSchema>;
 export type DraftFrontendState = z.infer<typeof draftFrontendState>;
 export type RecipientType = z.infer<typeof recipientTypeSchema>;
