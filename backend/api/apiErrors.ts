@@ -52,3 +52,8 @@ export const alreadyThreeDrafts : APIError = {
   message: DBError.ALREADY_THREE_DRAFTS,
   code: StatusCodes.CONFLICT,
 };
+
+export const notFoundError : APIError = {
+  message: DBError.ENTITY_NOT_FOUND,
+  code: StatusCodes.NOT_FOUND,
+};

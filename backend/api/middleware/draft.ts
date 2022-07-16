@@ -7,14 +7,16 @@ import {editDraftRequestBody,
 import {LetterContent} from 'shared/dist/editor/classes/letterContent';
 import {EditDraftRequestBody} from 'shared/types/draft';
 import {addDraft, modifyDraft,
-  deleteDraft as deleteDraftFromDB} from '../../db/draft';
+  deleteDraft as deleteDraftFromDB,
+  getDraft as getDraftFromDB} from '../../db/draft';
 import logger from '../../logger';
 import {getContentFilename,
   postDraftContent} from '../../utils/contentStorage/draft';
 import {UserSchema} from '../../utils/schemas/user';
 import {APIResponse} from '../../utils/types/apiStructure';
-import {alreadyThreeDrafts, unknownError} from '../apiErrors';
+import {alreadyThreeDrafts, notFoundError, unknownError} from '../apiErrors';
 import {addDraftIdToUser, deleteDraftIdFromUser} from '../../db/auth';
+import {DBError} from '../../db/errors';
 
 export const extractEditDraftData =
     async (req: express.Request, res: express.Response, next: Function) => {
@@ -192,3 +194,34 @@ export const deleteDraft =
       res.end(JSON.stringify(response));
     }
   };
+
+export const getDraft =
+  async (req: express.Request, res: express.Response, next: Function) => {
+    const draftId = req.draft?.id as string;
+    const draftRes = await getDraftFromDB(draftId);
+
+    if (draftRes.error === DBError.ENTITY_NOT_FOUND) {
+      const response : APIResponse = {
+        data: null,
+        error: notFoundError,
+      };
+      res.status(response.error?.code as number)
+          .end(JSON.stringify(response));
+      return;
+    } else if (draftRes.error) {
+      const response : APIResponse = {
+        data: null,
+        error: notFoundError,
+      };
+      res.status(response.error?.code as number)
+          .end(JSON.stringify(response));
+      return;
+    } else {
+      const response : APIResponse = {
+        data: draftRes.draft,
+        error: null,
+      };
+      res.end(JSON.stringify(response));
+    }
+  };
+
