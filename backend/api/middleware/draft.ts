@@ -1,10 +1,8 @@
 import {ObjectID} from 'bson';
 import express from 'express';
-import {Content} from 'shared/dist/editor/classes/content';
 import {editDraftRequestBody,
   DraftType,
   draftTypeSchema} from 'shared/dist/types/draft';
-import {LetterContent} from 'shared/dist/editor/classes/letterContent';
 import {DraftResponseBody,
   EditDraftRequestBody} from 'shared/types/draft';
 import {draftResponseBody} from 'shared/dist/types/draft';
@@ -20,6 +18,7 @@ import {APIResponse} from '../../utils/types/apiStructure';
 import {alreadyThreeDrafts, notFoundError, unknownError} from '../apiErrors';
 import {addDraftIdToUser, deleteDraftIdFromUser} from '../../db/auth';
 import {DBError} from '../../db/errors';
+import {parseContent} from 'shared/dist/editor/parseContent';
 
 export const extractEditDraftData =
     async (req: express.Request, res: express.Response, next: Function) => {
@@ -171,18 +170,7 @@ export const editDraft =
       }
 
       if (draftData.content) {
-        let content : Content;
-
-        switch (draftType) {
-          case 'letter': {
-            content = new LetterContent;
-            content.deserialize(draftData.content);
-          }
-
-          default: {
-            content = new Content();
-          }
-        }
+        const content = parseContent(draftData.content, draftType);
 
         try {
           await postDraftContent(user._id, draftId, content);
