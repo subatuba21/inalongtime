@@ -12,7 +12,7 @@ const draftSchema = z.object({
   recipientType: recipientTypeSchema,
   recipientEmail: z.string(),
   sendDate: z.date(),
-  contentUrl: z.string().url(),
+  contentCloudStoragePath: z.string().url(),
   type: draftTypeSchema,
   title: z.string().min(1),
   confirmed: z.boolean(),
@@ -23,10 +23,10 @@ const draftSchema = z.object({
   backupEmail1: z.string(),
   backupEmail2: z.string(),
   phoneNumber: z.string(),
-});
+}).strict();
 
 export const draftFrontendState = draftSchema.omit({
-  contentUrl: true,
+  contentCloudStoragePath: true,
 }).extend({
   content: z.instanceof(Content).optional(),
   progress: z.object({
@@ -35,7 +35,7 @@ export const draftFrontendState = draftSchema.omit({
     'customize': z.boolean(),
     'confirm': z.boolean(),
   }).strict(),
-})
+});
 
 export type DraftSchema = z.infer<typeof draftSchema>;
 export type DraftType = z.infer<typeof draftTypeSchema>;

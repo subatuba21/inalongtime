@@ -18,6 +18,8 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import {handleEndError} from './utils/handleEndError';
 import path from 'path';
+import {draftRouter} from './api/drafts';
+import {setDraftDb} from './db/draft';
 
 
 const app = express();
@@ -38,6 +40,7 @@ app.use(passport.session());
 
 app.use('/api/future', futureRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/draft', draftRouter);
 app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
@@ -52,6 +55,7 @@ export const start = async (options?: {
   await setupDb(process.env.MONGO_URL as string);
   const client = getDb();
   setUserDb(client);
+  setDraftDb(client);
   const server = app.listen(PORT,
       () => logger.info('Server started on port ' + PORT));
   return server;

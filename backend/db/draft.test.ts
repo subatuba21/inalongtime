@@ -33,7 +33,7 @@ describe('Testing draft related db functionalities', () => {
     const draftInput : DraftInput = {
       title: 'Test title',
       userId: new ObjectId().toString(),
-      contentUrl: 'https://www.google.com',
+      contentCloudStoragePath: 'https://www.google.com',
       sendDate: new Date('2025-01-01'),
       type: 'letter',
       confirmed: false,
@@ -50,7 +50,7 @@ describe('Testing draft related db functionalities', () => {
     expect(draftRes?.draft).toBeTruthy();
     const draft = draftRes?.draft;
     expect(draft?.toString()).toBe(draftInput.userId.toString());
-    expect(draft?.contentUrl).toBe(draftInput.contentUrl);
+    expect(draft?.contentCloudStoragePath).toBe(draftInput.contentCloudStoragePath);
     expect(draft?.sendDate).toStrictEqual(draftInput.sendDate);
   });
 
@@ -58,7 +58,7 @@ describe('Testing draft related db functionalities', () => {
     const draftInput : DraftInput = {
       title: 'Test title',
       userId: new ObjectId().toString(),
-      contentUrl: 'https://www.google.com',
+      contentCloudStoragePath: 'https://www.google.com',
       sendDate: new Date('2025-01-01'),
       type: 'letter',
       confirmed: false,
@@ -79,7 +79,7 @@ describe('Testing draft related db functionalities', () => {
     const draftInput : DraftInput = {
       title: 'Test title',
       userId: new ObjectId().toString(),
-      contentUrl: 'https://www.google.com',
+      contentCloudStoragePath: 'https://www.google.com',
       sendDate: new Date('2025-01-01'),
       type: 'letter',
       confirmed: false,

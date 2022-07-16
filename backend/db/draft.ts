@@ -15,10 +15,11 @@ export interface DraftDbResponse extends DbResponse {
 }
 
 export const addDraft =
-    async (draft: DraftInput) : Promise<DraftDbResponse> => {
+    async (draft: DraftInput, _id?: ObjectId) : Promise<DraftDbResponse> => {
       try {
         const res = await draftCol.insertOne(
-            {...draft, userId: new ObjectId(draft.userId)});
+            {...draft, userId: new ObjectId(draft.userId),
+              _id: _id ? _id : new ObjectId()});
         if (res.acknowledged) {
           logger.verbose(`Added draft with id ${res.insertedId}`);
           return {
@@ -30,7 +31,7 @@ export const addDraft =
           };
         } else throw new Error('MongoDB error: write not allowed.');
       } catch (err: any) {
-        logger.verbose(`Unable to add draft: err.message`);
+        logger.verbose(`Unable to add draft: ${err.message}`);
         return {
           success: false,
           error: err.message,

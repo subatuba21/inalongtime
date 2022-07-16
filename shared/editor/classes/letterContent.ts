@@ -1,29 +1,43 @@
 import {Content, ContentType} from './content';
-import {EditorState} from 'draft-js';
+import {EditorState, convertToRaw, convertFromRaw} from 'draft-js';
 
-export class LetterContent implements Content {
-  type: ContentType;
-  data: EditorState;
+export type LetterData = {
+  editorState: EditorState,
+}
 
-  toJson() : Object {
-    return {};
-  }
+export class LetterContent extends Content {
+  type: ContentType = 'letter';
+  data?: LetterData;
 
-  static fromJson(object: any): LetterContent {
-    if (!this.validateJson(object)) {
-      throw new Error('Invalid JSON');
+  serialize() : object {
+    if (this.initialized===false) {
+      throw new Error('LetterContent has not been initialized.');
     }
-    return new LetterContent(object.data);
+
+    const data = this.data as LetterData;
+
+    const serializedData = {
+      editorState: convertToRaw(data.editorState.getCurrentContent()),
+    }
+
+    return {
+      type: this.type,
+      data: serializedData
+    };
   }
 
-  static validateJson(object: any) : boolean {
-    if (object?.type === 'letter' && typeof object?.data === 'string') {
-      return true;
-    } return false;
+  deserialize(data: any) {
+    if (data.editorState) {
+      this.data = {
+        editorState: new EditorState(convertFromRaw(data.editorState)),
+      }
+      this.initialized = true;
+    } else {
+      throw new Error("Data does not fit parameters.");
+    }
   }
 
-  constructor(data: EditorState) {
-    this.data = data;
-    this.type = 'letter';
+  constructor() {
+    super();
   }
 }

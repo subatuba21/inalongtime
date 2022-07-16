@@ -1,4 +1,5 @@
 import {StatusCodes} from 'http-status-codes';
+import {DBError} from '../db/errors';
 
 export interface APIError {
     message: string;
@@ -45,4 +46,9 @@ export const alreadySignedUp : APIError = {
 export const needToLogin : APIError = {
   message: 'Looks like you\'re not logged in. Please log in to access the app.',
   code: StatusCodes.UNAUTHORIZED,
+};
+
+export const alreadyThreeDrafts : APIError = {
+  message: DBError.ALREADY_THREE_DRAFTS,
+  code: StatusCodes.CONFLICT,
 };

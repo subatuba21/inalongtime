@@ -4,11 +4,19 @@ import {Component} from './component';
 export type ContentType = DraftType;
 
 export class Content extends Component {
-  data: any;
-  type: ContentType;
+  initialized: boolean = false;
+  data?: any;
+  type?: ContentType;
 
-  constructor(type: ContentType) {
+  constructor() {
     super();
-    this.type = type;
+  }
+
+  serialize() : object {
+    return {};
+  }
+
+  deserialize(data: any) {
+
   }
 }
