@@ -1,22 +1,26 @@
 import {ObjectID} from 'bson';
 import express from 'express';
-import {draftFrontendState,
+import {Content} from 'shared/dist/editor/classes/content';
+import {editDraftRequestBody,
   DraftType,
   draftTypeSchema} from 'shared/dist/types/draft';
-import {addDraft, getNumberOfUserDrafts} from '../../db/draft';
+import {LetterContent} from 'shared/dist/editor/classes/letterContent';
+import {EditDraftRequestBody} from 'shared/types/draft';
+import {addDraft, getNumberOfUserDrafts, modifyDraft} from '../../db/draft';
 import logger from '../../logger';
-import {getContentFilename} from '../../utils/contentStorage/draft';
+import {getContentFilename,
+  postDraftContent} from '../../utils/contentStorage/draft';
 import {UserSchema} from '../../utils/schemas/user';
 import {APIResponse} from '../../utils/types/apiStructure';
 import {alreadyThreeDrafts, unknownError} from '../apiErrors';
 
-export const extractDraftState =
+export const extractEditDraftData =
     async (req: express.Request, res: express.Response, next: Function) => {
       try {
         const body = req.body.data;
-        const state = await draftFrontendState.parseAsync(body);
+        const data = await editDraftRequestBody.parseAsync(body);
         if (!req.draft) req.draft = {};
-        req.draft.frontendDraftState = state;
+        req.draft.editDraftData = data;
         next();
       } catch (err) {
         logger.warn(err);
@@ -112,5 +116,36 @@ export const addNewDraft =
         res.status(response.error?.code as number)
             .end(JSON.stringify(response));
         return;
+      }
+    };
+
+export const editDraft =
+    async (req: express.Request, res: express.Response, next: Function) => {
+      const draftData = req.draft?.editDraftData as EditDraftRequestBody;
+      const draftId = req.draft?.id as string;
+      const draftType =
+        draftData?.dbModifiers?.type || req.draft?.type as DraftType;
+
+      const user = req.user as UserSchema;
+
+      if (draftData.dbModifiers) {
+        await modifyDraft(draftId, draftData.dbModifiers);
+      }
+
+      if (draftData.content) {
+        let content : Content;
+
+        switch (draftType) {
+          case 'letter': {
+            content = new LetterContent;
+            content.deserialize(draftData.content);
+          }
+
+          default: {
+            content = new Content();
+          }
+        }
+
+        await postDraftContent(user._id, draftId, content);
       }
     };

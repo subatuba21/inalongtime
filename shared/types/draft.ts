@@ -37,7 +37,24 @@ export const draftFrontendState = draftSchema.omit({
   }).strict(),
 });
 
+export const editDraftRequestBody = z.object({
+  content: z.any(),
+  dbModifiers: draftSchema.omit({
+    contentCloudStoragePath: true,
+    _id: true,
+    userId: true,
+    payment: true,
+  })
+}).partial();
+
+draftSchema.omit({
+  contentCloudStoragePath: true,
+}).extend({
+  content: z.any(),
+}).partial();
+
 export type DraftSchema = z.infer<typeof draftSchema>;
+export type EditDraftRequestBody = z.infer<typeof editDraftRequestBody>;
 export type DraftType = z.infer<typeof draftTypeSchema>;
 export type DraftFrontendState = z.infer<typeof draftFrontendState>;
 export type RecipientType = z.infer<typeof recipientTypeSchema>;

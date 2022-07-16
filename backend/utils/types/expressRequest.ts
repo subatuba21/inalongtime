@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-import {DraftFrontendState, DraftType} from 'shared/types/draft';
+import {editDraftRequestBody, DraftType,
+  EditDraftRequestBody} from 'shared/types/draft';
 import {APIError} from '../../api/apiErrors';
 import {PaymentData} from '../schemas/payment';
 import {PassportLoginInput,
@@ -12,7 +13,7 @@ declare module 'express-serve-static-core' {
       registerInfo?: RegisterUserInput;
       data?: PaymentData | any;
       draft?: {
-        frontendDraftState?: DraftFrontendState,
+        editDraftData?: EditDraftRequestBody,
         id?: string,
         type?: DraftType
       }
