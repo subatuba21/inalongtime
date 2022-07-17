@@ -58,6 +58,7 @@ export const miniDraft = draftSchema.pick({
   title: true,
   userId: true,
   _id: true,
+  type: true,
 }).strip();
 
 export const userDraftsResponseData = z.object({
