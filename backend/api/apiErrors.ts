@@ -57,3 +57,8 @@ export const notFoundError : APIError = {
   message: DBError.ENTITY_NOT_FOUND,
   code: StatusCodes.NOT_FOUND,
 };
+
+export const unauthorizedError : APIError = {
+  message: 'You are not authorized to access this resource.',
+  code: StatusCodes.UNAUTHORIZED,
+};

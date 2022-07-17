@@ -15,7 +15,8 @@ import {getContentFilename,
   postDraftContent} from '../../utils/contentStorage/draft';
 import {UserSchema} from '../../utils/schemas/user';
 import {APIResponse} from '../../utils/types/apiStructure';
-import {alreadyThreeDrafts, notFoundError, unknownError} from '../apiErrors';
+import {alreadyThreeDrafts, notFoundError,
+  unauthorizedError, unknownError} from '../apiErrors';
 import {addDraftIdToUser, deleteDraftIdFromUser} from '../../db/auth';
 import {DBError} from '../../db/errors';
 import {parseContent} from 'shared/dist/editor/parseContent';
@@ -241,18 +242,44 @@ export const getDraft =
       return;
     }
 
-    const draftContent = await getDraftContent(user._id,
-        draftId, result.draft?.type as DraftType);
+    try {
+      const draftContent = await getDraftContent(user._id,
+          draftId, result.draft?.type as DraftType);
+      const draftRes : DraftResponseBody = await draftResponseBody.parseAsync({
+        content: draftContent.serialize(),
+        properties: result.draft,
+      });
 
-    const draftRes : DraftResponseBody = await draftResponseBody.parseAsync({
-      content: draftContent,
-      properties: result.draft,
-    });
+      const response : APIResponse = {
+        data: draftRes,
+        error: null,
+      };
+      res.end(JSON.stringify(response));
+    } catch (err) {
+      logger.warn(err);
+      const response : APIResponse = {
+        data: null,
+        error: unknownError,
+      };
+      res.status(response.error?.code as number)
+          .end(JSON.stringify(response));
+      return;
+    }
+  };
 
-    const response : APIResponse = {
-      data: draftRes,
-      error: null,
-    };
-    res.end(JSON.stringify(response));
+export const authorizeDraft =
+  async (req: express.Request, res: express.Response, next: Function) => {
+    const draftId = req.draft?.id as string;
+    const user = req.user as UserSchema;
+
+    if (user.draftIDs && user.draftIDs.includes(draftId)) next();
+    else {
+      const response : APIResponse = {
+        data: null,
+        error: unauthorizedError,
+      };
+      res.status(response.error?.code as number)
+          .end(JSON.stringify(response));
+    }
   };
 
