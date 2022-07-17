@@ -1,13 +1,17 @@
-import {useState} from 'react';
+import React, {Suspense, useState} from 'react';
 import {StepType} from 'shared/types/draft';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
-import {LetterEditor} from '../../components/letterEditor/LetterEditor';
-// import {LetterEditor} from '../../components/letterEditor/LetterEditor';
 import {Navbar} from '../../components/navbars/Navbar';
+import {LoadingPage} from '../loadingPage/loadingPage';
 import {BasicInfo} from './basicInfoForm/basicInfo';
 import styles from './editorPage.module.css';
 import {Step} from './step/step';
+
+const LetterEditor =
+  React.lazy(
+      () => import('../../components/letterEditor/LetterEditor')
+          .then(({LetterEditor}) => ({default: LetterEditor})));
 
 export const EditorPage = () => {
   const [currentStep, setStepState] = useState<StepType>('info');
@@ -25,7 +29,10 @@ export const EditorPage = () => {
     }
 
     case 'content': {
-      content = <LetterEditor />;
+      content =
+      <Suspense fallback={<LoadingPage></LoadingPage>}>
+        <LetterEditor />;
+      </Suspense>;
       break;
     }
 
