@@ -1,3 +1,9 @@
+import {useSelector} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
+import {DraftFrontendState, DraftType} from 'shared/dist/types/draft';
+import {createDraft} from '../../../store/editor';
+import {CentralErrors, ErrorState} from '../../../store/error';
+import {useAppDispatch} from '../../../store/store';
 import styles from './futureType.module.css';
 
 interface contentType {
@@ -5,6 +11,7 @@ interface contentType {
     description: String;
     uses: String[];
     image: string
+    type: DraftType
 }
 
 const types : Record<string, contentType> = {
@@ -13,40 +20,50 @@ const types : Record<string, contentType> = {
     description: 'Send a message to the future.',
     uses: ['Emotional words', 'Pranks', 'Self-reflection'],
     image: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/322/envelope_2709-fe0f.png',
+    type: 'letter',
   },
   gallery: {
     name: 'Gallery',
     description: 'One or many photos and videos.',
     uses: ['Video message', 'Looking back on memories'],
     image: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/320/twitter/322/framed-picture_1f5bc-fe0f.png',
+    type: 'gallery',
   },
   reminder: {
     name: 'Reminder',
     description: 'It will help you remember to do something.',
     uses: ['Something you might forget after a while'],
     image: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/320/twitter/322/alarm-clock_23f0.png',
+    type: 'reminder',
   },
   goals: {
     name: 'Goals',
     description: 'Keep yourself accountable.',
     uses: ['Reflecting on a past goal', 'Motivation to succeed'],
     image: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/322/person-lifting-weights_1f3cb-fe0f.png',
+    type: 'goals',
   },
   journal: {
     name: 'Journal',
     description: 'Make an entry at regular intervals.',
     uses: ['Seeing your growth', 'Birthday letters'],
     image: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/322/open-book_1f4d6.png',
+    type: 'journal',
   },
 
 };
 
 export const FutureType = (props: {typeId: string, smallImage? : boolean}) => {
   const type = types[props.typeId];
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const editorState =
+    useSelector((state) => (state as any).editor) as DraftFrontendState;
+  const errorState = useSelector(
+      (state) => (state as any).editor) as ErrorState;
   // eslint-disable-next-line no-unused-vars
   return <div style={styles} id={styles.container}>
     <h3>{type.name}</h3>
-    <button className={styles.bottomButton}>Create</button>
     <div id={styles.image}>
       <img src={type.image} style={props.smallImage ?
         {width: '85%', height: '85%'} : {}}>
@@ -58,7 +75,13 @@ export const FutureType = (props: {typeId: string, smallImage? : boolean}) => {
       <ul>
         {type.uses.map((value) => <li key={0}>{value}</li>)}
       </ul>
-
     </div>
+    <button className={styles.bottomButton}
+      onClick={() => {
+        dispatch(createDraft(types[props.typeId].type));
+        if (errorState[CentralErrors.addDraftError]===null) {
+          navigate(`/editor/${editorState._id}`);
+        };
+      }}>Create</button>
   </div>;
 };

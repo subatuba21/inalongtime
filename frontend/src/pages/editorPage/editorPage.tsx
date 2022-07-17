@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {StepType} from 'shared/types/draft';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
+import {LetterEditor} from '../../components/letterEditor/LetterEditor';
 // import {LetterEditor} from '../../components/letterEditor/LetterEditor';
 import {Navbar} from '../../components/navbars/Navbar';
 import {BasicInfo} from './basicInfoForm/basicInfo';
@@ -20,6 +21,16 @@ export const EditorPage = () => {
   switch (currentStep) {
     case 'info': {
       content = <BasicInfo draftType='letter'></BasicInfo>;
+      break;
+    }
+
+    case 'content': {
+      content = <LetterEditor />;
+      break;
+    }
+
+    default: {
+
     }
   }
 
@@ -34,8 +45,8 @@ export const EditorPage = () => {
         <p id={styles.previewURL}>
           Preview Link: <a href='https://inalongtime.com/preview/sbbbrebf48357bt53h'>https://inalongtime.com/preview/sbbbrebf48357bt53h</a>
         </p>
-        <h3>Steps</h3>
-        <div style={{marginBottom: '20px'}}>
+        <h3 style={{marginBottom: '10px'}}>Steps</h3>
+        <div style={{marginBottom: '0px'}}>
           <Step step='info' currentStep={currentStep} setStep={setStep}></Step>
           <Step step='content'
             currentStep={currentStep} setStep={setStep}></Step>

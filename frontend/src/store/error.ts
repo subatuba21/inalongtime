@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {login, register} from './user';
+import {createDraft} from './editor';
 
 export type CentralError = {
     type: string,
@@ -16,6 +17,7 @@ const initialState : ErrorState = {
 export enum CentralErrors {
     signupError = 'SIGN_UP_ERROR',
     loginError = 'LOGIN_ERROR',
+    addDraftError = 'ADD_DRAFT_ERROR'
 }
 
 export const errorSlice = createSlice({
@@ -53,6 +55,10 @@ export const errorSlice = createSlice({
         es[CentralErrors.loginError] = error;
         return es;
       } else return _state;
+    });
+
+    builder.addCase(createDraft.fulfilled, (_state, action) => {
+
     });
   },
 });

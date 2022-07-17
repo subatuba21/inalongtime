@@ -2,8 +2,10 @@ import {InputBox} from '../../../components/inputBox/inputBox';
 import styles from './basicInfo.module.css';
 import {SelectBox} from '../../../components/selectBox/selectBox';
 import {DraftFrontendState, DraftType, RecipientType} from 'shared/types/draft';
-import {draftTypeSchema, recipientTypeSchema} from 'shared/dist/types/draft';
-import {changeTitle, save, changePhoneNumber,
+import {draftTypeSchema,
+  editDraftRequestBody,
+  EditDraftRequestBody, recipientTypeSchema} from 'shared/dist/types/draft';
+import {changeTitle, saveDraft, changePhoneNumber,
   changeBackupEmail1, changeBackupEmail2,
   changeRecipientEmail,
   changeRecipientType,
@@ -17,13 +19,22 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
     useSelector((state) => (state as any).editor) as DraftFrontendState;
   const dispatch = useAppDispatch();
 
+  const compileBasicInfo = () : EditDraftRequestBody => {
+    return editDraftRequestBody.parse({
+      properties: editorState,
+    });
+  };
+
   return <div id={styles.basicInfo} className='box'>
     <div>
       <span className={styles.fieldName}>Title</span>
       <InputBox name='title' placeholder='A message from the past'
         valueState={{value: editorState.title,
           set: (title: string) => dispatch(changeTitle(title))}}
-        onBlur={() => dispatch(save())}
+        onBlur={() => dispatch(saveDraft({
+          id: editorState._id,
+          data: compileBasicInfo(),
+        }))}
       ></InputBox>
     </div>
     <br />
@@ -35,7 +46,10 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
         valueState={{value: editorState.type,
           set: (type: string) =>
             dispatch(changeContentType(type as DraftType))}}
-        onChange={() => dispatch(save())}
+        onChange={() => dispatch(saveDraft({
+          id: editorState._id,
+          data: compileBasicInfo(),
+        }))}
       ></SelectBox>
     </div>
     <br />
@@ -48,7 +62,10 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
           {{value: editorState.recipientType,
             set: (type: string) =>
               dispatch(changeRecipientType(type as RecipientType))}}
-        onChange={() => dispatch(save())}
+        onChange={() => dispatch(saveDraft({
+          id: editorState._id,
+          data: compileBasicInfo(),
+        }))}
       ></SelectBox>
     </div>
     {editorState.recipientType === 'someone else' ?
@@ -60,7 +77,10 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
             placeholder='recipientemail@gmail.com'
             valueState={{value: editorState.recipientEmail,
               set: (email: string) => dispatch(changeRecipientEmail(email))}}
-            onBlur={() => dispatch(save())}
+            onBlur={() => dispatch(saveDraft({
+              id: editorState._id,
+              data: compileBasicInfo(),
+            }))}
           ></InputBox>
         </div>
       </> : <></>
@@ -71,7 +91,10 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
       <InputBox name='backupemail1' placeholder='backupemail@gmail.com'
         valueState={{value: editorState.backupEmail1, set:
           (email: string) => dispatch(changeBackupEmail1(email))}}
-        onBlur={() => dispatch(save())}
+        onBlur={() => dispatch(saveDraft({
+          id: editorState._id,
+          data: compileBasicInfo(),
+        }))}
       ></InputBox>
     </div>
     <br />
@@ -80,7 +103,10 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
       <InputBox name='backupemail2' placeholder='backupemail2@gmail.com'
         valueState={{value: editorState.backupEmail2,
           set: (email: string) => dispatch(changeBackupEmail2(email))}}
-        onBlur={() => dispatch(save())}
+        onBlur={() => dispatch(saveDraft({
+          id: editorState._id,
+          data: compileBasicInfo(),
+        }))}
       ></InputBox>
     </div>
     <br />
@@ -89,7 +115,10 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
       <InputBox name='phonenumber' placeholder='999-999-9999'
         valueState={{value: editorState.phoneNumber,
           set: (ph: string) => dispatch(changePhoneNumber(ph))}}
-        onBlur={() => dispatch(save())}
+        onBlur={() => dispatch(saveDraft({
+          id: editorState._id,
+          data: compileBasicInfo(),
+        }))}
       ></InputBox>
     </div>
   </div>;
