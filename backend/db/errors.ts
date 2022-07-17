@@ -5,5 +5,6 @@ export const enum DBError {
     UNIQUE_ENTITY_ALREADY_EXISTS =
     'An entity with the same unique index already exists.',
     ALREADY_THREE_DRAFTS =
-        'There are already three drafts in your account. Please either delete one or send one to the future.'
+        'There are already three drafts in your account. Please either delete one or send one to the future.',
+    UNKNOWN = 'There was an unknown error.'
 }

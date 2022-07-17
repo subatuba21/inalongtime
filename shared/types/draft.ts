@@ -54,6 +54,16 @@ export const draftResponseBody = z.object({
   }).strip()
 });
 
+export const miniDraft = draftSchema.pick({
+  title: true,
+  userId: true,
+  _id: true,
+}).strip();
+
+export const userDraftsResponseData = z.object({
+  drafts: z.array(miniDraft)
+})
+
 draftSchema.omit({
   contentCloudStoragePath: true,
 }).extend({
@@ -67,4 +77,6 @@ export type DraftType = z.infer<typeof draftTypeSchema>;
 export type DraftFrontendState = z.infer<typeof draftFrontendState>;
 export type RecipientType = z.infer<typeof recipientTypeSchema>;
 export type StepType = 'info' | 'content' | 'customize' | 'confirm';
+export type MiniDraft = z.infer<typeof miniDraft>;
+export type UserDraftsResponseData = z.infer<typeof userDraftsResponseData>;
 

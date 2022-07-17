@@ -4,11 +4,14 @@ import {editDraftRequestBody,
   DraftType,
   draftTypeSchema} from 'shared/dist/types/draft';
 import {DraftResponseBody,
-  EditDraftRequestBody} from 'shared/types/draft';
+  EditDraftRequestBody,
+  UserDraftsResponseData} from 'shared/types/draft';
 import {draftResponseBody} from 'shared/dist/types/draft';
 import {addDraft, modifyDraft,
   deleteDraft as deleteDraftFromDB,
-  getDraft as getDraftFromDB} from '../../db/draft';
+  getDraft as getDraftFromDB,
+  getUserDrafts as getUserDraftsFromDB,
+} from '../../db/draft';
 import logger from '../../logger';
 import {getContentFilename,
   getDraftContent,
@@ -280,6 +283,28 @@ export const authorizeDraft =
       };
       res.status(response.error?.code as number)
           .end(JSON.stringify(response));
+    }
+  };
+
+export const getUserDrafts =
+  async (req: express.Request, res: express.Response, next: Function) => {
+    const user = req.user as UserSchema;
+    const result = await getUserDraftsFromDB(user._id);
+    if (result.error) {
+      const response : APIResponse = {
+        data: null,
+        error: unknownError,
+      };
+      res.status(response.error?.code as number)
+          .end(JSON.stringify(response));
+      return;
+    } else {
+      const draftsData = result.draftData as UserDraftsResponseData;
+      const response : APIResponse = {
+        data: draftsData,
+        error: null,
+      };
+      res.end(JSON.stringify(response));
     }
   };
 

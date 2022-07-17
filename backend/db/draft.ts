@@ -1,7 +1,9 @@
 import {Db, Collection, ObjectId} from 'mongodb';
 import logger from '../logger';
-import {DraftSchema} from 'shared/types/draft';
+import {DraftSchema, miniDraft, MiniDraft
+  , UserDraftsResponseData} from 'shared/types/draft';
 import {DbResponse} from './setup';
+import {DBError} from './errors';
 
 let draftCol : Collection;
 export const setDraftDb = async (db: Db) => {
@@ -123,6 +125,37 @@ export const deleteDraft = async (_id: string) : Promise<DraftDbResponse> => {
       success: false,
       error: err.message,
       draft: null,
+    };
+  }
+};
+
+interface getUserDraftsDbResponse extends DbResponse {
+  draftData?: UserDraftsResponseData,
+}
+
+export const getUserDrafts = async (userId: string) :
+  Promise<getUserDraftsDbResponse> => {
+  try {
+    const drafts : MiniDraft[] = [];
+    const res = await draftCol.find({userId: {
+      $eq: new ObjectId(userId),
+    }});
+
+    await res.forEach((doc) => {
+      drafts.push(miniDraft.parse({...doc,
+        userId: doc.userId.toString(), _id: doc._id.toString()}));
+    });
+
+    return {
+      success: true,
+      draftData: {
+        drafts,
+      },
+    };
+  } catch (err) {
+    return {
+      success: false,
+      error: DBError.UNKNOWN,
     };
   }
 };
