@@ -2,7 +2,7 @@ import express from 'express';
 import passport from 'passport';
 import {ClientUserData,
   UserSchema} from '../../utils/schemas/user';
-import {credentialsInvalid, needToLogin} from '../apiErrors';
+import {credentialsInvalid, needToLogin} from 'shared/dist/types/apiErrors';
 import {APIResponse} from '../../utils/types/apiStructure';
 import logger from '../../logger';
 

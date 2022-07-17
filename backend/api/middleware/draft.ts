@@ -16,7 +16,7 @@ import {getContentFilename,
 import {UserSchema} from '../../utils/schemas/user';
 import {APIResponse} from '../../utils/types/apiStructure';
 import {alreadyThreeDrafts, notFoundError,
-  unauthorizedError, unknownError} from '../apiErrors';
+  unauthorizedError, unknownError} from 'shared/dist/types/apiErrors';
 import {addDraftIdToUser, deleteDraftIdFromUser} from '../../db/auth';
 import {DBError} from '../../db/errors';
 import {parseContent} from 'shared/dist/editor/parseContent';

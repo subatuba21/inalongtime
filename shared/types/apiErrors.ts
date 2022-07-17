@@ -1,5 +1,4 @@
 import {StatusCodes} from 'http-status-codes';
-import {DBError} from '../db/errors';
 
 export interface APIError {
     message: string;
@@ -49,12 +48,12 @@ export const needToLogin : APIError = {
 };
 
 export const alreadyThreeDrafts : APIError = {
-  message: DBError.ALREADY_THREE_DRAFTS,
+  message: 'You already have three drafts in your account.',
   code: StatusCodes.CONFLICT,
 };
 
 export const notFoundError : APIError = {
-  message: DBError.ENTITY_NOT_FOUND,
+  message: 'The entity you were looking for wasn\'t found.',
   code: StatusCodes.NOT_FOUND,
 };
 

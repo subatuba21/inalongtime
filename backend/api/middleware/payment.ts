@@ -2,7 +2,7 @@ import express from 'express';
 import {getDraft} from '../../db/draft';
 import {PaymentData, paymentDataSchema} from '../../utils/schemas/payment';
 import {APIResponse} from '../../utils/types/apiStructure';
-import {unknownError} from '../apiErrors';
+import {unknownError} from 'shared/dist/types/apiErrors';
 export const extractPaymentData =
     async (req: express.Request, res: express.Response, next: Function) => {
       try {

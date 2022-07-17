@@ -4,7 +4,7 @@ import {APIRegisterInput,
   ClientUserData, RegisterUserInput} from '../../utils/schemas/user';
 import {APIResponse} from '../../utils/types/apiStructure';
 import {alreadySignedUp,
-  registerValidationError, unknownError} from '../apiErrors';
+  registerValidationError, unknownError} from 'shared/dist/types/apiErrors';
 import {registerUser as registerUserToDb} from '../../db/auth';
 import express from 'express';
 import {DBError} from '../../db/errors';
