@@ -17,6 +17,10 @@ export class Content extends Component {
   }
 
   deserialize(data: any) {
+    this.initialized = true;
+  }
 
+  initialize(args: any) {
+    this.initialized = true;
   }
 }

@@ -18,20 +18,20 @@ const {EmojiSuggestions, EmojiSelect} = emojiPlugin;
 
 export const LetterEditor = (props: {letterContent? : LetterContent}) => {
   const [editorState, setEditorState] = useState(
-      () => props.letterContent?.data || EditorState.createEmpty(),
+      () => props.letterContent?.data?.editorState || EditorState.createEmpty(),
   );
-  const [letterContentState,
-    setLetterContentState] = useState(props.letterContent ||
-      new LetterContent(editorState));
 
   const onChange = (editor: EditorState) => {
     setEditorState(editor);
-    letterContentState.data = editor;
-    setLetterContentState(letterContentState);
   };
 
   const save = () => {
-
+    const letterContent = new LetterContent();
+    letterContent.initialize({
+      data: {
+        editorState: editorState,
+      },
+    });
   };
 
   return <>

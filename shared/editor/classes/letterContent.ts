@@ -37,6 +37,13 @@ export class LetterContent extends Content {
     }
   }
 
+  initialize(args: {
+    data: LetterData,
+  }): void {
+      this.data = args.data;
+      this.initialized = true;
+  }
+
   constructor() {
     super();
   }
