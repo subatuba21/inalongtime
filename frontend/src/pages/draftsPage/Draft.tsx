@@ -4,6 +4,7 @@ import {XLg, Pen} from 'react-bootstrap-icons';
 import {useAppDispatch} from '../../store/store';
 import {activateModal} from '../../store/modal';
 import {deleteDraft} from '../../store/editor';
+import {useNavigate} from 'react-router-dom';
 
 export const Draft = (props: {
   name: string,
@@ -13,6 +14,8 @@ export const Draft = (props: {
 }) => {
   const processedName = props.name.trim().length > 0 ? props.name : 'No title';
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   return <div style={styles} id={styles.container}>
     <span className={styles.title}>
       {props.name.trim().length > 0 ? props.name : 'No title'}
@@ -20,7 +23,7 @@ export const Draft = (props: {
 
     <span className={styles.right}>
       <span className={styles.icons}>
-        <Pen id={styles.edit}></Pen>
+        <Pen id={styles.edit} onClick={() => navigate(`/draft/${props.id}`)}></Pen>
         <XLg id={styles.close} onClick={() => dispatch(activateModal({
           header: 'Confirm',
           content: <>{`Are you sure you want to delete the draft titled '${processedName}'? You can't go back.`}</>,
