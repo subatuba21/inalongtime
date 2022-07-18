@@ -9,7 +9,8 @@ export const Modal = () => {
   const modalState = useSelector((state) => (state as any).modal) as ModalState;
   const dispatch = useAppDispatch();
   const emptyFunc = () => {};
-  const onClose = () => {
+  const onClose = (func?: Function) => {
+    if (func) func();
     modalState.onClose ? modalState.onClose() : null;
     dispatch(deactivateModal());
   };
@@ -27,12 +28,15 @@ export const Modal = () => {
     <BootstrapModal.Footer>
       {modalState.dangerButton ?
       <Button variant="secondary"
-        onClick={modalState.dangerButton.onClick || emptyFunc}>
+        onClick={
+          () => onClose((modalState.dangerButton as any).onClick || emptyFunc)}>
         {modalState.dangerButton?.text}
       </Button> : <></>}
       {modalState.successButton ?
       <Button variant="primary"
-        onClick={modalState.successButton.onClick || emptyFunc}>
+        onClick={
+          () => onClose((modalState.successButton as any)
+              .onClick || emptyFunc)}>
         {modalState.successButton?.text}</Button> : <></>}
     </BootstrapModal.Footer> : <></>}
   </BootstrapModal>;

@@ -42,6 +42,7 @@ export const modalSlice = createSlice({
     activateModal: (state, action: PayloadAction<ModalInput>) => {
       state.content = action.payload.content;
       state.dangerButton = action.payload.dangerButton;
+      state.successButton = action.payload.successButton;
       state.header = action.payload.header;
       state.onClose = action.payload.onClose;
       state.activated = true;

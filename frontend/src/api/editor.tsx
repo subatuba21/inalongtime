@@ -79,7 +79,7 @@ export const editorAPI = {
           success: false,
           error: {
             type: CentralErrors.addDraftError,
-            message: 'You already have three drafts in your account. Please remove one and try again.',
+            message: alreadyThreeDrafts.message,
           },
         };
       } else {
@@ -111,20 +111,10 @@ export const editorAPI = {
         throw new Error();
       }
     } catch (err) {
-      const axerr = err as AxiosError;
-      let error : CentralError;
-      if ((axerr?.response as any)?.error?.message ===
-      alreadyThreeDrafts.message) {
-        error = {
-          type: CentralErrors.addDraftError,
-          message: 'You already have three drafts in your account.',
-        };
-      } else {
-        error = {
-          type: CentralErrors.addDraftError,
-          message: 'There was an unknown error getting your drafts.',
-        };
-      }
+      const error = {
+        type: CentralErrors.addDraftError,
+        message: 'There was an unknown error getting your drafts.',
+      };
 
       return {
         success: false,
