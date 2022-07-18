@@ -38,7 +38,7 @@ export const LetterEditor = (props: {letterContent? : LetterContent}) => {
       },
     });
 
-    editorAPI.save(editorState._id, {
+    editorAPI.save(editorState._id, editorState.type, {
       content: letterContent.serialize(),
     });
   };

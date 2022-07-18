@@ -69,12 +69,17 @@ export const editorAPI = {
       };
     }
   },
-  save: async (draftID: string, data: EditDraftRequestBody) => {
+  save: async (draftID: string, type: DraftType, data: EditDraftRequestBody) => {
     try {
       await axios({
         method: 'put',
         url: `/api/draft/${draftID}`,
-        data,
+        data: {
+          data: {
+            ...data,
+            type,
+          },
+        },
       });
     } catch (err) {
 

@@ -48,7 +48,7 @@ export const editDraftRequestBody = z.object({
     _id: true,
     userId: true,
     payment: true,
-  }).partial().strict()
+  }).partial().strip()
 }).partial().strip();
 
 export const draftResponseBody = z.object({

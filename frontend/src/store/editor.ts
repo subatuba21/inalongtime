@@ -30,8 +30,9 @@ const initialState : DraftFrontendState = {
 };
 
 export const saveDraft = createAsyncThunk('editor/save',
-    async (args : {id: string, data: EditDraftRequestBody}, thunkApi) => {
-      await editorAPI.save(args.id, args.data);
+    async (args : {id: string, type: DraftType,
+      data: EditDraftRequestBody}, thunkApi) => {
+      await editorAPI.save(args.id, args.type, args.data);
     });
 
 export const createDraft = createAsyncThunk('editor/create',

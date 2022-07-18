@@ -25,16 +25,19 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
     });
   };
 
+  const onBlur = () => dispatch(saveDraft({
+    id: editorState._id,
+    data: compileBasicInfo(),
+    type: editorState.type,
+  }));
+
   return <div id={styles.basicInfo} className='box'>
     <div>
       <span className={styles.fieldName}>Title</span>
       <InputBox name='title' placeholder='A message from the past'
         valueState={{value: editorState.title,
           set: (title: string) => dispatch(changeTitle(title))}}
-        onBlur={() => dispatch(saveDraft({
-          id: editorState._id,
-          data: compileBasicInfo(),
-        }))}
+        onBlur={onBlur}
       ></InputBox>
     </div>
     <br />
@@ -46,10 +49,7 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
         valueState={{value: editorState.type,
           set: (type: string) =>
             dispatch(changeContentType(type as DraftType))}}
-        onChange={() => dispatch(saveDraft({
-          id: editorState._id,
-          data: compileBasicInfo(),
-        }))}
+        onChange={onBlur}
       ></SelectBox>
     </div>
     <br />
@@ -62,10 +62,7 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
           {{value: editorState.recipientType,
             set: (type: string) =>
               dispatch(changeRecipientType(type as RecipientType))}}
-        onChange={() => dispatch(saveDraft({
-          id: editorState._id,
-          data: compileBasicInfo(),
-        }))}
+        onChange={onBlur}
       ></SelectBox>
     </div>
     {editorState.recipientType === 'someone else' ?
@@ -77,10 +74,7 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
             placeholder='recipientemail@gmail.com'
             valueState={{value: editorState.recipientEmail,
               set: (email: string) => dispatch(changeRecipientEmail(email))}}
-            onBlur={() => dispatch(saveDraft({
-              id: editorState._id,
-              data: compileBasicInfo(),
-            }))}
+            onBlur={onBlur}
           ></InputBox>
         </div>
       </> : <></>
@@ -91,10 +85,7 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
       <InputBox name='backupemail1' placeholder='backupemail@gmail.com'
         valueState={{value: editorState.backupEmail1, set:
           (email: string) => dispatch(changeBackupEmail1(email))}}
-        onBlur={() => dispatch(saveDraft({
-          id: editorState._id,
-          data: compileBasicInfo(),
-        }))}
+        onBlur={onBlur}
       ></InputBox>
     </div>
     <br />
@@ -103,10 +94,7 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
       <InputBox name='backupemail2' placeholder='backupemail2@gmail.com'
         valueState={{value: editorState.backupEmail2,
           set: (email: string) => dispatch(changeBackupEmail2(email))}}
-        onBlur={() => dispatch(saveDraft({
-          id: editorState._id,
-          data: compileBasicInfo(),
-        }))}
+        onBlur={onBlur}
       ></InputBox>
     </div>
     <br />
@@ -115,10 +103,7 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
       <InputBox name='phonenumber' placeholder='999-999-9999'
         valueState={{value: editorState.phoneNumber,
           set: (ph: string) => dispatch(changePhoneNumber(ph))}}
-        onBlur={() => dispatch(saveDraft({
-          id: editorState._id,
-          data: compileBasicInfo(),
-        }))}
+        onBlur={onBlur}
       ></InputBox>
     </div>
   </div>;
