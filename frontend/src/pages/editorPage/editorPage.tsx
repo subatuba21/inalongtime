@@ -1,11 +1,11 @@
 import React, {Suspense, useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {DraftResponseBody, StepType} from 'shared/types/draft';
-import {editorAPI} from '../../api/editor';
+import {StepType} from 'shared/types/draft';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
 import {Navbar} from '../../components/navbars/Navbar';
-import {loadDraft} from '../../store/editor';
+import {getDraft} from '../../store/editor';
+import {activateModal} from '../../store/modal';
 import {useAppDispatch} from '../../store/store';
 import {LoadingPage} from '../loadingPage/loadingPage';
 import {BasicInfo} from './basicInfoForm/basicInfo';
@@ -28,16 +28,22 @@ export const EditorPage = () => {
       navigate('/');
     };
 
-    const getData = async () => {
-      const res = await editorAPI.getDraft(id as string);
-      if (res.success) {
-        dispatch(loadDraft(res.data as DraftResponseBody));
-      } else {
-
-      }
-      setLoading(false);
-    };
-    getData();
+    dispatch(getDraft({
+      id: id as string,
+      onSuccess: () => {
+        setLoading(false);
+      },
+      onFailure: () => {
+        dispatch(activateModal({
+          header: 'Error: Unable to get draft.',
+          content: <>We were unable to retrieve your draft.
+          Please try again later.</>,
+          onClose: () => {
+            navigate('/drafts');
+          },
+        }));
+      },
+    }));
   }, []);
 
   const [currentStep, setStepState] = useState<StepType>('info');
