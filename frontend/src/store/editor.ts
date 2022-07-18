@@ -45,6 +45,8 @@ export const createDraft = createAsyncThunk('editor/create',
         const data = res.data as DraftResponseBody;
         thunkApi.dispatch(loadDraft(res.data as DraftResponseBody));
         args.onSuccess(data.properties._id);
+      } else {
+        args.onFailure(res.error as CentralError);
       }
       return res;
     });

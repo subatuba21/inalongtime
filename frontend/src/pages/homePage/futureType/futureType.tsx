@@ -2,6 +2,7 @@ import {useNavigate} from 'react-router-dom';
 import {DraftType} from 'shared/dist/types/draft';
 import {createDraft} from '../../../store/editor';
 import {CentralError} from '../../../store/error';
+import {activateModal} from '../../../store/modal';
 import {useAppDispatch} from '../../../store/store';
 import styles from './futureType.module.css';
 
@@ -77,7 +78,10 @@ export const FutureType = (props: {typeId: string, smallImage? : boolean}) => {
           onSuccess: (draftId) => {
             navigate('/draft/' + draftId);
           }, onFailure: (error: CentralError) => {
-            alert(error.message);
+            dispatch(activateModal({
+              header: 'Error while creating draft.',
+              content: <>{error.message}</>,
+            }));
           }}));
       }}>Create</button>
   </div>;

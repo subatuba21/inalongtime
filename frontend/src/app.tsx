@@ -19,6 +19,7 @@ import {authAPI} from './api/auth';
 import {useAppDispatch} from './store/store';
 import {setUserState} from './store/user';
 import {useSelector} from 'react-redux';
+import {Modal} from './components/modal/modal';
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -44,54 +45,57 @@ export const App = () => {
   }, []);
 
   return isLoading ? <LoadingPage /> :
-  <BrowserRouter>
-    <Routes>
-      <Route path='/login' element={
-        <DontAllowIfLoggedIn>
-          <LoginPage></LoginPage>
-        </DontAllowIfLoggedIn>
-      }/>
-      <Route path='/signup' element={
-        <DontAllowIfLoggedIn>
-          <RegisterPage></RegisterPage>
-        </DontAllowIfLoggedIn>
-      }/>
-      <Route path='/home' element={
-        <LoggedInRouteGuard>
+  <>
+    <Modal></Modal>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/login' element={
+          <DontAllowIfLoggedIn>
+            <LoginPage></LoginPage>
+          </DontAllowIfLoggedIn>
+        }/>
+        <Route path='/signup' element={
+          <DontAllowIfLoggedIn>
+            <RegisterPage></RegisterPage>
+          </DontAllowIfLoggedIn>
+        }/>
+        <Route path='/home' element={
+          <LoggedInRouteGuard>
+            <HomePage></HomePage>
+          </LoggedInRouteGuard>}/>
+
+        <Route path='/drafts' element={
+          <LoggedInRouteGuard>
+            <DraftsPage></DraftsPage>
+          </LoggedInRouteGuard>}/>
+
+        <Route path='/draft/:id' element={
+          <LoggedInRouteGuard>
+            <EditorPage></EditorPage>
+          </LoggedInRouteGuard>}/>
+
+        <Route path='/hometest' element={
           <HomePage></HomePage>
-        </LoggedInRouteGuard>}/>
+        } />
 
-      <Route path='/drafts' element={
-        <LoggedInRouteGuard>
+        <Route path='/drafttest' element={
           <DraftsPage></DraftsPage>
-        </LoggedInRouteGuard>}/>
+        } />
 
-      <Route path='/draft/:id' element={
-        <LoggedInRouteGuard>
+        <Route path='/senttest' element={
+          <SentPage></SentPage>
+        } />
+
+        <Route path='/edittest' element={
           <EditorPage></EditorPage>
-        </LoggedInRouteGuard>}/>
+        } />
 
-      <Route path='/hometest' element={
-        <HomePage></HomePage>
-      } />
+        <Route path='/load' element={
+          <LoadingPage></LoadingPage>
+        } />
 
-      <Route path='/drafttest' element={
-        <DraftsPage></DraftsPage>
-      } />
-
-      <Route path='/senttest' element={
-        <SentPage></SentPage>
-      } />
-
-      <Route path='/edittest' element={
-        <EditorPage></EditorPage>
-      } />
-
-      <Route path='/load' element={
-        <LoadingPage></LoadingPage>
-      } />
-
-      <Route path="*" element={<Navigate to='/login'></Navigate>} />
-    </Routes>
-  </BrowserRouter>;
+        <Route path="*" element={<Navigate to='/login'></Navigate>} />
+      </Routes>
+    </BrowserRouter>;
+  </>;
 };

@@ -4,12 +4,14 @@ import {useDispatch} from 'react-redux';
 import {userSlice} from './user';
 import {errorSlice} from './error';
 import {editorSlice} from './editor';
+import {modalSlice} from './modal';
 
 export const store = configureStore({
   reducer: combineReducers({
     user: userSlice.reducer,
     error: errorSlice.reducer,
     editor: editorSlice.reducer,
+    modal: modalSlice.reducer,
   }),
 });
 

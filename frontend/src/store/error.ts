@@ -64,7 +64,6 @@ export const errorSlice = createSlice({
       const es = {..._state};
       if (!action.payload.success) {
         es[CentralErrors.addDraftError] = action.payload.error as CentralError;
-        action.meta.arg.onFailure(action.payload.error as CentralError);
         return es;
       } else return _state;
     });
