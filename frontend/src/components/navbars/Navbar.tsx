@@ -1,4 +1,4 @@
-import styles from './indexNavbar.module.css';
+import styles from './Navbar.module.css';
 import {Link} from 'react-router-dom';
 import {useAppDispatch} from '../../store/store';
 import {logout} from '../../store/user';
