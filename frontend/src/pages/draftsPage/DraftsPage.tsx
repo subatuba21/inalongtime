@@ -21,8 +21,10 @@ export const DraftsPage = () => {
       }
       setLoading(false);
     };
-    getData();
-  }, []);
+    if (loading) {
+      getData();
+    }
+  }, [loading]);
 
   if (loading) {
     return <LoadingPage loggedInNavbar={true}></LoadingPage>;
@@ -35,7 +37,8 @@ export const DraftsPage = () => {
         <h2 className='pinkText'>Drafts</h2>
         {data.map((draft, i) => {
           return <Draft key={i} id={draft._id}
-            name={draft.title} type={draft.type}></Draft>;
+            name={draft.title} type={draft.type}
+            setLoading={setLoading}></Draft>;
         })}
         <p className={styles.question}>
           <h3 className='pinkText'>Q: Are my drafts available forever?</h3>

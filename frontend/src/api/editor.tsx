@@ -20,6 +20,11 @@ interface getDraftResult {
   data?: DraftResponseBody,
 }
 
+interface deleteDraftResult {
+  success: boolean,
+  error?: CentralError
+}
+
 export const editorAPI = {
   getDraft: async (draftID: string) : Promise<getDraftResult> => {
     try {
@@ -36,8 +41,30 @@ export const editorAPI = {
       return {
         success: false,
         error: {
-          type: CentralErrors.addDraftError,
+          type: CentralErrors.getDraftError,
           message: 'Unable to find requested draft.',
+        },
+      };
+    }
+  },
+
+  deleteDraft: async (draftID: string) : Promise<deleteDraftResult> => {
+    try {
+      const res = await axios({
+        method: 'delete',
+        url: `/api/draft/${draftID}`,
+      });
+      if (res.status === 200) {
+        return {
+          success: true,
+        };
+      } else throw new Error();
+    } catch (err) {
+      return {
+        success: false,
+        error: {
+          type: CentralErrors.deleteDraftError,
+          message: 'Unable to delete draft due to unknown error.',
         },
       };
     }
@@ -112,7 +139,7 @@ export const editorAPI = {
       }
     } catch (err) {
       const error = {
-        type: CentralErrors.addDraftError,
+        type: CentralErrors.getUserDraftsError,
         message: 'There was an unknown error getting your drafts.',
       };
 

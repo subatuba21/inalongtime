@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {login, register} from './user';
-import {createDraft} from './editor';
+import {createDraft, deleteDraft} from './editor';
 
 export type CentralError = {
     type: string,
@@ -64,6 +64,15 @@ export const errorSlice = createSlice({
       const es = {..._state};
       if (!action.payload.success) {
         es[CentralErrors.addDraftError] = action.payload.error as CentralError;
+        return es;
+      } else return _state;
+    });
+
+    builder.addCase(deleteDraft.fulfilled, (_state, action) => {
+      const es = {..._state};
+      if (!action.payload.success) {
+        es[CentralErrors.deleteDraftError] =
+          action.payload.error as CentralError;
         return es;
       } else return _state;
     });

@@ -5,11 +5,11 @@ export interface ModalState {
     content: JSX.Element,
     dangerButton?: {
         text: string,
-        onClick: () => any,
+        onClick?: () => any,
     },
     successButton?: {
         text: string,
-        onClick: () => any,
+        onClick?: () => any,
     },
     onClose?: () => any,
     activated: boolean,
@@ -26,11 +26,11 @@ export interface ModalInput {
     content: JSX.Element,
     dangerButton?: {
         text: string,
-        onClick: () => any,
+        onClick?: () => any,
     },
     successButton?: {
         text: string,
-        onClick: () => any,
+        onClick?: () => any,
     },
     onClose?: () => any,
 }

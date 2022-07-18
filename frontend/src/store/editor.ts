@@ -51,6 +51,37 @@ export const createDraft = createAsyncThunk('editor/create',
       return res;
     });
 
+export const deleteDraft = createAsyncThunk('editor/delete',
+    async (args: {
+      id: string,
+      onSuccess: () => any,
+      onFailure: (error: CentralError) => any,
+    }, thunkApi) => {
+      const res = await editorAPI.deleteDraft(args.id);
+      if (res.success) {
+        args.onSuccess();
+      } else {
+        args.onFailure(res.error as CentralError);
+      }
+      return res;
+    });
+
+export const getDraft = createAsyncThunk('editor/get', async (args: {
+  id: string,
+  onSuccess: () => any,
+  onFailure: (error: CentralError) => any,
+}, thunkAPI) => {
+  const res = await editorAPI.getDraft(args.id as string);
+  if (res.success) {
+    thunkAPI.dispatch(loadDraft(res.data as DraftResponseBody));
+    args.onSuccess();
+  } else {
+    args.onFailure(res.error as CentralError);
+  }
+  return res;
+});
+
+
 export const editorSlice = createSlice({
   name: 'editor',
   initialState,
