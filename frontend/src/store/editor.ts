@@ -6,6 +6,7 @@ import {StepType} from 'shared/types/draft';
 import {EditDraftRequestBody} from 'shared/dist/types/draft';
 import {parseContent} from 'shared/dist/editor/parseContent';
 import {Content} from 'shared/dist/editor/classes/content';
+import {CentralError} from './error';
 
 
 const initialState : DraftFrontendState = {
@@ -27,6 +28,26 @@ const initialState : DraftFrontendState = {
     confirm: false,
   },
 };
+
+export const saveDraft = createAsyncThunk('editor/save',
+    async (args : {id: string, data: EditDraftRequestBody}, thunkApi) => {
+      await editorAPI.save(args.id, args.data);
+    });
+
+export const createDraft = createAsyncThunk('editor/create',
+    async (args: {
+      type: DraftType
+      onSuccess: (draftId: string) => any,
+      onFailure: (error: CentralError) => any,
+    }, thunkApi) => {
+      const res = await editorAPI.new(args.type);
+      if (res.success) {
+        const data = res.data as DraftResponseBody;
+        thunkApi.dispatch(loadDraft(res.data as DraftResponseBody));
+        args.onSuccess(data.properties._id);
+      }
+      return res;
+    });
 
 export const editorSlice = createSlice({
   name: 'editor',
@@ -92,16 +113,6 @@ export const editorSlice = createSlice({
       },
   },
 });
-
-export const saveDraft = createAsyncThunk('editor/save',
-    async (args : {id: string, data: EditDraftRequestBody}, thunkApi) => {
-      await editorAPI.save(args.id, args.data);
-    });
-
-export const createDraft = createAsyncThunk('editor/create',
-    async (type: DraftType, thunkApi) => {
-      await editorAPI.new(type);
-    });
 
 export const {changeTitle, changePhoneNumber,
   changeBackupEmail1, changeBackupEmail2,

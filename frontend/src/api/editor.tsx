@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {DraftResponseBody, EditDraftRequestBody,
   MiniDraft,
   UserDraftsResponseData} from 'shared/dist/types/draft';
@@ -53,9 +54,9 @@ export const editorAPI = {
     }
   },
 
-  new: async (type: DraftType) => {
+  new: async (type: DraftType) : Promise<getDraftResult> => {
     try {
-      await axios({
+      const res = await axios({
         method: 'post',
         url: `/api/draft`,
         data: {
@@ -64,13 +65,31 @@ export const editorAPI = {
           },
         },
       });
+
+      const data = await draftResponseBody.parseAsync(res.data?.data);
+      return {
+        success: true,
+        data,
+      };
     } catch (err) {
       const error = err as AxiosError;
-      if ((error.response as any).error?.message ===
+      if ((error.response as any)?.data?.error?.message ===
       alreadyThreeDrafts.message) {
-
+        return {
+          success: false,
+          error: {
+            type: CentralErrors.addDraftError,
+            message: 'You already have three drafts in your account. Please remove one and try again.',
+          },
+        };
       } else {
-
+        return {
+          success: false,
+          error: {
+            type: CentralErrors.addDraftError,
+            message: 'There was an unknown error in adding a draft.',
+          },
+        };
       }
     }
   },

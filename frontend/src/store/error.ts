@@ -17,7 +17,10 @@ const initialState : ErrorState = {
 export enum CentralErrors {
     signupError = 'SIGN_UP_ERROR',
     loginError = 'LOGIN_ERROR',
-    addDraftError = 'ADD_DRAFT_ERROR'
+    addDraftError = 'ADD_DRAFT_ERROR',
+    getDraftError = 'GET_DRAFT_ERROR',
+    getUserDraftsError = 'GET_USER_DRAFTS_ERROR',
+    deleteDraftError = 'DELETE_DRAFT_ERROR',
 }
 
 export const errorSlice = createSlice({
@@ -58,7 +61,12 @@ export const errorSlice = createSlice({
     });
 
     builder.addCase(createDraft.fulfilled, (_state, action) => {
-
+      const es = {..._state};
+      if (!action.payload.success) {
+        es[CentralErrors.addDraftError] = action.payload.error as CentralError;
+        action.meta.arg.onFailure(action.payload.error as CentralError);
+        return es;
+      } else return _state;
     });
   },
 });

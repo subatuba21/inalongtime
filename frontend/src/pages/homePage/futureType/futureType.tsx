@@ -1,8 +1,7 @@
-import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
-import {DraftFrontendState, DraftType} from 'shared/dist/types/draft';
+import {DraftType} from 'shared/dist/types/draft';
 import {createDraft} from '../../../store/editor';
-import {CentralErrors, ErrorState} from '../../../store/error';
+import {CentralError} from '../../../store/error';
 import {useAppDispatch} from '../../../store/store';
 import styles from './futureType.module.css';
 
@@ -57,10 +56,6 @@ export const FutureType = (props: {typeId: string, smallImage? : boolean}) => {
   const type = types[props.typeId];
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const editorState =
-    useSelector((state) => (state as any).editor) as DraftFrontendState;
-  const errorState = useSelector(
-      (state) => (state as any).editor) as ErrorState;
   // eslint-disable-next-line no-unused-vars
   return <div style={styles} id={styles.container}>
     <h3>{type.name}</h3>
@@ -78,12 +73,12 @@ export const FutureType = (props: {typeId: string, smallImage? : boolean}) => {
     </div>
     <button className={styles.bottomButton}
       onClick={() => {
-        dispatch(createDraft(types[props.typeId].type));
-        if (errorState[CentralErrors.addDraftError]===null) {
-          navigate(`/draft/${editorState._id}`);
-        } else {
-
-        }
+        dispatch(createDraft({type: types[props.typeId].type,
+          onSuccess: (draftId) => {
+            navigate('/draft/' + draftId);
+          }, onFailure: (error: CentralError) => {
+            alert(error.message);
+          }}));
       }}>Create</button>
   </div>;
 };
