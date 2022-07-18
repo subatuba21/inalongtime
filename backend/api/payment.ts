@@ -1,11 +1,11 @@
 import {Router} from 'express';
+import {StatusCodes} from 'http-status-codes';
 import Stripe from 'stripe';
 import {modifyDraft} from '../db/draft';
 import {PaymentData} from '../utils/schemas/payment';
 import {createPaymentLink} from '../utils/stripe/generatePaymentLink';
 import {stripe} from '../utils/stripe/setup';
 import {APIResponse} from '../utils/types/apiStructure';
-import {unknownError} from './apiErrors';
 import {mustBeLoggedIn} from './middleware/login';
 import {checkDraftValidity, extractPaymentData} from './middleware/payment';
 
@@ -27,7 +27,10 @@ paymentRouter.post('/paymentlink', mustBeLoggedIn,
       } catch {
         const response : APIResponse = {
           data: null,
-          error: unknownError,
+          error: {
+            code: StatusCodes.INTERNAL_SERVER_ERROR,
+            message: 'Unable to create payment link.',
+          },
         };
         res.end(response);
       }

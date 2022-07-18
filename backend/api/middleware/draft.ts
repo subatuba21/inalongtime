@@ -36,7 +36,10 @@ export const extractEditDraftData =
       } catch (err) {
         logger.warn(err);
         const response : APIResponse = {
-          error: unknownError,
+          error: {
+            message: 'Incorrect request body structure for edit draft.',
+            code: StatusCodes.BAD_REQUEST,
+          },
           data: null,
         };
 
@@ -54,7 +57,10 @@ export const extractDraftID =
         next();
       } else {
         const response : APIResponse = {
-          error: unknownError,
+          error: {
+            message: 'ID is not provided properly in the request body.',
+            code: StatusCodes.BAD_REQUEST,
+          },
           data: null,
         };
         res.status(response.error?.code as number)
@@ -70,7 +76,9 @@ export const extractDraftIDFromURL =
       next();
     } else {
       const response : APIResponse = {
-        error: unknownError,
+        error: {
+          message: 'Draft ID needs to be in URL id parameter.',
+        },
         data: null,
       };
       res.status(response.error?.code as number)
@@ -167,6 +175,7 @@ export const editDraft =
       if (draftData.properties) {
         const draftRes = await modifyDraft(draftId, draftData.properties);
         if (draftRes.error) {
+          logger.warn(draftRes.error);
           const response : APIResponse = {
             data: null,
             error: unknownError,
@@ -185,7 +194,9 @@ export const editDraft =
         } catch (err) {
           const response : APIResponse = {
             data: null,
-            error: unknownError,
+            error: {
+              message: 'ID is not provided properly in the request body.',
+            },
           };
           res.status(response.error?.code as number)
               .end(JSON.stringify(response));
@@ -209,6 +220,7 @@ export const deleteDraft =
     const error = await deleteDraftIdFromUser(user._id, draftId);
 
     if (draftRes.error || error) {
+      logger.warn(draftRes.error || error);
       const response : APIResponse = {
         data: null,
         error: unknownError,
