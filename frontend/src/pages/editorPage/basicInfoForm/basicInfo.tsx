@@ -44,7 +44,8 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
     <div>
       <span className={styles.fieldName}>Type</span>
       <SelectBox name='title'
-        options={['Letter', 'Gallery', 'Journal', 'Reminder', 'Goals']}
+        options={draftTypeSchema._def.values
+            .map((str) => str[0].toUpperCase() + str.substring(1))}
         values={draftTypeSchema._def.values}
         valueState={{value: editorState.type,
           set: (type: string) =>

@@ -5,7 +5,7 @@ export const SelectBox = (props: {
      values: string[],
      name: string,
      valueState: {value: string, set: Function},
-     onChange?: React.ChangeEventHandler<HTMLSelectElement>
+     onChange?: React.ChangeEventHandler<HTMLSelectElement>,
 }) => {
   const onChange : React.ChangeEventHandler<HTMLSelectElement> = (event) => {
     props.valueState.set(event.currentTarget.value);
@@ -14,10 +14,12 @@ export const SelectBox = (props: {
   return <div style={styles}>
     <select onInput={onChange}
       onChange={props.onChange ? props.onChange : () => null}>
-      {
-        props.options.map((str, index) =>
-          <option key={str} value={props.values[index]}>{str}</option>)
-      }
+      {props.options.map((str, index) => {
+        const selected =
+          props.valueState.value===props.values[index] ? true : false;
+        return <option key={str} value={props.values[index]}
+          selected={selected}>{str}</option>;
+      })}
     </select>
   </div>;
 };
