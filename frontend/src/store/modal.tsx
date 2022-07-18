@@ -5,13 +5,13 @@ export interface ModalState {
     content: JSX.Element,
     dangerButton?: {
         text: string,
-        onClick: Function,
+        onClick: () => any,
     },
     successButton?: {
         text: string,
-        onClick: Function,
+        onClick: () => any,
     },
-    onClose?: Function,
+    onClose?: () => any,
     activated: boolean,
 }
 
@@ -26,13 +26,13 @@ export interface ModalInput {
     content: JSX.Element,
     dangerButton?: {
         text: string,
-        onClick: Function,
+        onClick: () => any,
     },
     successButton?: {
         text: string,
-        onClick: Function,
+        onClick: () => any,
     },
-    onClose?: Function,
+    onClose?: () => any,
 }
 
 export const modalSlice = createSlice({
@@ -46,7 +46,7 @@ export const modalSlice = createSlice({
       state.onClose = action.payload.onClose;
       state.activated = true;
     },
-    deactivateModal: (state, action) => {
+    deactivateModal: (state, action: PayloadAction<undefined>) => {
       state.activated = false;
     },
   },
