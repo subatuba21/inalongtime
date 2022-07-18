@@ -96,6 +96,6 @@ export const App = () => {
 
         <Route path="*" element={<Navigate to='/login'></Navigate>} />
       </Routes>
-    </BrowserRouter>;
+    </BrowserRouter>
   </>;
 };
