@@ -6,12 +6,16 @@ export const draftTypeSchema =
 
 export const recipientTypeSchema = z.enum(['myself', 'someone else']);
 
+export const dateSchema = z.preprocess((arg) => {
+  if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
+}, z.date());
+
 const draftSchema = z.object({
   _id: z.string().length(24),
   userId: z.string().length(24),
   recipientType: recipientTypeSchema,
   recipientEmail: z.string(),
-  sendDate: z.date(),
+  sendDate: dateSchema,
   contentCloudStoragePath: z.string().url(),
   type: draftTypeSchema,
   title: z.string(),
@@ -45,7 +49,7 @@ export const editDraftRequestBody = z.object({
     userId: true,
     payment: true,
   }).partial().strict()
-}).partial().strict();
+}).partial().strip();
 
 export const draftResponseBody = z.object({
   content: z.any(),

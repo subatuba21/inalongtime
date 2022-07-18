@@ -1,8 +1,11 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {DraftFrontendState, DraftType, RecipientType} from 'shared/types/draft';
+import {DraftFrontendState, DraftResponseBody,
+  DraftType, RecipientType} from 'shared/types/draft';
 import {editorAPI} from '../api/editor';
 import {StepType} from 'shared/types/draft';
 import {EditDraftRequestBody} from 'shared/dist/types/draft';
+import {parseContent} from 'shared/dist/editor/parseContent';
+import {Content} from 'shared/dist/editor/classes/content';
 
 
 const initialState : DraftFrontendState = {
@@ -66,6 +69,27 @@ export const editorSlice = createSlice({
       (state: DraftFrontendState, action: PayloadAction<StepType>) => {
         state.progress[action.payload] = false;
       },
+    loadDraft:
+      (state: DraftFrontendState, action: PayloadAction<DraftResponseBody>) => {
+        state._id = action.payload.properties._id;
+        state.backupEmail1 = action.payload.properties.backupEmail1;
+        state.backupEmail2 = action.payload.properties.backupEmail2;
+        state.confirmed = action.payload.properties.confirmed;
+        state.phoneNumber = action.payload.properties.phoneNumber;
+        state.recipientEmail = action.payload.properties.recipientEmail;
+        state.recipientType = action.payload.properties.recipientType;
+        state.sendDate = action.payload.properties.sendDate;
+        state.title = action.payload.properties.title;
+        state.type = action.payload.properties.type;
+        state._id = action.payload.properties._id;
+        state.userId = action.payload.properties.userId;
+
+        try {
+          state.content = parseContent(action.payload.content, state.type);
+        } catch {
+          state.content = new Content();
+        }
+      },
   },
 });
 
@@ -84,5 +108,6 @@ export const {changeTitle, changePhoneNumber,
   changeRecipientEmail, changeContentType,
   changeRecipientType, setStepFinished,
   setStepUnfinished,
+  loadDraft,
 } =
    editorSlice.actions;

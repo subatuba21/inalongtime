@@ -5,7 +5,6 @@ import {LoggedInRouteGuard} from './components/routeGuards/LoggedInRouteGuard';
 import {DraftsPage} from './pages/draftsPage/DraftsPage';
 import {EditorPage} from './pages/editorPage/editorPage';
 import {HomePage} from './pages/homePage/HomePage';
-import {IndexPage} from './pages/indexPage/IndexPage';
 import {LoadingPage} from './pages/loadingPage/loadingPage';
 import {LoginPage} from './pages/loginPage/loginPage';
 import {RegisterPage} from './pages/registerPage/registerPage';
@@ -47,11 +46,6 @@ export const App = () => {
   return isLoading ? <LoadingPage /> :
   <BrowserRouter>
     <Routes>
-      <Route path='/' element={
-        <DontAllowIfLoggedIn>
-          <IndexPage></IndexPage>
-        </DontAllowIfLoggedIn>
-      }/>
       <Route path='/login' element={
         <DontAllowIfLoggedIn>
           <LoginPage></LoginPage>
@@ -70,6 +64,11 @@ export const App = () => {
       <Route path='/drafts' element={
         <LoggedInRouteGuard>
           <DraftsPage></DraftsPage>
+        </LoggedInRouteGuard>}/>
+
+      <Route path='/edit/:id' element={
+        <LoggedInRouteGuard>
+          <EditorPage></EditorPage>
         </LoggedInRouteGuard>}/>
 
       <Route path='/hometest' element={
@@ -91,6 +90,8 @@ export const App = () => {
       <Route path='/load' element={
         <LoadingPage></LoadingPage>
       } />
+
+      <Route path="*" element={<LoginPage></LoginPage>} />
     </Routes>
   </BrowserRouter>;
 };

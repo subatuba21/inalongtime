@@ -1,8 +1,8 @@
-import {EditDraftRequestBody,
+import {DraftResponseBody, EditDraftRequestBody,
   MiniDraft,
   UserDraftsResponseData} from 'shared/dist/types/draft';
 import axios, {AxiosError} from 'axios';
-import {DraftType} from 'shared/types/draft';
+import {draftResponseBody, DraftType} from 'shared/dist/types/draft';
 import {alreadyThreeDrafts} from
   'shared/dist/types/apiErrors';
 import {CentralError, CentralErrors} from '../store/error';
@@ -13,7 +13,34 @@ interface getUserDraftsResult {
   data?: MiniDraft[],
 }
 
+interface getDraftResult {
+  success: boolean,
+  error?: CentralError,
+  data?: DraftResponseBody,
+}
+
 export const editorAPI = {
+  getDraft: async (draftID: string) : Promise<getDraftResult> => {
+    try {
+      const res = await axios({
+        method: 'get',
+        url: `/api/draft/${draftID}`,
+      });
+      const data = await draftResponseBody.parseAsync(res.data?.data);
+      return {
+        success: true,
+        data,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        error: {
+          type: CentralErrors.addDraftError,
+          message: 'Unable to find requested draft.',
+        },
+      };
+    }
+  },
   save: async (draftID: string, data: EditDraftRequestBody) => {
     try {
       await axios({
@@ -39,7 +66,6 @@ export const editorAPI = {
       });
     } catch (err) {
       const error = err as AxiosError;
-      console.log(err);
       if ((error.response as any).error?.message ===
       alreadyThreeDrafts.message) {
 

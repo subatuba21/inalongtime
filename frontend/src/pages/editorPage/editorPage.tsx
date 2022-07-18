@@ -1,8 +1,12 @@
-import React, {Suspense, useState} from 'react';
-import {StepType} from 'shared/types/draft';
+import React, {Suspense, useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
+import {DraftResponseBody, StepType} from 'shared/types/draft';
+import {editorAPI} from '../../api/editor';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
 import {Navbar} from '../../components/navbars/Navbar';
+import {loadDraft} from '../../store/editor';
+import {useAppDispatch} from '../../store/store';
 import {LoadingPage} from '../loadingPage/loadingPage';
 import {BasicInfo} from './basicInfoForm/basicInfo';
 import styles from './editorPage.module.css';
@@ -14,6 +18,28 @@ const LetterEditor =
           .then(({LetterEditor}) => ({default: LetterEditor})));
 
 export const EditorPage = () => {
+  const {id} = useParams();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!id) {
+      navigate('/');
+    };
+
+    const getData = async () => {
+      const res = await editorAPI.getDraft(id as string);
+      if (res.success) {
+        dispatch(loadDraft(res.data as DraftResponseBody));
+      } else {
+
+      }
+      setLoading(false);
+    };
+    getData();
+  }, []);
+
   const [currentStep, setStepState] = useState<StepType>('info');
 
   const setStep = (name: StepType) => {
@@ -39,6 +65,10 @@ export const EditorPage = () => {
     default: {
 
     }
+  }
+
+  if (loading) {
+    return <LoadingPage loggedInNavbar={true}></LoadingPage>;
   }
 
   return <div style={styles}>

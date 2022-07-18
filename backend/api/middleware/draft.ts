@@ -23,6 +23,7 @@ import {alreadyThreeDrafts, notFoundError,
 import {addDraftIdToUser, deleteDraftIdFromUser} from '../../db/auth';
 import {DBError} from '../../db/errors';
 import {parseContent} from 'shared/dist/editor/parseContent';
+import {StatusCodes} from 'http-status-codes';
 
 export const extractEditDraftData =
     async (req: express.Request, res: express.Response, next: Function) => {
@@ -86,7 +87,10 @@ export const extractDraftType =
         next();
       } else {
         const response : APIResponse = {
-          error: unknownError,
+          error: {
+            message: 'Must put data type in response.',
+            code: StatusCodes.BAD_REQUEST,
+          },
           data: null,
         };
         res.status(response.error?.code as number)
