@@ -13,6 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
 import './css/buttons.css';
 import './css/box.css';
+import './css/modal.css';
 import './api/setup';
 import {useEffect, useState} from 'react';
 import {authAPI} from './api/auth';

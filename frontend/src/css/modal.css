@@ -1,0 +1,45 @@
+.modal-content {
+    margin-top: 5vh;
+}
+
+div.modal-header {
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.modal-title {
+    font-size: 15pt;
+}
+
+.modal-body {
+    min-height: 200px;
+}
+
+.modal-footer {
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.modal-footer > .btn-primary {
+    color: black;
+}
+
+.modal-footer > .btn-primary, .modal-footer > .btn-danger {
+    padding: 0px;
+    margin: 0px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.modal-footer > .btn-danger {
+    color: black;
+}
+
+@media (max-width: 575px) {
+    .modal-dialog {
+        width: 90%;
+        margin-left: 5%;
+    }
+}
