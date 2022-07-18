@@ -21,7 +21,7 @@ export const googleStrategy = new Strategy({
       });
 
       if (registerUserResponse.success) {
-        return done(null, userResponse.user);
+        return done(null, registerUserResponse.user);
       } else {
         return done(null, false);
       }
