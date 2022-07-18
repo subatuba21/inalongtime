@@ -17,7 +17,7 @@ export const RegisterPage = () => {
           <a href=
             {`${process.env.REACT_APP_BASE_URL ? process.env.REACT_APP_BASE_URL : ''}/api/auth/google`}>
             <img src='/g-logo.png' id={styles.googleLogo}></img>
-          Sign In With Google
+          Sign Up With Google
           </a>
         </Button>
       </div>
