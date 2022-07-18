@@ -80,8 +80,10 @@ export const FutureType = (props: {typeId: string, smallImage? : boolean}) => {
       onClick={() => {
         dispatch(createDraft(types[props.typeId].type));
         if (errorState[CentralErrors.addDraftError]===null) {
-          navigate(`/editor/${editorState._id}`);
-        };
+          navigate(`/draft/${editorState._id}`);
+        } else {
+
+        }
       }}>Create</button>
   </div>;
 };

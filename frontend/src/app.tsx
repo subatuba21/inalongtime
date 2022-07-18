@@ -66,7 +66,7 @@ export const App = () => {
           <DraftsPage></DraftsPage>
         </LoggedInRouteGuard>}/>
 
-      <Route path='/edit/:id' element={
+      <Route path='/draft/:id' element={
         <LoggedInRouteGuard>
           <EditorPage></EditorPage>
         </LoggedInRouteGuard>}/>
