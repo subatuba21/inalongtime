@@ -89,7 +89,7 @@ export const EditorPage = () => {
           Preview Link: <a href='https://inalongtime.com/preview/sbbbrebf48357bt53h'>https://inalongtime.com/preview/sbbbrebf48357bt53h</a>
         </p>
         <h3 style={{marginBottom: '10px'}}>Steps</h3>
-        <div style={{marginBottom: '0px'}}>
+        <div style={{marginBottom: '10px'}}>
           <Step step='info' currentStep={currentStep} setStep={setStep}></Step>
           <Step step='content'
             currentStep={currentStep} setStep={setStep}></Step>

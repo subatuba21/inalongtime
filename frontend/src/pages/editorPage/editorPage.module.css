@@ -42,10 +42,12 @@
    color: white;
    margin-bottom: 0px;
    margin-top: 0px;
+   word-break: break-word;
 }
 
 #previewURL > a {
     color: lightcyan;
+    word-break: break-word;
 }
 
 .step {
@@ -64,4 +66,16 @@
 .step.active {
     background-color: var(--pink);
     cursor:unset;
+}
+
+@media (max-width: 600px) {
+    #mainDiv {
+        margin-top: 30px;
+    }
+
+    #mainDiv > h2 {
+        font-size: 20pt;
+        margin-bottom: 10px;
+    }
+
 }
