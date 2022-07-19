@@ -1,5 +1,5 @@
 import {z} from 'zod';
-import {APIError} from '../../api/apiErrors';
+import {APIError} from 'shared/dist/types/apiErrors';
 
 export interface APIResponse {
     data: object | null,

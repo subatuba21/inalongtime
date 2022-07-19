@@ -1,7 +1,7 @@
 import {InputBox} from '../../../components/inputBox/inputBox';
 import styles from './basicInfo.module.css';
 import {SelectBox} from '../../../components/selectBox/selectBox';
-import {DraftFrontendState, DraftType, RecipientType} from 'shared/types/draft';
+import {DraftFrontendState, DraftType, RecipientType} from 'shared/dist/types/draft';
 import {draftTypeSchema,
   editDraftRequestBody,
   EditDraftRequestBody, recipientTypeSchema} from 'shared/dist/types/draft';

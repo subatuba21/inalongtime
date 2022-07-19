@@ -11,7 +11,7 @@ import {LetterContent} from
   'shared/dist/editor/classes/letterContent';
 import {editorAPI} from '../../api/editor';
 import {useSelector} from 'react-redux';
-import {DraftFrontendState} from 'shared/types/draft';
+import {DraftFrontendState} from 'shared/dist/types/draft';
 
 const toolbarPlugin = createToolbarPlugin();
 const {Toolbar} = toolbarPlugin;
@@ -33,9 +33,7 @@ export const LetterEditor = (props: {letterContent? : LetterContent}) => {
   const save = () => {
     const letterContent = new LetterContent();
     letterContent.initialize({
-      data: {
-        editorState: letterEditorState,
-      },
+      editorState: letterEditorState,
     });
 
     editorAPI.save(editorState._id, editorState.type, {

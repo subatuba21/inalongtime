@@ -1,8 +1,8 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {DraftFrontendState, DraftResponseBody,
-  DraftType, RecipientType} from 'shared/types/draft';
+  DraftType, RecipientType} from 'shared/dist/types/draft';
 import {editorAPI} from '../api/editor';
-import {StepType} from 'shared/types/draft';
+import {StepType} from 'shared/dist/types/draft';
 import {EditDraftRequestBody} from 'shared/dist/types/draft';
 import {parseContent} from 'shared/dist/editor/parseContent';
 import {Content} from 'shared/dist/editor/classes/content';

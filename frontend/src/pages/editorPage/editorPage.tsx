@@ -1,6 +1,6 @@
 import React, {Suspense, useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {StepType} from 'shared/types/draft';
+import {StepType} from 'shared/dist/types/draft';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
 import {Navbar} from '../../components/navbars/Navbar';

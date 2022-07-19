@@ -2,35 +2,28 @@ import {Content, ContentType} from './content';
 import {EditorState, convertToRaw, convertFromRaw} from 'draft-js';
 
 export type LetterData = {
-  editorState: EditorState,
+  editorState: object,
 }
 
 export class LetterContent extends Content {
   type: ContentType = 'letter';
-  data?: LetterData;
+  editorState?: EditorState;
 
-  serialize() : object {
+  serialize() : LetterData {
     if (this.initialized===false) {
       throw new Error('LetterContent has not been initialized.');
     }
 
-    const data = this.data as LetterData;
-
     const serializedData = {
-      editorState: convertToRaw(data.editorState.getCurrentContent()),
+      editorState: convertToRaw((this.editorState as EditorState).getCurrentContent()),
     }
 
-    return {
-      type: this.type,
-      data: serializedData
-    };
+    return serializedData;
   }
 
   deserialize(data: any) {
     if (data.editorState) {
-      this.data = {
-        editorState: new EditorState(convertFromRaw(data.editorState)),
-      }
+      this.editorState = new EditorState(convertFromRaw(data.editorState)),
       this.initialized = true;
     } else {
       throw new Error("Data does not fit parameters.");
@@ -38,9 +31,9 @@ export class LetterContent extends Content {
   }
 
   initialize(args: {
-    data: LetterData,
+    editorState: EditorState,
   }): void {
-      this.data = args.data;
+      this.editorState = args.editorState;
       this.initialized = true;
   }
 

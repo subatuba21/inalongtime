@@ -1,7 +1,7 @@
 import {Db, Collection, ObjectId} from 'mongodb';
 import logger from '../logger';
 import {DraftSchema, miniDraft, MiniDraft
-  , UserDraftsResponseData} from 'shared/types/draft';
+  , UserDraftsResponseData} from 'shared/dist/types/draft';
 import {DbResponse} from './setup';
 import {DBError} from './errors';
 

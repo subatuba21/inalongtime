@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import {DownloadResponse, Storage} from '@google-cloud/storage';
 import {DraftType} from 'shared/dist/types/draft';
-import {Content} from 'shared/editor/classes/content';
+import {Content} from 'shared/dist/editor/classes/content';
 import {parseContent} from 'shared/dist/editor/parseContent';
 const storage = new Storage({
   keyFilename: `${__dirname}/${process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE_PATH}`,

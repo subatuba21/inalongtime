@@ -5,7 +5,7 @@ import {editDraftRequestBody,
   draftTypeSchema} from 'shared/dist/types/draft';
 import {DraftResponseBody,
   EditDraftRequestBody,
-  UserDraftsResponseData} from 'shared/types/draft';
+  UserDraftsResponseData} from 'shared/dist/types/draft';
 import {draftResponseBody} from 'shared/dist/types/draft';
 import {addDraft, modifyDraft,
   deleteDraft as deleteDraftFromDB,
@@ -78,6 +78,7 @@ export const extractDraftIDFromURL =
       const response : APIResponse = {
         error: {
           message: 'Draft ID needs to be in URL id parameter.',
+          code: StatusCodes.BAD_REQUEST,
         },
         data: null,
       };
@@ -169,7 +170,6 @@ export const editDraft =
       const draftId = req.draft?.id as string;
       const draftType =
         draftData?.properties?.type || req.draft?.type as DraftType;
-
       const user = req.user as UserSchema;
 
       if (draftData.properties) {
@@ -187,15 +187,15 @@ export const editDraft =
       }
 
       if (draftData.content) {
-        const content = parseContent(draftData.content, draftType);
-
         try {
+          const content = parseContent(draftData.content, draftType);
           await postDraftContent(user._id, draftId, content);
         } catch (err) {
           const response : APIResponse = {
             data: null,
             error: {
-              message: 'ID is not provided properly in the request body.',
+              message: 'Unable to upload draft to storage.',
+              code: StatusCodes.INTERNAL_SERVER_ERROR,
             },
           };
           res.status(response.error?.code as number)

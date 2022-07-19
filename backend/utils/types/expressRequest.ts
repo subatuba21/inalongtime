@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {editDraftRequestBody, DraftType,
-  EditDraftRequestBody} from 'shared/types/draft';
-import {APIError} from '../../api/apiErrors';
+  EditDraftRequestBody} from 'shared/dist/types/draft';
+import {APIError} from 'shared/dist/types/apiErrors';
 import {PaymentData} from '../schemas/payment';
 import {PassportLoginInput,
   RegisterUserInput, UserSchema} from '../schemas/user';
