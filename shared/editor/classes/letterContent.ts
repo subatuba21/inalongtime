@@ -23,7 +23,7 @@ export class LetterContent extends Content {
 
   deserialize(data: any) {
     if (data.editorState) {
-      this.editorState = new EditorState(convertFromRaw(data.editorState)),
+      this.editorState = EditorState.createWithContent(convertFromRaw(data.editorState));
       this.initialized = true;
     } else {
       throw new Error("Data does not fit parameters.");
