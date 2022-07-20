@@ -31,8 +31,16 @@ const initialState : DraftFrontendState = {
 
 export const saveDraft = createAsyncThunk('editor/save',
     async (args : {id: string, type: DraftType,
-      data: EditDraftRequestBody}, thunkApi) => {
-      await editorAPI.save(args.id, args.type, args.data);
+      data: EditDraftRequestBody,
+      onSuccess: () => any,
+      onFailure: (error: CentralError) => any}, thunkApi) => {
+      const res = await editorAPI.save(args.id, args.type, args.data);
+      if (res.success) {
+        args.onSuccess();
+      } else {
+        args.onFailure(res.error as CentralError);
+      }
+      return res;
     });
 
 export const createDraft = createAsyncThunk('editor/create',
@@ -116,6 +124,10 @@ export const editorSlice = createSlice({
           state.recipientType = action.payload;
           if (action.payload === 'myself') state.recipientEmail = '';
         },
+    changeContent:
+      (state: DraftFrontendState, action: PayloadAction<Content>) => {
+        state.content = action.payload;
+      },
     setStepFinished:
       (state: DraftFrontendState, action: PayloadAction<StepType>) => {
         state.progress[action.payload] = true;
@@ -153,6 +165,6 @@ export const {changeTitle, changePhoneNumber,
   changeRecipientEmail, changeContentType,
   changeRecipientType, setStepFinished,
   setStepUnfinished,
-  loadDraft,
+  loadDraft, changeContent,
 } =
    editorSlice.actions;

@@ -1,7 +1,8 @@
 import {InputBox} from '../../../components/inputBox/inputBox';
 import styles from './basicInfo.module.css';
 import {SelectBox} from '../../../components/selectBox/selectBox';
-import {DraftFrontendState, DraftType, RecipientType} from 'shared/dist/types/draft';
+import {DraftFrontendState,
+  DraftType, RecipientType} from 'shared/dist/types/draft';
 import {draftTypeSchema,
   editDraftRequestBody,
   EditDraftRequestBody, recipientTypeSchema} from 'shared/dist/types/draft';
@@ -13,6 +14,7 @@ import {changeTitle, saveDraft, changePhoneNumber,
 } from '../../../store/editor';
 import {useAppDispatch} from '../../../store/store';
 import {useSelector} from 'react-redux';
+import {activateModal} from '../../../store/modal';
 
 export const BasicInfo = (props: {draftType : DraftType}) => {
   const editorState =
@@ -29,6 +31,13 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
     id: editorState._id,
     data: compileBasicInfo(),
     type: editorState.type,
+    onSuccess: () => {},
+    onFailure: () => {
+      dispatch(activateModal({
+        header: 'Unable to save info.',
+        content: <>Unable to save info due to unknown error</>,
+      }));
+    },
   }));
 
   return <div id={styles.basicInfo} className='box'>

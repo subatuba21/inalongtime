@@ -1,5 +1,6 @@
 import express from 'express';
 import {unknownError} from 'shared/dist/types/apiErrors';
+import logger from '../logger';
 import {APIResponse} from './types/apiStructure';
 
 export const handleEndError =
@@ -9,8 +10,10 @@ export const handleEndError =
         error: unknownError,
       };
 
+      logger.error(err);
+
+      if (req.logout) req.logout(() => {});
+
       res.status(response.error?.code as number)
           .end(JSON.stringify(response));
-
-      req.logout(() => {});
     };

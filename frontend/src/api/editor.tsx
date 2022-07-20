@@ -71,7 +71,7 @@ export const editorAPI = {
   },
   save: async (draftID: string, type: DraftType, data: EditDraftRequestBody) => {
     try {
-      await axios({
+      const res = await axios({
         method: 'put',
         url: `/api/draft/${draftID}`,
         data: {
@@ -81,8 +81,19 @@ export const editorAPI = {
           },
         },
       });
+      if (res.status === 200) {
+        return {
+          success: true,
+        };
+      } else throw new Error();
     } catch (err) {
-
+      return {
+        success: false,
+        error: {
+          type: CentralErrors.saveDraftError,
+          message: 'Unable to save draft due to unknown error.',
+        },
+      };
     }
   },
 

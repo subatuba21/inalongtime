@@ -6,12 +6,13 @@ import '@draft-js-plugins/emoji/lib/plugin.css';
 import '../../css/drafteditor.css';
 import createEmojiPlugin from '@draft-js-plugins/emoji';
 import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
-import {useState} from 'react';
 import {LetterContent} from
   'shared/dist/editor/classes/letterContent';
-import {editorAPI} from '../../api/editor';
 import {useSelector} from 'react-redux';
 import {DraftFrontendState} from 'shared/dist/types/draft';
+import {useAppDispatch} from '../../store/store';
+import {changeContent, saveDraft} from '../../store/editor';
+import {activateModal} from '../../store/modal';
 
 const toolbarPlugin = createToolbarPlugin();
 const {Toolbar} = toolbarPlugin;
@@ -19,27 +20,42 @@ const {Toolbar} = toolbarPlugin;
 const emojiPlugin = createEmojiPlugin();
 const {EmojiSuggestions, EmojiSelect} = emojiPlugin;
 
-export const LetterEditor = (props: {letterContent? : LetterContent}) => {
-  const [letterEditorState, setLetterEditorState] = useState(
-      () => props.letterContent?.data?.editorState || EditorState.createEmpty(),
-  );
+export const LetterEditor = () => {
   const editorState =
     useSelector((state) => (state as any).editor) as DraftFrontendState;
 
-  const onChange = (editor: EditorState) => {
-    setLetterEditorState(editor);
+  const letterEditorState =
+    (editorState?.content as LetterContent)?.editorState ||
+    EditorState.createEmpty();
+  const dispatch = useAppDispatch();
+
+  const onChange = (editorState: EditorState) => {
+    const content = new LetterContent();
+    content.initialize({
+      editorState,
+    });
+    dispatch(changeContent(content));
   };
 
   const save = () => {
-    const letterContent = new LetterContent();
-    letterContent.initialize({
-      editorState: letterEditorState,
-    });
-
-    editorAPI.save(editorState._id, editorState.type, {
-      content: letterContent.serialize(),
-    });
+    if (editorState.content) {
+      dispatch(saveDraft({
+        type: 'letter',
+        id: editorState._id,
+        data: {
+          content: editorState.content?.serialize(),
+        },
+        onSuccess: () => {},
+        onFailure: () => {
+          dispatch(activateModal({
+            content: <div>Unable to save draft due to unknown error</div>,
+            header: 'Error: Unable to save draft',
+          }));
+        },
+      }));
+    }
   };
+
 
   return <>
     <Toolbar/>
