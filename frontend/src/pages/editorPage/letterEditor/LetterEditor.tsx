@@ -3,16 +3,16 @@ import Editor from '@draft-js-plugins/editor';
 import 'draft-js/dist/Draft.css';
 import '@draft-js-plugins/static-toolbar/lib/plugin.css';
 import '@draft-js-plugins/emoji/lib/plugin.css';
-import '../../css/drafteditor.css';
+import '../../../css/drafteditor.css';
 import createEmojiPlugin from '@draft-js-plugins/emoji';
 import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
 import {LetterContent} from
   'shared/dist/editor/classes/letterContent';
 import {useSelector} from 'react-redux';
 import {DraftFrontendState} from 'shared/dist/types/draft';
-import {useAppDispatch} from '../../store/store';
-import {changeContent, saveDraft} from '../../store/editor';
-import {activateModal} from '../../store/modal';
+import {useAppDispatch} from '../../../store/store';
+import {changeContent, saveDraft} from '../../../store/editor';
+import {activateModal} from '../../../store/modal';
 import {useEffect} from 'react';
 
 const toolbarPlugin = createToolbarPlugin();
@@ -60,7 +60,7 @@ export const LetterEditor = () => {
   useEffect(() => {
     const debounced = setTimeout(() => {
       save();
-    }, 3000);
+    }, 2500);
 
     return () => clearTimeout(debounced);
   }, [editorState.content]);

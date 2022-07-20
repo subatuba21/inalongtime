@@ -1,0 +1,23 @@
+#confirmForm {
+    min-height: 350px;
+    width: 100%;
+    color: black;
+    padding-top: 10px;
+}
+
+#confirmForm p {
+    font-size: 12pt;
+    margin-top: 10px;
+}
+
+#confirmForm .disabled, #confirmForm .disabled * {
+    opacity: 0.3;
+}
+
+#confirmForm h4 {
+    padding-top: 30px;
+}
+
+#confirmForm button {
+    background-color: var(--pink);
+}

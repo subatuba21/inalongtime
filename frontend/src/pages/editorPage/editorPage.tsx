@@ -1,4 +1,5 @@
 import React, {Suspense, useEffect, useState} from 'react';
+import styles from './editorPage.module.css';
 import {useNavigate, useParams} from 'react-router-dom';
 import {StepType} from 'shared/dist/types/draft';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
@@ -9,12 +10,12 @@ import {activateModal} from '../../store/modal';
 import {useAppDispatch} from '../../store/store';
 import {LoadingPage} from '../loadingPage/loadingPage';
 import {BasicInfo} from './basicInfoForm/basicInfo';
-import styles from './editorPage.module.css';
+import {ConfirmForm} from './confirmForm/ConfirmForm';
 import {Step} from './step/step';
 
 const LetterEditor =
   React.lazy(
-      () => import('../../components/letterEditor/LetterEditor')
+      () => import('./letterEditor/LetterEditor')
           .then(({LetterEditor}) => ({default: LetterEditor})));
 
 export const EditorPage = () => {
@@ -65,6 +66,11 @@ export const EditorPage = () => {
       <Suspense fallback={<LoadingPage></LoadingPage>}>
         <LetterEditor />;
       </Suspense>;
+      break;
+    }
+
+    case 'confirm': {
+      content = <ConfirmForm></ConfirmForm>;
       break;
     }
 
