@@ -11,10 +11,13 @@ import {changeTitle, saveDraft, changePhoneNumber,
   changeRecipientEmail,
   changeRecipientType,
   changeContentType,
+  setStepUnfinished,
+  setStepFinished,
 } from '../../../store/editor';
 import {useAppDispatch} from '../../../store/store';
 import {useSelector} from 'react-redux';
 import {activateModal} from '../../../store/modal';
+import {useState} from 'react';
 
 export const BasicInfo = (props: {draftType : DraftType}) => {
   const editorState =
@@ -40,6 +43,19 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
     },
   }));
 
+  const [formErrorState, setFormErrorState] =
+  useState<Record<string, string[]>>({});
+
+  let finished = true;
+  for (const item of Object.keys(formErrorState)) {
+    if (formErrorState[item].length!=0) {
+      dispatch(setStepUnfinished('info'));
+      finished = false;
+    }
+  }
+
+  if (finished) dispatch(setStepFinished('info'));
+
   return <div id={styles.basicInfo} className='box'>
     <div>
       <span className={styles.fieldName}>Title</span>
@@ -47,6 +63,18 @@ export const BasicInfo = (props: {draftType : DraftType}) => {
         valueState={{value: editorState.title,
           set: (title: string) => dispatch(changeTitle(title))}}
         onBlur={onBlur}
+        validation={{
+          formErrorState: {
+            set: setFormErrorState,
+            value: formErrorState,
+          },
+          validationFunction: (input: string) => {
+            const errors = [];
+            if (input.length===0) errors.push('Phone number cannot be blank.');
+            return errors;
+          },
+          showErrors: true,
+        }}
       ></InputBox>
     </div>
     <br />

@@ -22,7 +22,7 @@ const initialState : DraftFrontendState = {
   phoneNumber: '',
   sendDate: new Date(),
   progress: {
-    info: true,
+    info: false,
     content: false,
     customize: false,
     confirm: false,
