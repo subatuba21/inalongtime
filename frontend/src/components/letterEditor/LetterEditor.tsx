@@ -13,6 +13,7 @@ import {DraftFrontendState} from 'shared/dist/types/draft';
 import {useAppDispatch} from '../../store/store';
 import {changeContent, saveDraft} from '../../store/editor';
 import {activateModal} from '../../store/modal';
+import {useEffect} from 'react';
 
 const toolbarPlugin = createToolbarPlugin();
 const {Toolbar} = toolbarPlugin;
@@ -55,6 +56,14 @@ export const LetterEditor = () => {
       }));
     }
   };
+
+  useEffect(() => {
+    const debounced = setTimeout(() => {
+      save();
+    }, 3000);
+
+    return () => clearTimeout(debounced);
+  }, [editorState.content]);
 
 
   return <>
