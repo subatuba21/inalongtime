@@ -1198,7 +1198,7 @@
     "@draft-js-plugins/buttons" "^4.0.0"
     "@draft-js-plugins/utils" "^4.0.0"
 
-"@draft-js-plugins/buttons@^4.0.0":
+"@draft-js-plugins/buttons@^4.0.0", "@draft-js-plugins/buttons@^4.3.1":
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/@draft-js-plugins/buttons/-/buttons-4.3.1.tgz#d1361250657112a38fe2f82d02692ad432284151"
   integrity sha512-1NFNYOfnt1+D++nuxwOZHvtQpfAo/Ilu7WAbUngU57vBGPW9YEWi9FJ4JpGPUZ0dE3F3RO52bDrIu7SSYA36tA==
@@ -1232,6 +1232,13 @@
     react-custom-scrollbars-2 "^4.4.0"
     react-icons "^4.3.1"
     to-style "^1.3.3"
+
+"@draft-js-plugins/image@^4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@draft-js-plugins/image/-/image-4.1.3.tgz#2a90f9629b5784fb01ad4bc92c2b8125598dc5b5"
+  integrity sha512-/+E/dx/6GvcWiw7ViIaeKkVTLJm9cDejZu1tpinb53Cl4iwMT7hN3pwLE270MYcctj5ZdwjleRuMDnx4l/mDtw==
+  dependencies:
+    clsx "^1.0.4"
 
 "@draft-js-plugins/static-toolbar@^4.1.3":
   version "4.1.3"

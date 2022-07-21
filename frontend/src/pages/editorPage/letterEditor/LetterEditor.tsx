@@ -3,23 +3,39 @@ import Editor from '@draft-js-plugins/editor';
 import 'draft-js/dist/Draft.css';
 import '@draft-js-plugins/static-toolbar/lib/plugin.css';
 import '@draft-js-plugins/emoji/lib/plugin.css';
+import '@draft-js-plugins/image/lib/plugin.css';
 import '../../../css/drafteditor.css';
 import createEmojiPlugin from '@draft-js-plugins/emoji';
 import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
+import createImagePlugin from '@draft-js-plugins/image';
 import {LetterContent} from
   'shared/dist/editor/classes/letterContent';
 import {useSelector} from 'react-redux';
 import {DraftFrontendState} from 'shared/dist/types/draft';
 import {useAppDispatch} from '../../../store/store';
-import {changeContent, saveDraft} from '../../../store/editor';
+import {changeContent, saveDraft,
+  setStepFinished, setStepUnfinished} from '../../../store/editor';
 import {activateModal} from '../../../store/modal';
 import {useEffect} from 'react';
+import {
+  BoldButton,
+  ItalicButton,
+  HeadlineOneButton,
+  HeadlineTwoButton,
+  HeadlineThreeButton,
+  OrderedListButton,
+  UnorderedListButton,
+} from '@draft-js-plugins/buttons';
 
 const toolbarPlugin = createToolbarPlugin();
 const {Toolbar} = toolbarPlugin;
 
 const emojiPlugin = createEmojiPlugin();
 const {EmojiSuggestions, EmojiSelect} = emojiPlugin;
+
+
+const imagePlugin = createImagePlugin();
+
 
 export const LetterEditor = () => {
   const editorState =
@@ -37,6 +53,14 @@ export const LetterEditor = () => {
     });
     dispatch(changeContent(content));
   };
+
+  if (editorState.content && (editorState.content as any).editorState &&
+  ((editorState.content as LetterContent).editorState as EditorState)
+      .getCurrentContent().getPlainText().trim() != '') {
+    dispatch(setStepFinished('content'));
+  } else {
+    dispatch(setStepUnfinished('content'));
+  }
 
   const save = () => {
     if (editorState.content) {
@@ -67,10 +91,25 @@ export const LetterEditor = () => {
 
 
   return <>
-    <Toolbar/>
+    <Toolbar>
+      {
+        (externalProps) => (
+          <>
+            <BoldButton {...externalProps} />
+            <ItalicButton {...externalProps} />
+            <HeadlineOneButton {...externalProps} />
+            <HeadlineTwoButton {...externalProps} />
+            <HeadlineThreeButton {...externalProps} />
+            <OrderedListButton {...externalProps} />
+            <UnorderedListButton {...externalProps} />
+          </>
+        )
+      }
+    </Toolbar>
     <Editor
       editorState={letterEditorState}
-      onChange={onChange} onBlur={save} plugins={[toolbarPlugin, emojiPlugin]}/>
+      onChange={onChange} onBlur={save} plugins={[toolbarPlugin,
+        emojiPlugin, imagePlugin]}/>
     <EmojiSuggestions/>
     <EmojiSelect/>
   </>;
