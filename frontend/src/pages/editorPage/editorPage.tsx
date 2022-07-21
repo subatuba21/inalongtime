@@ -12,6 +12,7 @@ import {LoadingPage} from '../loadingPage/loadingPage';
 import {BasicInfo} from './basicInfoForm/basicInfo';
 import {ConfirmForm} from './confirmForm/ConfirmForm';
 import {Step} from './step/step';
+import {Spinner} from 'react-bootstrap';
 
 const LetterEditor =
   React.lazy(
@@ -63,7 +64,11 @@ export const EditorPage = () => {
 
     case 'content': {
       content =
-      <Suspense fallback={<LoadingPage></LoadingPage>}>
+      <Suspense fallback={
+        <div style={{textAlign: 'center', paddingTop: '10vh'}}>
+          <Spinner animation={'grow'} style={{color: 'white'}}></Spinner>
+        </div>
+      }>
         <LetterEditor />;
       </Suspense>;
       break;

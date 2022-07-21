@@ -5,6 +5,11 @@
     padding-top: 0px;
 }
 
+#confirmForm button:disabled {
+    border-color: white;
+    color: black;
+}
+
 #confirmForm p {
     font-size: 12pt;
     margin-top: 10px;
