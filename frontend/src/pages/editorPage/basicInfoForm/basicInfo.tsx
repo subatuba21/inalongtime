@@ -3,9 +3,7 @@ import styles from './basicInfo.module.css';
 import {SelectBox} from '../../../components/selectBox/selectBox';
 import {DraftFrontendState,
   DraftType, RecipientType} from 'shared/dist/types/draft';
-import {draftTypeSchema,
-  editDraftRequestBody,
-  EditDraftRequestBody, recipientTypeSchema} from 'shared/dist/types/draft';
+import {draftTypeSchema, recipientTypeSchema} from 'shared/dist/types/draft';
 import {changeTitle, saveDraft, changePhoneNumber,
   changeBackupEmail1, changeBackupEmail2,
   changeRecipientEmail,
@@ -16,32 +14,14 @@ import {changeTitle, saveDraft, changePhoneNumber,
 } from '../../../store/editor';
 import {useAppDispatch} from '../../../store/store';
 import {useSelector} from 'react-redux';
-import {activateModal} from '../../../store/modal';
 import {useState} from 'react';
 
-export const BasicInfo = (props: {draftType : DraftType}) => {
+export const BasicInfo = () => {
   const editorState =
     useSelector((state) => (state as any).editor) as DraftFrontendState;
   const dispatch = useAppDispatch();
 
-  const compileBasicInfo = () : EditDraftRequestBody => {
-    return editDraftRequestBody.parse({
-      properties: editorState,
-    });
-  };
-
-  const onBlur = () => dispatch(saveDraft({
-    id: editorState._id,
-    data: compileBasicInfo(),
-    type: editorState.type,
-    onSuccess: () => {},
-    onFailure: () => {
-      dispatch(activateModal({
-        header: 'Unable to save info.',
-        content: <>Unable to save info due to unknown error</>,
-      }));
-    },
-  }));
+  const onBlur = () => dispatch(saveDraft('properties'));
 
   const [formErrorState, setFormErrorState] =
   useState<Record<string, string[]>>({});

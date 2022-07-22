@@ -1,12 +1,13 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {DraftFrontendState, DraftResponseBody,
-  DraftType, RecipientType} from 'shared/dist/types/draft';
+  DraftType, editDraftRequestBody,
+  RecipientType} from 'shared/dist/types/draft';
 import {editorAPI} from '../api/editor';
 import {StepType} from 'shared/dist/types/draft';
-import {EditDraftRequestBody} from 'shared/dist/types/draft';
 import {parseContent} from 'shared/dist/editor/parseContent';
 import {Content} from 'shared/dist/editor/classes/content';
 import {CentralError} from './error';
+import {activateModal} from './modal';
 
 
 const initialState : DraftFrontendState = {
@@ -30,17 +31,36 @@ const initialState : DraftFrontendState = {
 };
 
 export const saveDraft = createAsyncThunk('editor/save',
-    async (args : {id: string, type: DraftType,
-      data: EditDraftRequestBody,
-      onSuccess: () => any,
-      onFailure: (error: CentralError) => any}, thunkApi) => {
-      const res = await editorAPI.save(args.id, args.type, args.data);
-      if (res.success) {
-        args.onSuccess();
+    async (section: 'properties' | 'data', thunkApi) => {
+      const editorState = (thunkApi.getState() as any)
+          .editor as DraftFrontendState;
+
+      if (section === 'data' && editorState.content) {
+        const res = await editorAPI.save(editorState._id, editorState.type, {
+          content: editorState.content?.serialize(),
+        });
+        if (res.success) {
+        } else {
+          thunkApi.dispatch(activateModal({
+            content: <div>Unable to save draft due to unknown error</div>,
+            header: 'Error: Unable to save draft',
+          }));
+        }
+        return res;
       } else {
-        args.onFailure(res.error as CentralError);
+        const res = await editorAPI.save(
+            editorState._id, editorState.type, editDraftRequestBody.parse({
+              properties: editorState,
+            }));
+        if (res.success) {
+        } else {
+          thunkApi.dispatch(activateModal({
+            content: <div>Unable to save draft due to unknown error</div>,
+            header: 'Error: Unable to save draft',
+          }));
+        }
+        return res;
       }
-      return res;
     });
 
 export const createDraft = createAsyncThunk('editor/create',

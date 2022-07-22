@@ -1,7 +1,7 @@
-import React, {Suspense, useEffect, useState} from 'react';
+import {ReactNode, Suspense, useEffect, useState, lazy} from 'react';
 import styles from './editorPage.module.css';
 import {useNavigate, useParams} from 'react-router-dom';
-import {StepType} from 'shared/dist/types/draft';
+import {DraftFrontendState, StepType} from 'shared/dist/types/draft';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
 import {Navbar} from '../../components/navbars/Navbar';
@@ -13,17 +13,20 @@ import {BasicInfo} from './basicInfoForm/basicInfo';
 import {ConfirmForm} from './confirmForm/ConfirmForm';
 import {Step} from './step/step';
 import {Spinner} from 'react-bootstrap';
+import {useSelector} from 'react-redux';
+import {GalleryEditor} from './galleryEditor/GalleryEditor';
 
 const LetterEditor =
-  React.lazy(
-      () => import('./letterEditor/LetterEditor')
-          .then(({LetterEditor}) => ({default: LetterEditor})));
+  lazy(() => import('./letterEditor/LetterEditor')
+      .then(({LetterEditor}) => ({default: LetterEditor})));
 
 export const EditorPage = () => {
   const {id} = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
+  const editorState = useSelector(
+      (state: any) => state.editor) as DraftFrontendState;
 
   useEffect(() => {
     if (!id) {
@@ -54,23 +57,40 @@ export const EditorPage = () => {
     if (name!==currentStep) setStepState(name);
   };
 
-  let content;
+  let contentEditor : ReactNode = <></>;
 
-  switch (currentStep) {
-    case 'info': {
-      content = <BasicInfo draftType='letter'></BasicInfo>;
-      break;
-    }
-
-    case 'content': {
-      content =
-      <Suspense fallback={
+  switch (editorState.type) {
+    case 'letter': {
+      contentEditor = <Suspense fallback={
         <div style={{textAlign: 'center', paddingTop: '10vh'}}>
           <Spinner animation={'grow'} style={{color: 'white'}}></Spinner>
         </div>
       }>
-        <LetterEditor />;
+        <LetterEditor />
       </Suspense>;
+      break;
+    }
+
+    case 'gallery': {
+      contentEditor = <GalleryEditor />;
+      break;
+    }
+
+    default: {
+      contentEditor = <>Content Type not supported yet</>;
+    }
+  }
+
+  let content;
+
+  switch (currentStep) {
+    case 'info': {
+      content = <BasicInfo></BasicInfo>;
+      break;
+    }
+
+    case 'content': {
+      content = contentEditor;
       break;
     }
 
@@ -80,7 +100,7 @@ export const EditorPage = () => {
     }
 
     default: {
-
+      content = <></>;
     }
   }
 

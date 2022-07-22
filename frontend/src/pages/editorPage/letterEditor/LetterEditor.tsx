@@ -13,9 +13,9 @@ import {LetterContent} from
 import {useSelector} from 'react-redux';
 import {DraftFrontendState} from 'shared/dist/types/draft';
 import {useAppDispatch} from '../../../store/store';
-import {changeContent, saveDraft,
+import {changeContent,
+  saveDraft,
   setStepFinished, setStepUnfinished} from '../../../store/editor';
-import {activateModal} from '../../../store/modal';
 import {useEffect} from 'react';
 import {
   BoldButton,
@@ -62,28 +62,9 @@ export const LetterEditor = () => {
     dispatch(setStepUnfinished('content'));
   }
 
-  const save = () => {
-    if (editorState.content) {
-      dispatch(saveDraft({
-        type: 'letter',
-        id: editorState._id,
-        data: {
-          content: editorState.content?.serialize(),
-        },
-        onSuccess: () => {},
-        onFailure: () => {
-          dispatch(activateModal({
-            content: <div>Unable to save draft due to unknown error</div>,
-            header: 'Error: Unable to save draft',
-          }));
-        },
-      }));
-    }
-  };
-
   useEffect(() => {
     const debounced = setTimeout(() => {
-      save();
+      saveDraft('data');
     }, 2500);
 
     return () => clearTimeout(debounced);
@@ -108,7 +89,8 @@ export const LetterEditor = () => {
     </Toolbar>
     <Editor
       editorState={letterEditorState}
-      onChange={onChange} onBlur={save} plugins={[toolbarPlugin,
+      onChange={onChange} onBlur={() => saveDraft('data')}
+      plugins={[toolbarPlugin,
         emojiPlugin, imagePlugin]}/>
     <EmojiSuggestions/>
     <EmojiSelect/>

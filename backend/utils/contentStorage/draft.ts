@@ -18,9 +18,7 @@ export const postDraftContent =
       const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
       const path = getContentFilename(userId, draftId);
       const file = bucket.file(path);
-      await file.save(JSON.stringify(content.serialize()), {
-        gzip: true,
-      });
+      await file.save(JSON.stringify(content.serialize()));
       return path;
     };
 
