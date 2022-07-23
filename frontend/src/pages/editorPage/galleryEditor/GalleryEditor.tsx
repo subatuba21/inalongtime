@@ -4,13 +4,13 @@ import styles from './GalleryEditor.module.css';
 import {GalleryContent} from 'shared/dist/editor/classes/galleryContent';
 import {changeContent, saveDraft} from '../../../store/editor';
 import {useAppDispatch} from '../../../store/store';
+import {AddGalleryImage} from './AddGalleryImage/addGalleryImage';
 
 export const GalleryEditor = () => {
   const dispatch = useAppDispatch();
   const editorState =
     useSelector((state) => (state as any).editor) as DraftFrontendState;
   let content = editorState.content as GalleryContent;
-  console.log(content);
 
   if (!content || !(content instanceof GalleryContent)) {
     content = new GalleryContent() as GalleryContent;
@@ -37,13 +37,23 @@ export const GalleryEditor = () => {
     <span className={styles.fieldName}>
         Gallery Description/Message (Optional)
     </span>
-    <textarea name="description" id="" cols={30}
-      rows={10} onInput={onDescriptionChange}
+    <textarea name="description" id=""
+      rows={3} onInput={onDescriptionChange}
       value={content.description} onBlur={() => dispatch(saveDraft('data'))}>
     </textarea>
     <span className={styles.fieldName}>
         Gallery Images
     </span>
+    <div>
+      {content ?
+      (content.mediaResourceArray as {
+        description: string;
+        mediaResourceURL: string;
+    }[]).map((mediaResource, index) => {
+        return <></>;
+      }) : <></>}
+      <AddGalleryImage />
+    </div>
     <div>
 
     </div>

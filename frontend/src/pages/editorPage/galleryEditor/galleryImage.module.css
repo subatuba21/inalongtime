@@ -1,0 +1,29 @@
+.imageBox {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
+    width: 200px;
+    height: 300px;
+}
+
+.imageBox:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+}
+
+#addImage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#addImage svg {
+    font-size: 50pt;
+    color: #fff;
+    margin-bottom: -6px;
+}
+
+#addImage p {
+    font-size: 13pt;
+    color: #fff;
+}
