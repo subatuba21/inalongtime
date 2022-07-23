@@ -13,37 +13,35 @@ export const galleryDataSchema = z.object({
     mediaResourceArray: mediaResourceArraySchema
 });
 
-export type GalleryData = {
-    description: string;
-    media: MediaResourceArray
-}
+export type GalleryData = z.infer<typeof galleryDataSchema>;
 
 export class GalleryContent extends Content {
     type : ContentType = 'gallery';
     description?: string;
-    media?: MediaResourceArray = [];
+    mediaResourceArray?: MediaResourceArray = [];
 
 
     initialize (args: {
         description: string,
-        media: MediaResourceArray
+        mediaResourceArray: MediaResourceArray
     }) {
         this.description = args.description;
-        this.media = args.media;
+        this.mediaResourceArray = args.mediaResourceArray;
         this.initialized = true;
     }
 
     serialize(): object {
-        return {
-            description: this.description,
-            media: this.media,
-        }
+        const data : GalleryData = {
+            description: this.description as string,
+            mediaResourceArray: this.mediaResourceArray as MediaResourceArray,
+        } 
+        return data;
     }
 
     deserialize(data: any): void {
         const galleryData = galleryDataSchema.parse(data);
         this.description = galleryData.description;
-        this.media = galleryData.mediaResourceArray;
+        this.mediaResourceArray = galleryData.mediaResourceArray;
         this.initialized = true;
     }
 

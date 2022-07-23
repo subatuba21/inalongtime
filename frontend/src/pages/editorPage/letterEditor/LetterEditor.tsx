@@ -64,7 +64,7 @@ export const LetterEditor = () => {
 
   useEffect(() => {
     const debounced = setTimeout(() => {
-      saveDraft('data');
+      dispatch(saveDraft('data'));
     }, 2500);
 
     return () => clearTimeout(debounced);
@@ -89,7 +89,7 @@ export const LetterEditor = () => {
     </Toolbar>
     <Editor
       editorState={letterEditorState}
-      onChange={onChange} onBlur={() => saveDraft('data')}
+      onChange={onChange} onBlur={() => dispatch(saveDraft('data'))}
       plugins={[toolbarPlugin,
         emojiPlugin, imagePlugin]}/>
     <EmojiSuggestions/>

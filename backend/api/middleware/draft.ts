@@ -191,6 +191,7 @@ export const editDraft =
           const content = parseContent(draftData.content, draftType);
           await postDraftContent(user._id, draftId, content);
         } catch (err) {
+          logger.warn(err);
           const response : APIResponse = {
             data: null,
             error: {
