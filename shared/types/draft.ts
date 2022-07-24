@@ -19,6 +19,11 @@ export const customizationSchema = z.object({
   dontShowInDrafts: z.boolean(),
 });
 
+export const resourceSchema = z.object({
+  id: z.string(),
+  mimetype: z.enum(['image/jpeg', 'image/png', 'video/mp4', 'audio/mp3']),
+})
+
 const draftSchema = z.object({
   _id: z.string().length(24),
   userId: z.string().length(24),
@@ -33,7 +38,7 @@ const draftSchema = z.object({
   phoneNumber: z.string(),
   backupEmail: z.string(),
   contactEmail: z.string().optional(),
-  resources: z.array(z.string())
+  resources: z.array(resourceSchema)
 }).strict();
 
 export const draftFrontendState = draftSchema.omit({
@@ -92,4 +97,5 @@ export type RecipientType = z.infer<typeof recipientTypeSchema>;
 export type StepType = 'info' | 'content' | 'customize' | 'confirm';
 export type MiniDraft = z.infer<typeof miniDraft>;
 export type UserDraftsResponseData = z.infer<typeof userDraftsResponseData>;
+export type Resource = z.infer<typeof resourceSchema>;
 

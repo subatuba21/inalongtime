@@ -1,7 +1,7 @@
 import {Db, Collection, ObjectId} from 'mongodb';
 import logger from '../logger';
-import {DraftSchema, miniDraft, MiniDraft
-  , UserDraftsResponseData} from 'shared/dist/types/draft';
+import {DraftSchema, miniDraft, MiniDraft,
+  Resource, UserDraftsResponseData} from 'shared/dist/types/draft';
 import {DbResponse} from './setup';
 import {DBError} from './errors';
 
@@ -161,13 +161,13 @@ export const getUserDrafts = async (userId: string) :
 };
 
 export const addResourceToDraft = async (
-    draftId: string, resourceId: string) => {
+    draftId: string, resource: Resource) => {
   try {
     const result = await draftCol.updateOne({
       _id: new ObjectId(draftId),
     }, {
       $addToSet: {
-        resources: resourceId,
+        resources: resource,
       },
     });
 

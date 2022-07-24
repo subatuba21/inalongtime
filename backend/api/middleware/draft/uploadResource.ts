@@ -5,6 +5,7 @@ import {addResourceToDraft} from '../../../db/draft';
 import {postDraftResource} from '../../../utils/contentStorage/draft';
 import {UserSchema} from '../../../utils/schemas/user';
 import {APIResponse} from '../../../utils/types/apiStructure';
+import {resourceSchema} from 'shared/dist/types/draft';
 import fs from 'fs';
 
 export const allowedFileTypes = ['image/png', 'image/jpeg', 'video/mp4'];
@@ -86,7 +87,10 @@ export const uploadResource =
           return;
         }
 
-        await addResourceToDraft(draftId, resourceId);
+        await addResourceToDraft(draftId, await resourceSchema.parseAsync({
+          id: resourceId,
+          mimetype: file.mimetype,
+        }));
 
         const response : APIResponse = {
           data: {
