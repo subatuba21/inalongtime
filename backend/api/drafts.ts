@@ -6,7 +6,8 @@ import {extractDraftType, extractDraftIDFromURL,
 import {addNewDraft} from './middleware/draft/addNewDraft';
 import {authorizeDraft} from './middleware/draft/authorizeDraft';
 import {editDraft} from './middleware/draft/editDraft';
-import {uploadResource} from './middleware/draft/uploadResource';
+import {uploadResource, allowFileTypes}
+  from './middleware/draft/uploadResource';
 import {deleteResource} from './middleware/draft/deleteResource';
 import {getUserDrafts} from './middleware/draft/getUserDrafts';
 import {getDraft} from './middleware/draft/getDraft';
@@ -26,7 +27,10 @@ draftRouter.get('/:id', mustBeLoggedIn,
 draftRouter.delete('/:id', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft, deleteDraft);
 draftRouter.post('/:id/resource', mustBeLoggedIn,
-    extractDraftIDFromURL, authorizeDraft, fileUpload(), uploadResource);
+    extractDraftIDFromURL, authorizeDraft,
+    fileUpload({
+      useTempFiles: true,
+    }), allowFileTypes, uploadResource);
 draftRouter.delete('/:id/resource/:resourceId', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft,
     extractResourceId, deleteResource);

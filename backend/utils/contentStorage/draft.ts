@@ -4,6 +4,7 @@ import {DraftType} from 'shared/dist/types/draft';
 import {Content} from 'shared/dist/editor/classes/content';
 import {parseContent} from 'shared/dist/editor/parseContent';
 import {Metadata} from '@google-cloud/storage/build/src/nodejs-common';
+import fs from 'fs';
 const storage = new Storage({
   keyFilename: `${__dirname}/${process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE_PATH}`,
 });
@@ -53,7 +54,7 @@ export const deleteDraftContent = async (userId: string, draftId: string) => {
   });
 };
 
-export const postDraftResource = async (userId: string, draftId: string, resourceId: string, upload: Buffer, fileSize: number) => {
+export const postDraftResource = async (userId: string, draftId: string, resourceId: string, uploadFilePath: string, fileSize: number) => {
   const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
   let totalStorage = 0;
   const folder = await bucket.getFiles({
@@ -64,12 +65,22 @@ export const postDraftResource = async (userId: string, draftId: string, resourc
     totalStorage += metadata.size;
   });
 
-  if (totalStorage + fileSize > 1.024e+9) {
-    throw new Error('Draft is over 1gb. Please delete resources and try again');
+  if (totalStorage + fileSize > 5.05e8) {
+    throw new Error('Draft is over 500mb. Please delete resources and try again');
   }
   const path = getContentResourceFileName(userId, draftId, resourceId);
   const file = bucket.file(path);
-  await file.save(upload);
+
+  const uploadFunc = () : Promise<void> => {
+    return new Promise((resolve, reject) => {
+      fs.createReadStream(uploadFilePath)
+          .pipe(file.createWriteStream({gzip: true}))
+          .on('finish', () => resolve())
+          .on('error', () => reject(new Error('Error writing file to cloud storage')));
+    });
+  };
+
+  await uploadFunc();
 };
 
 
