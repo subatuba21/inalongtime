@@ -5,7 +5,7 @@ import {DraftFrontendState,
   DraftType, RecipientType} from 'shared/dist/types/draft';
 import {draftTypeSchema, recipientTypeSchema} from 'shared/dist/types/draft';
 import {changeTitle, saveDraft, changePhoneNumber,
-  changeBackupEmail1, changeBackupEmail2,
+  changeBackupEmail,
   changeRecipientEmail,
   changeRecipientType,
   changeContentType,
@@ -99,19 +99,10 @@ export const BasicInfo = () => {
     }
     <br />
     <div>
-      <span className={styles.fieldName}>Backup email 1</span>
-      <InputBox name='backupemail1' placeholder='backupemail@gmail.com'
-        valueState={{value: editorState.backupEmail1, set:
-          (email: string) => dispatch(changeBackupEmail1(email))}}
-        onBlur={onBlur}
-      ></InputBox>
-    </div>
-    <br />
-    <div>
-      <span className={styles.fieldName}>Backup email 2</span>
-      <InputBox name='backupemail2' placeholder='backupemail2@gmail.com'
-        valueState={{value: editorState.backupEmail2,
-          set: (email: string) => dispatch(changeBackupEmail2(email))}}
+      <span className={styles.fieldName}>Backup email</span>
+      <InputBox name='backupemail' placeholder='backupemail@gmail.com'
+        valueState={{value: editorState.backupEmail, set:
+          (email: string) => dispatch(changeBackupEmail(email))}}
         onBlur={onBlur}
       ></InputBox>
     </div>

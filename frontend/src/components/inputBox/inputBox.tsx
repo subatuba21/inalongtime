@@ -8,7 +8,7 @@ export const InputBox = (props:
   {
     name: string,
     placeholder: string,
-    valueState: {value: string, set: Function},
+    valueState: {value?: string, set: Function},
     validation?: {
       formErrorState?: {value: Record<string, string[]>, set: Function}
       validationFunction: (input: string) => string[],
@@ -23,6 +23,9 @@ export const InputBox = (props:
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (!props.valueState.value) {
+      props.valueState.set('');
+    }
     const value = inputRef.current?.value as string;
     errorCheck(value);
   }, []);

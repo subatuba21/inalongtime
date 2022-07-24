@@ -16,6 +16,7 @@ declare module 'express-serve-static-core' {
         editDraftData?: EditDraftRequestBody,
         id?: string,
         type?: DraftType
-      }
+      },
+      resourceId?: string
     }
 }

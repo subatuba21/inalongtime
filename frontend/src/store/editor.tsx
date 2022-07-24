@@ -17,17 +17,16 @@ const initialState : DraftFrontendState = {
   type: 'letter',
   recipientType: 'myself',
   recipientEmail: '',
-  confirmed: false,
-  backupEmail1: '',
-  backupEmail2: '',
+  backupEmail: '',
   phoneNumber: '',
-  sendDate: new Date(),
+  nextSendDate: new Date(),
   progress: {
     info: false,
     content: false,
     customize: false,
     confirm: false,
   },
+  resources: [],
 };
 
 export const saveDraft = createAsyncThunk('editor/save',
@@ -118,13 +117,9 @@ export const editorSlice = createSlice({
     changeTitle: (state: DraftFrontendState, action: PayloadAction<string>) => {
       state.title = action.payload;
     },
-    changeBackupEmail1:
+    changeBackupEmail:
         (state: DraftFrontendState, action: PayloadAction<string>) => {
-          state.backupEmail1 = action.payload;
-        },
-    changeBackupEmail2:
-        (state: DraftFrontendState, action: PayloadAction<string>) => {
-          state.backupEmail2 = action.payload;
+          state.backupEmail = action.payload;
         },
     changePhoneNumber:
         (state: DraftFrontendState, action: PayloadAction<string>) => {
@@ -159,13 +154,11 @@ export const editorSlice = createSlice({
     loadDraft:
       (state: DraftFrontendState, action: PayloadAction<DraftResponseBody>) => {
         state._id = action.payload.properties._id;
-        state.backupEmail1 = action.payload.properties.backupEmail1;
-        state.backupEmail2 = action.payload.properties.backupEmail2;
-        state.confirmed = action.payload.properties.confirmed;
+        state.nextSendDate = action.payload.properties.nextSendDate;
         state.phoneNumber = action.payload.properties.phoneNumber;
         state.recipientEmail = action.payload.properties.recipientEmail;
         state.recipientType = action.payload.properties.recipientType;
-        state.sendDate = action.payload.properties.sendDate;
+        state.nextSendDate = action.payload.properties.nextSendDate;
         state.title = action.payload.properties.title;
         state.type = action.payload.properties.type;
         state._id = action.payload.properties._id;
@@ -181,7 +174,7 @@ export const editorSlice = createSlice({
 });
 
 export const {changeTitle, changePhoneNumber,
-  changeBackupEmail1, changeBackupEmail2,
+  changeBackupEmail,
   changeRecipientEmail, changeContentType,
   changeRecipientType, setStepFinished,
   setStepUnfinished,

@@ -10,27 +10,35 @@ export const dateSchema = z.preprocess((arg) => {
   if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
 }, z.date());
 
+export const hexSchema = z.string().regex(/^#[0-9A-F]{6}$/i);
+
+export const customizationSchema = z.object({
+  backgroundColor: hexSchema,
+  font: z.string(),
+  fontColor: hexSchema,
+  dontShowInDrafts: z.boolean(),
+});
+
 const draftSchema = z.object({
   _id: z.string().length(24),
   userId: z.string().length(24),
   recipientType: recipientTypeSchema,
-  recipientEmail: z.string(),
-  sendDate: dateSchema,
+  recipientEmail: z.string().optional(),
+  lastEdited: dateSchema,
+  nextSendDate: dateSchema,
+  intervalInDays: z.number().optional(),
   contentCloudStoragePath: z.string().url(),
   type: draftTypeSchema,
   title: z.string(),
-  confirmed: z.boolean(),
-  payment: z.object({
-    required: z.boolean(),
-    completed: z.boolean(),
-  }).optional(),
-  backupEmail1: z.string(),
-  backupEmail2: z.string(),
   phoneNumber: z.string(),
+  backupEmail: z.string(),
+  contactEmail: z.string().optional(),
+  resources: z.array(z.string())
 }).strict();
 
 export const draftFrontendState = draftSchema.omit({
   contentCloudStoragePath: true,
+  lastEdited: true,
 }).extend({
   content: z.instanceof(Content).optional(),
   progress: z.object({

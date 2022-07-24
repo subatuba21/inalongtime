@@ -1,14 +1,23 @@
 /* eslint-disable max-len */
-import {DownloadResponse, Storage} from '@google-cloud/storage';
+import {DownloadResponse, File, Storage} from '@google-cloud/storage';
 import {DraftType} from 'shared/dist/types/draft';
 import {Content} from 'shared/dist/editor/classes/content';
 import {parseContent} from 'shared/dist/editor/parseContent';
+import {Metadata} from '@google-cloud/storage/build/src/nodejs-common';
 const storage = new Storage({
   keyFilename: `${__dirname}/${process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE_PATH}`,
 });
 
+export const getContentFolderName = (userId: string, contentId: string) => {
+  return `user-${userId}/content-${contentId}`;
+};
+
 export const getContentFilename = (userId: string, contentId: string) => {
   return `user-${userId}/content-${contentId}/main.json`;
+};
+
+export const getContentResourceFileName = (userId: string, contentId: string, resourceId: string) => {
+  return `user-${userId}/content-${contentId}/${resourceId}`;
 };
 
 export type ContentPath = string;
@@ -33,6 +42,43 @@ export const getDraftContent =
         return new Content();
       }
     };
+
+export const deleteDraftContent = async (userId: string, draftId: string) => {
+  const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
+  const folder = await bucket.getFiles({
+    prefix: getContentFolderName(userId, draftId),
+  });
+  folder.forEach(async (file: File) => {
+    await file.delete();
+  });
+};
+
+export const postDraftResource = async (userId: string, draftId: string, resourceId: string, upload: Buffer, fileSize: number) => {
+  const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
+  let totalStorage = 0;
+  const folder = await bucket.getFiles({
+    prefix: getContentFolderName(userId, draftId),
+  });
+  folder.forEach(async (file: File) => {
+    const metadata : Metadata = (await file.getMetadata());
+    totalStorage += metadata.size;
+  });
+
+  if (totalStorage + fileSize > 1.024e+9) {
+    throw new Error('Draft is over 1gb. Please delete resources and try again');
+  }
+  const path = getContentResourceFileName(userId, draftId, resourceId);
+  const file = bucket.file(path);
+  await file.save(upload);
+};
+
+
+export const deleteDraftResource = async (userId: string, draftId: string, resourceId: string) => {
+  const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
+  const fileName = getContentResourceFileName(userId, draftId, resourceId);
+  const file = bucket.file(fileName);
+  await file.delete();
+};
 
 const parseDownload = (file: DownloadResponse) => {
   return JSON.parse(file[0].toString('utf8'));

@@ -11,11 +11,14 @@ import {addDraft, modifyDraft,
   deleteDraft as deleteDraftFromDB,
   getDraft as getDraftFromDB,
   getUserDrafts as getUserDraftsFromDB,
+  addResourceToDraft,
+  deleteResourceFromDraft,
 } from '../../db/draft';
 import logger from '../../logger';
-import {getContentFilename,
+import {deleteDraftContent, deleteDraftResource, getContentFilename,
   getDraftContent,
-  postDraftContent} from '../../utils/contentStorage/draft';
+  postDraftContent,
+  postDraftResource} from '../../utils/contentStorage/draft';
 import {UserSchema} from '../../utils/schemas/user';
 import {APIResponse} from '../../utils/types/apiStructure';
 import {alreadyThreeDrafts, notFoundError,
@@ -24,6 +27,7 @@ import {addDraftIdToUser, deleteDraftIdFromUser} from '../../db/auth';
 import {DBError} from '../../db/errors';
 import {parseContent} from 'shared/dist/editor/parseContent';
 import {StatusCodes} from 'http-status-codes';
+import {UploadedFile} from 'express-fileupload';
 
 export const extractEditDraftData =
     async (req: express.Request, res: express.Response, next: Function) => {
@@ -130,14 +134,14 @@ export const addNewDraft =
         recipientType: 'myself',
         recipientEmail: '',
         title: '',
-        confirmed: false,
-        backupEmail1: '',
-        backupEmail2: '',
+        backupEmail: '',
         phoneNumber: '',
-        sendDate: new Date(new Date().setFullYear(
+        nextSendDate: new Date(new Date().setFullYear(
             new Date().getFullYear() + 1)),
         contentCloudStoragePath: getContentFilename(
             user._id, draftID.toString()),
+        lastEdited: new Date(),
+        resources: [],
       }, draftID);
 
       const error = await addDraftIdToUser(user._id, draftID.toString());
@@ -218,6 +222,7 @@ export const deleteDraft =
     const draftId = req.draft?.id as string;
     const draftRes = await deleteDraftFromDB(draftId);
     const user = req.user as UserSchema;
+    await deleteDraftContent(user._id, draftId);
     const error = await deleteDraftIdFromUser(user._id, draftId);
 
     if (draftRes.error || error) {
@@ -325,3 +330,92 @@ export const getUserDrafts =
     }
   };
 
+export const uploadResource =
+  async (req: express.Request, res: express.Response, next: Function) => {
+    const user = req.user as UserSchema;
+    const draftId = req.draft?.id as string;
+
+    if (!req.files || !req.files.file) {
+      const response : APIResponse = {
+        data: null,
+        error: {
+          code: 400,
+          message: 'Must provide file to upload.',
+        },
+      };
+      res.status(400).end(response);
+      return;
+    } else {
+      const file = req.files.file as UploadedFile;
+      if (file.size > 5.05e8) {
+        const response : APIResponse = {
+          data: null,
+          error: {
+            code: 413,
+            message: 'File must be 500MB or smaller',
+          },
+        };
+        res.status(413).end(response);
+        return;
+      } else {
+        const resourceId = new ObjectID().toString();
+        try {
+          await postDraftResource(
+              user._id, draftId, resourceId, file.data, file.size);
+        } catch (err) {
+          const error = err as Error;
+          const response : APIResponse = {
+            data: null,
+            error: {
+              code: 500,
+              message: error.message,
+            },
+          };
+          res.status(500).end(response);
+          return;
+        }
+
+        await addResourceToDraft(draftId, resourceId);
+
+        const response : APIResponse = {
+          data: {
+            resourceId,
+          },
+          error: null,
+        };
+        res.end(response);
+      }
+    }
+  };
+
+export const extractResourceId =
+  async (req: express.Request, res: express.Response, next: Function) => {
+    if (typeof req.body?.data?.resourceId === 'string' &&
+    (req.body?.data?.resourceId as string).length > 5) {
+      req.resourceId = req.body?.data?.resourceId;
+    } else {
+      const response : APIResponse = {
+        error: {
+          message: 'Resource ID is not provided properly in the request body.',
+          code: StatusCodes.BAD_REQUEST,
+        },
+        data: null,
+      };
+      res.status(response.error?.code as number)
+          .end(JSON.stringify(response));
+    }
+  };
+
+export const deleteResource =
+  async (req: express.Request, res: express.Response, next: Function) => {
+    const user = req.user as UserSchema;
+    const draftId = req.draft?.id as string;
+    const resourceId = req.resourceId as string;
+    await deleteDraftResource(user._id, draftId, resourceId);
+    await deleteResourceFromDraft(draftId, resourceId);
+    const response : APIResponse = {
+      data: null,
+      error: null,
+    };
+    res.end(response);
+  };

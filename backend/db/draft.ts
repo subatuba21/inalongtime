@@ -159,3 +159,37 @@ export const getUserDrafts = async (userId: string) :
     };
   }
 };
+
+export const addResourceToDraft = async (
+    draftId: string, resourceId: string) => {
+  try {
+    const result = await draftCol.updateOne({
+      _id: new ObjectId(draftId),
+    }, {
+      $addToSet: {
+        resources: resourceId,
+      },
+    });
+
+    if (!result.acknowledged) throw new Error();
+  } catch (err) {
+    return DBError.ENTITY_NOT_FOUND;
+  }
+};
+
+export const deleteResourceFromDraft = async (
+    draftId: string, resourceId: string) => {
+  try {
+    const result = await draftCol.updateOne({
+      _id: new ObjectId(draftId),
+    }, {
+      $pull: {
+        resources: resourceId,
+      },
+    });
+
+    if (!result.acknowledged) throw new Error();
+  } catch (err) {
+    return DBError.ENTITY_NOT_FOUND;
+  }
+};
