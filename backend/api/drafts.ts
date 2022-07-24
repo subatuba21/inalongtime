@@ -1,14 +1,17 @@
-import {Router} from 'express';
-import {extractDraftType,
-  addNewDraft, extractEditDraftData, editDraft,
-  deleteDraft,
-  extractDraftIDFromURL,
-  getDraft, authorizeDraft, getUserDrafts,
-  uploadResource,
-  extractResourceId,
-  deleteResource} from './middleware/draft';
 import {mustBeLoggedIn} from './middleware/login';
 import fileUpload from 'express-fileupload';
+import {Router} from 'express';
+import {extractDraftType, extractDraftIDFromURL,
+  extractEditDraftData, extractResourceId} from './middleware/extract';
+import {addNewDraft} from './middleware/draft/addNewDraft';
+import {authorizeDraft} from './middleware/draft/authorizeDraft';
+import {editDraft} from './middleware/draft/editDraft';
+import {uploadResource} from './middleware/draft/uploadResource';
+import {deleteResource} from './middleware/draft/deleteResource';
+import {getUserDrafts} from './middleware/draft/getUserDrafts';
+import {getDraft} from './middleware/draft/getDraft';
+import {deleteDraft} from './middleware/draft/deleteDraft';
+
 
 // eslint-disable-next-line new-cap
 export const draftRouter = Router();
