@@ -3,7 +3,7 @@ import {Plus} from 'react-bootstrap-icons';
 import {useAppDispatch} from '../../../../store/store';
 import {activateModal} from '../../../../store/modal';
 import {AddImageSetting, ImageEditModalContent} from
-  '../../imageEditModalContent/ImageEditModalContent';
+  '../imageEditModalContent/ImageEditModalContent';
 
 export const AddGalleryImage = () => {
   const dispatch = useAppDispatch();

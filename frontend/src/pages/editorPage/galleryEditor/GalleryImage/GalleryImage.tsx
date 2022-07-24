@@ -4,7 +4,7 @@ import {DraftFrontendState} from 'shared/dist/types/draft';
 import {activateModal} from '../../../../store/modal';
 import {useAppDispatch} from '../../../../store/store';
 import {ImageEditModalContent} from
-  '../../imageEditModalContent/ImageEditModalContent';
+  '../imageEditModalContent/ImageEditModalContent';
 
 export const GalleryImage = (props: {mediaArrayIndex: number}) => {
   const editorState =
