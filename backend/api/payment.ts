@@ -1,7 +1,5 @@
 import {Router} from 'express';
 import {StatusCodes} from 'http-status-codes';
-import Stripe from 'stripe';
-import {modifyDraft} from '../db/draft';
 import {PaymentData} from '../utils/schemas/payment';
 import {createPaymentLink} from '../utils/stripe/generatePaymentLink';
 import {stripe} from '../utils/stripe/setup';
@@ -23,7 +21,7 @@ paymentRouter.post('/paymentlink', mustBeLoggedIn,
           },
           error: null,
         };
-        res.end(response);
+        res.end(JSON.stringify(response));
       } catch {
         const response : APIResponse = {
           data: null,
@@ -32,7 +30,7 @@ paymentRouter.post('/paymentlink', mustBeLoggedIn,
             message: 'Unable to create payment link.',
           },
         };
-        res.end(response);
+        res.end(JSON.stringify(response));
       }
     });
 
@@ -43,14 +41,6 @@ paymentRouter.post('/success', async (req, res) => {
     const event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
 
     if (event.type === 'checkout.session.completed') {
-      const object = event.data.object as Stripe.Checkout.Session;
-      const draftId = object?.metadata?.draftId as string;
-      await modifyDraft(draftId, {
-        payment: {
-          required: true,
-          completed: true,
-        },
-      });
 
       // more fulfillment functions
     }

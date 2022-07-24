@@ -15,7 +15,8 @@ export const extractPaymentData =
           data: null,
           error: unknownError,
         };
-        res.status(response.error?.code as number).end(response);
+        res.status(response.error?.code as number)
+            .end(JSON.stringify(response));
       }
     };
 
@@ -30,6 +31,7 @@ export const checkDraftValidity =
           data: null,
           error: unknownError,
         };
-        res.status(response.error?.code as number).end(response);
+        res.status(response.error?.code as number)
+            .end(JSON.stringify(response));
       }
     };

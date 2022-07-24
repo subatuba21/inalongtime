@@ -74,7 +74,7 @@ export const mustBeLoggedIn =
         data: null,
         error: needToLogin,
       };
-      res.status(response.error?.code as number).end(response);
+      res.status(response.error?.code as number).end(JSON.stringify(response));
     }
   };
 

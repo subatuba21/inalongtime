@@ -9,7 +9,7 @@ const storage = new Storage({
 });
 
 export const getContentFolderName = (userId: string, contentId: string) => {
-  return `user-${userId}/content-${contentId}`;
+  return `user-${userId}/content-${contentId}/`;
 };
 
 export const getContentFilename = (userId: string, contentId: string) => {
@@ -48,7 +48,7 @@ export const deleteDraftContent = async (userId: string, draftId: string) => {
   const folder = await bucket.getFiles({
     prefix: getContentFolderName(userId, draftId),
   });
-  folder.forEach(async (file: File) => {
+  folder[0].forEach(async (file: File) => {
     await file.delete();
   });
 };
@@ -59,7 +59,7 @@ export const postDraftResource = async (userId: string, draftId: string, resourc
   const folder = await bucket.getFiles({
     prefix: getContentFolderName(userId, draftId),
   });
-  folder.forEach(async (file: File) => {
+  folder[0].forEach(async (file: File) => {
     const metadata : Metadata = (await file.getMetadata());
     totalStorage += metadata.size;
   });

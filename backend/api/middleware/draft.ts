@@ -343,7 +343,7 @@ export const uploadResource =
           message: 'Must provide file to upload.',
         },
       };
-      res.status(400).end(response);
+      res.status(400).end(JSON.stringify(response));
       return;
     } else {
       const file = req.files.file as UploadedFile;
@@ -355,7 +355,7 @@ export const uploadResource =
             message: 'File must be 500MB or smaller',
           },
         };
-        res.status(413).end(response);
+        res.status(413).end(JSON.stringify(response));
         return;
       } else {
         const resourceId = new ObjectID().toString();
@@ -371,7 +371,7 @@ export const uploadResource =
               message: error.message,
             },
           };
-          res.status(500).end(response);
+          res.status(500).end(JSON.stringify(response));
           return;
         }
 
@@ -383,16 +383,17 @@ export const uploadResource =
           },
           error: null,
         };
-        res.end(response);
+        res.end(JSON.stringify(response));
       }
     }
   };
 
 export const extractResourceId =
   async (req: express.Request, res: express.Response, next: Function) => {
-    if (typeof req.body?.data?.resourceId === 'string' &&
-    (req.body?.data?.resourceId as string).length > 5) {
-      req.resourceId = req.body?.data?.resourceId;
+    if (typeof req.params.resourceId === 'string' &&
+     req.params.resourceId.length > 5) {
+      req.resourceId = req.params.resourceId;
+      next();
     } else {
       const response : APIResponse = {
         error: {
@@ -417,5 +418,5 @@ export const deleteResource =
       data: null,
       error: null,
     };
-    res.end(response);
+    res.end(JSON.stringify(response));
   };

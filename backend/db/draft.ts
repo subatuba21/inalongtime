@@ -171,7 +171,10 @@ export const addResourceToDraft = async (
       },
     });
 
-    if (!result.acknowledged) throw new Error();
+    if (!result.acknowledged) {
+      throw new Error(
+          'Unable to add resource to draft');
+    }
   } catch (err) {
     return DBError.ENTITY_NOT_FOUND;
   }
