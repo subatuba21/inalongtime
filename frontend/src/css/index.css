@@ -81,3 +81,9 @@ input:focus, textarea { outline: none ! important; }
 .bold {
   font-weight: 600;
 }
+
+textarea {
+  border-radius: 5px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+}

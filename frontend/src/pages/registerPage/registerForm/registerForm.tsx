@@ -7,6 +7,7 @@ import {addError, CentralError, CentralErrors,
 import {useAppDispatch} from '../../../store/store';
 import {register as registerAction} from '../../../store/user';
 import styles from './registerForm.module.css';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export const RegisterForm = () => {
   const [email, setEmail] = useState('');
@@ -157,6 +158,10 @@ export const RegisterForm = () => {
         ></InputBox>
       </div>
     </div>
+    <ReCAPTCHA sitekey={process.env.REACT_APP_SITE_KEY as string}
+      style={{margin: '10px', marginBottom: '20px',
+        marginLeft: '0px', maxWidth: '70vw'}}
+      onChange={() => {}}></ReCAPTCHA>
     <Button variant='info' id={styles.button} type='submit' style={{
       opacity: processingRegister ? '.5' : '1',
     }}>Sign Up</Button>
