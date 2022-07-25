@@ -6,9 +6,8 @@ import {postDraftResource} from '../../../utils/contentStorage/draft';
 import {UserSchema} from '../../../utils/schemas/user';
 import {APIResponse} from '../../../utils/types/apiStructure';
 import {resourceSchema} from 'shared/dist/types/draft';
+import {allowedFileTypesSchema} from 'shared/dist/types/fileTypes';
 import fs from 'fs';
-
-export const allowedFileTypes = ['image/png', 'image/jpeg', 'video/mp4'];
 
 export const allowFileTypes =
     async (req: express.Request, res: express.Response, next: Function) => {
@@ -25,7 +24,8 @@ export const allowFileTypes =
       }
 
       const file = req.files.file as UploadedFile;
-      if (allowedFileTypes.includes(file.mimetype)) {
+      const fileType = allowedFileTypesSchema.safeParse(file.mimetype);
+      if (fileType.success) {
         next();
       } else {
         const response : APIResponse = {

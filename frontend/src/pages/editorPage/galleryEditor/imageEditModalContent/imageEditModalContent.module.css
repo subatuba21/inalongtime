@@ -42,3 +42,10 @@
     height: 100%;
     opacity: 0;
 }
+
+#removeButton {
+    background-color: white !important;
+    color: black;
+    border: 3px solid black !important;
+    margin-bottom: 20px;
+}
