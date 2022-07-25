@@ -12,6 +12,7 @@ import {deleteResource} from './middleware/draft/deleteResource';
 import {getUserDrafts} from './middleware/draft/getUserDrafts';
 import {getDraft} from './middleware/draft/getDraft';
 import {deleteDraft} from './middleware/draft/deleteDraft';
+import {getResource} from './middleware/draft/getResource';
 
 
 // eslint-disable-next-line new-cap
@@ -31,6 +32,9 @@ draftRouter.post('/:id/resource', mustBeLoggedIn,
     fileUpload({
       useTempFiles: true,
     }), allowFileTypes, uploadResource);
+draftRouter.get('/:id/resource/:resourceId', mustBeLoggedIn,
+    extractDraftIDFromURL, authorizeDraft,
+    extractResourceId, getResource);
 draftRouter.delete('/:id/resource/:resourceId', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft,
     extractResourceId, deleteResource);

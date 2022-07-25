@@ -91,6 +91,18 @@ export const deleteDraftResource = async (userId: string, draftId: string, resou
   await file.delete();
 };
 
+export const getDraftReadStream = async (userId: string, draftId: string, resourceId: string) => {
+  const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
+  const fileName = getContentResourceFileName(userId, draftId, resourceId);
+  const file = bucket.file(fileName);
+
+  if (await file.exists()) {
+    return file.createReadStream();
+  } else {
+    throw new Error('File does not exist.');
+  }
+};
+
 const parseDownload = (file: DownloadResponse) => {
   return JSON.parse(file[0].toString('utf8'));
 };
