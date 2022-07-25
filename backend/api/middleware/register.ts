@@ -8,6 +8,7 @@ import {alreadySignedUp,
 import {registerUser as registerUserToDb} from '../../db/auth';
 import express from 'express';
 import {DBError} from '../../db/errors';
+import axios from 'axios';
 
 export const extractRegisterInput =
 async (req: express.Request, res: express.Response, next: Function) => {
@@ -35,6 +36,29 @@ async (req: express.Request, res: express.Response, next: Function) => {
       res.status(response.error?.code as number)
           .end(JSON.stringify(response));
     }
+  }
+};
+
+export const verifyRecaptcha =
+async (req: express.Request, res: express.Response, next: Function) => {
+  const userInfo = req.registerInfo as RegisterUserInput;
+  try {
+    const res = await axios(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${userInfo.recaptchaToken}`, {
+      method: 'GET',
+    });
+    if (res.status===200 && res.data?.success === true) next();
+    else throw new Error('Failed Recaptcha');
+  } catch (err) {
+    const response : APIResponse = {
+      error: {
+        message:
+        'The Recaptcha failed. Please correctly verify it to continue.',
+        code: 400,
+      },
+      data: null,
+    };
+    res.status(response.error?.code as number)
+        .end(JSON.stringify(response));
   }
 };
 

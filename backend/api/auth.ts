@@ -3,7 +3,8 @@ import passport from 'passport';
 import {
   logoutMiddleware,
   passportAuthenticateLocal, returnCurrentUser} from './middleware/login';
-import {extractRegisterInput, registerUser} from './middleware/register';
+import {extractRegisterInput, registerUser,
+  verifyRecaptcha} from './middleware/register';
 
 
 // eslint-disable-next-line new-cap
@@ -21,4 +22,5 @@ authRouter.get('/google/callback',
 authRouter.post('/logout', logoutMiddleware);
 authRouter.get('/current', returnCurrentUser);
 authRouter.post('/login', passportAuthenticateLocal);
-authRouter.post('/register', extractRegisterInput, registerUser);
+authRouter.post('/register', extractRegisterInput,
+    verifyRecaptcha, registerUser);

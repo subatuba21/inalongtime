@@ -26,6 +26,7 @@ export interface RegisterInput {
   password: string,
   firstname: string,
   lastname: string,
+  recaptchaToken: string,
 }
 
 

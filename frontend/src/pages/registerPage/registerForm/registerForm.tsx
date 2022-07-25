@@ -15,6 +15,7 @@ export const RegisterForm = () => {
   const [password2, setPassword2] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const captchaRef = useRef<ReCAPTCHA>(null);
   const errorState = useSelector((state) => (state as any).error) as ErrorState;
   const errorMessageBox = useRef<HTMLParagraphElement>(null);
   const [errors, setErrors]:
@@ -55,11 +56,16 @@ export const RegisterForm = () => {
       }
     }
 
+    if (!captchaRef.current || !captchaRef.current.getValue()) {
+      return;
+    }
+
     dispatch(registerAction({
       email,
       firstname: firstName,
       lastname: lastName,
       password,
+      recaptchaToken: captchaRef.current.getValue() as string,
     }));
 
     setProcessingRegister(false);
@@ -161,7 +167,7 @@ export const RegisterForm = () => {
     <ReCAPTCHA sitekey={process.env.REACT_APP_SITE_KEY as string}
       style={{margin: '10px', marginBottom: '20px',
         marginLeft: '0px', maxWidth: '70vw'}}
-      onChange={() => {}}></ReCAPTCHA>
+      onChange={() => {}} ref={captchaRef}></ReCAPTCHA>
     <Button variant='info' id={styles.button} type='submit' style={{
       opacity: processingRegister ? '.5' : '1',
     }}>Sign Up</Button>

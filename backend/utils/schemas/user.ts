@@ -18,8 +18,10 @@ export const registerUserInputSchema = userSchema.omit({
   passwordHash: true,
   draftIDs: true,
   futureIDs: true,
+  method: true,
 }).extend({
   password: z.string().min(8).regex(noSpacesRegex),
+  recaptchaToken: z.string(),
 });
 
 export const APILoginInput = z.object({
@@ -34,7 +36,8 @@ export const APIRegisterInput = z.object({
 }).strict();
 
 export type RegisterUserInput = z.infer<typeof registerUserInputSchema>;
-export type GoogleUserInput = Omit<RegisterUserInput, 'password'>;
+export type GoogleUserInput = Omit<
+  Omit<RegisterUserInput, 'password'>, 'recaptchaToken'>;
 export type UserSchema = z.infer<typeof userSchema>;
 export type PassportLoginInput = {
   email: string;
