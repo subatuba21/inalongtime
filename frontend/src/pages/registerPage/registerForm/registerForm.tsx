@@ -167,8 +167,7 @@ export const RegisterForm = () => {
       </div>
     </div>
     <ReCAPTCHA sitekey={process.env.REACT_APP_SITE_KEY as string}
-      style={{margin: '10px', marginBottom: '20px',
-        marginLeft: '0px', maxWidth: '70vw'}}
+      id={styles.recaptcha}
       onChange={() => {}} ref={captchaRef}></ReCAPTCHA>
     <Button variant='info' id={styles.button} type='submit' style={{
       opacity: processingRegister ? '.5' : '1',
