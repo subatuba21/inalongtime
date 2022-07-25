@@ -1,20 +1,20 @@
 import {useSelector} from 'react-redux';
-import {GalleryContent} from 'shared/dist/editor/classes/galleryContent';
+import {GalleryContent, MediaResourceArray}
+  from 'shared/dist/editor/classes/galleryContent';
 import {DraftFrontendState} from 'shared/dist/types/draft';
 import {activateModal} from '../../../../store/modal';
 import {useAppDispatch} from '../../../../store/store';
 import {ImageEditModalContent} from
   '../imageEditModalContent/ImageEditModalContent';
+import {BaseMediaPlayer}
+  from '../../../../components/BaseMediaPlayer/baseMediaPlayer';
 
 export const GalleryImage = (props: {mediaArrayIndex: number}) => {
   const editorState =
     useSelector((state) => (state as any).editor) as DraftFrontendState;
   const dispatch = useAppDispatch();
   const content = editorState.content as GalleryContent;
-  const image = (content.mediaResourceArray as {
-    description: string;
-    mediaResourceURL: string;
-  }[]
+  const image = (content.mediaResourceArray as MediaResourceArray
   )[props.mediaArrayIndex];
 
   const onClick = () => {
@@ -26,8 +26,10 @@ export const GalleryImage = (props: {mediaArrayIndex: number}) => {
   };
 
   return <div onClick={onClick}>
-    <img src={image.mediaResourceURL}></img>
-    <p>{image.description}</p>
+    <BaseMediaPlayer src={
+      `/api/draft/${editorState._id}/resource/${image.mediaResourceID}`}
+    type={image.mimetype} style={{}}></BaseMediaPlayer>
+    <p>{image.caption}</p>
     <button>edit</button>
   </div>;
 };

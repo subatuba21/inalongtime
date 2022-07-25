@@ -45,16 +45,16 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
         editorContent.mediaResourceArray ?
         editorContent.mediaResourceArray : [];
 
+        const newImageEntry = {
+          caption: captionInput.current?.value || '',
+          mediaResourceID: resourceId,
+          mimetype: currentFileType as allowedFileTypes,
+        };
+
         if (props.mediaArrayIndex === AddImageSetting) {
-          galleryImageArray.push({
-            description: captionInput.current?.value || '',
-            mediaResourceURL: resourceId,
-          });
+          galleryImageArray.push(newImageEntry);
         } else {
-          galleryImageArray[props.mediaArrayIndex] = {
-            description: captionInput.current?.value || '',
-            mediaResourceURL: resourceId,
-          };
+          galleryImageArray[props.mediaArrayIndex] = newImageEntry;
         }
 
         newContent.initialize({
@@ -133,22 +133,12 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
     }
   };
 
-  const image = (content.mediaResourceArray as {
-    description: string;
-    mediaResourceURL: string;
-  }[]
-  )[props.mediaArrayIndex];
-
-  let caption = '';
-  let imageUrl = '';
-  if (props.mediaArrayIndex !== AddImageSetting) {
-    caption = image.description;
-    imageUrl = image.mediaResourceURL;
-  }
+  const image = (content.mediaResourceArray as MediaResourceArray)[
+      props.mediaArrayIndex];
 
   return <div id={styles.imageEditModalContent}>
     <h3 className={editorStyles.fieldName}>Image Caption</h3>
-    <textarea defaultValue={caption} ref={captionInput}>
+    <textarea defaultValue={image ? image.caption : ''} ref={captionInput}>
     </textarea>
     <br />
     <h3 className={editorStyles.fieldName}>Upload New Media</h3>
@@ -179,8 +169,10 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
       props.mediaArrayIndex === AddImageSetting ? <></> : <>
         <br />
         <h3 className={editorStyles.fieldName}>Current Media File</h3>
-        {imageUrl.trim() != '' ? <img src={imageUrl} alt='Gallery Media' /> :
-    <>No file selected</>}
+        <BaseMediaPlayer
+          src={
+            `/api/draft/${editorState._id}/resource/${image.mediaResourceID}`}
+          type={image.mimetype} style={{}} /> :
       </>
     }
 

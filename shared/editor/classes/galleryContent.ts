@@ -1,9 +1,11 @@
 import { Content, ContentType } from "./content";
 import {z} from 'zod';
+import { allowedFileTypesSchema } from "../../types/fileTypes";
 
 export const mediaResourceArraySchema = z.array(z.object({
-    description: z.string(),
-    mediaResourceURL: z.string(),
+    caption: z.string(),
+    mediaResourceID: z.string(),
+    mimetype: allowedFileTypesSchema
 }));
 
 export type MediaResourceArray = z.infer<typeof mediaResourceArraySchema>;

@@ -1,10 +1,12 @@
 import {useSelector} from 'react-redux';
 import {DraftFrontendState} from 'shared/dist/types/draft';
 import styles from './GalleryEditor.module.css';
-import {GalleryContent} from 'shared/dist/editor/classes/galleryContent';
+import {GalleryContent, MediaResourceArray}
+  from 'shared/dist/editor/classes/galleryContent';
 import {changeContent, saveDraft} from '../../../store/editor';
 import {useAppDispatch} from '../../../store/store';
 import {AddGalleryImage} from './AddGalleryImage/addGalleryImage';
+import {GalleryImage} from './GalleryImage/GalleryImage';
 
 export const GalleryEditor = () => {
   const dispatch = useAppDispatch();
@@ -46,12 +48,10 @@ export const GalleryEditor = () => {
     </span>
     <div>
       {content ?
-      (content.mediaResourceArray as {
-        description: string;
-        mediaResourceURL: string;
-    }[]).map((mediaResource, index) => {
-        return <></>;
-      }) : <></>}
+      (content.mediaResourceArray as MediaResourceArray)
+          .map((mediaResource, index) => {
+            return <GalleryImage key={index} mediaArrayIndex={index}/>;
+          }) : <></>}
       <AddGalleryImage />
     </div>
     <div>
