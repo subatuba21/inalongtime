@@ -49,6 +49,7 @@ export const registerUser =
           email: user.user.email,
           firstname: user.user.firstname,
           lastname: user.user.lastname,
+          method: user.user.method,
         };
         const response : APIResponse = {
           error: null,

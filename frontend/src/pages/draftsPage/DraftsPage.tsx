@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 import {MiniDraft} from 'shared/dist/types/draft';
 import {editorAPI} from '../../api/editor';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
@@ -35,11 +36,17 @@ export const DraftsPage = () => {
       <Navbar></Navbar>
       <div id={styles.mainDiv}>
         <h2 className='pinkText'>Drafts</h2>
-        {data.map((draft, i) => {
+        {data.length > 0 ? data.map((draft, i) => {
           return <Draft key={i} id={draft._id}
             name={draft.title} type={draft.type}
             setLoading={setLoading}></Draft>;
-        })}
+        }) : <h5 className='whiteText'>
+          There are no drafts in your account right now. Click&nbsp;
+          <Link to='/home' style={{color: 'lightcyan',
+            textDecoration: 'underline'}}>
+            here
+          </Link> to create a new draft.
+        </h5>}
         <p className={styles.question}>
           <h3 className='pinkText'>Q: Are my drafts available forever?</h3>
           <p className='whiteText'>No. Drafts will be deleted automatically

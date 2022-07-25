@@ -6,6 +6,7 @@ export interface UserState {
     firstName: string;
     lastName: string;
     email: string;
+    method?: string;
     loggedIn: boolean;
 }
 
@@ -48,6 +49,7 @@ export const userSlice = createSlice({
       state.email = action.payload.email;
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
+      state.method = action.payload.method;
     },
   },
   extraReducers: (builder) => {
@@ -59,6 +61,7 @@ export const userSlice = createSlice({
           firstName: action.payload.user?.firstName as string,
           lastName: action.payload.user?.lastName as string,
           loggedIn: true,
+          method: action.payload.user?.method as string,
         };
       }
     });
@@ -71,6 +74,7 @@ export const userSlice = createSlice({
           firstName: action.payload.user?.firstName as string,
           lastName: action.payload.user?.lastName as string,
           loggedIn: true,
+          method: action.payload.user?.method as string,
         };
       }
     });

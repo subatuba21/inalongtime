@@ -13,6 +13,7 @@ export interface LoginResult {
         firstName: string;
         lastName: string;
         _id: string;
+        method?: string;
     };
 }
 
@@ -46,9 +47,10 @@ export const authAPI = {
           success: true,
           user: {
             email: res.data.data.email,
-            firstName: res.data.data.firstName,
-            lastName: res.data.data.lastName,
+            firstName: res.data.data.firstname,
+            lastName: res.data.data.lastname,
             _id: res.data.data._id,
+            method: res.data.data.method,
           },
         };
       }
@@ -86,6 +88,7 @@ export const authAPI = {
             firstName: res.data.data.firstname,
             lastName: res.data.data.lastname,
             _id: res.data.data._id,
+            method: res.data.data.method,
           },
         };
       }
@@ -127,6 +130,7 @@ export const authAPI = {
             firstName: res.data.data.firstname,
             lastName: res.data.data.lastname,
             _id: res.data.data._id,
+            method: res.data.data.method,
           },
         };
       }

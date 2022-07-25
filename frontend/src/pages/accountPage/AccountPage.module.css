@@ -1,0 +1,58 @@
+#mainDiv {
+    width: 400px;
+    max-width: 90%;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+#mainDiv input {
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#mainDiv > h2 {
+    font-size: 25pt;
+    margin-bottom: 15px;
+}
+
+#mainDiv > h3 {
+    font-size: 19pt;
+    color: white;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+#resetPassword {
+    background-color: white;
+    border-radius: 5px;
+    border: 3px solid black;
+}
+
+#save {
+    background-color: var(--pink);
+    color: black;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 75px;
+    border-color: var(--pink);
+}
+
+#infoBox {
+    font-size: 12pt;
+    padding: 15px;
+    width: 100%;
+}
+
+
+
+
+@media (max-width: 600px) {
+    #mainDiv {
+        margin-top: 30px;
+    }
+
+    #mainDiv > h2 {
+        font-size: 20pt;
+        margin-bottom: 20px;
+    }
+}

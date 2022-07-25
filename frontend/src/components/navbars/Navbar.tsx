@@ -25,7 +25,7 @@ export const Navbar = (props?: {type?: 'index' | 'home'}) => {
     <Link to='/drafts' className='whiteText'>Drafts</Link>
     <Link to='/sent' className='whiteText'>Sent</Link>
     <Link to='/account' className='bold whiteText'>Account Info</Link>
-    <Link to='/account' className='bold pinkText'>Logout</Link>
+    <a onClick={() => dispatch(logout())} className='bold pinkText'>Logout</a>
   </div>;
 
   if (props?.type==='index') {

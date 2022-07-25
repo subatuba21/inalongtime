@@ -15,6 +15,7 @@ import {Step} from './step/step';
 import {Spinner} from 'react-bootstrap';
 import {useSelector} from 'react-redux';
 import {GalleryEditor} from './galleryEditor/GalleryEditor';
+import {ArrowUpRightSquareFill} from 'react-bootstrap-icons';
 
 const LetterEditor =
   lazy(() => import('./letterEditor/LetterEditor')
@@ -117,7 +118,15 @@ export const EditorPage = () => {
             All fields are autosaved.
         </p>
         <p id={styles.previewURL}>
-          Preview Link: <a href='https://inalongtime.com/preview/sbbbrebf48357bt53h'>https://inalongtime.com/preview/sbbbrebf48357bt53h</a>
+          <a href='https://inalongtime.com/preview/sbbbrebf48357bt53h'>
+            <ArrowUpRightSquareFill style={{
+              marginRight: '9px',
+              position: 'relative',
+              bottom: '2px',
+              fontSize: '15pt',
+            }}></ArrowUpRightSquareFill>
+            Open Preview
+          </a>
         </p>
         <h3 style={{marginBottom: '10px'}}>Steps</h3>
         <div style={{marginBottom: '10px'}}>

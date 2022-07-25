@@ -53,6 +53,7 @@ export const passportAuthenticateLocal =
               _id: user._id,
               firstname: user.firstname,
               lastname: user.lastname,
+              method: user.method,
             };
 
             const response : APIResponse = {
@@ -88,6 +89,7 @@ export const returnCurrentUser =
         _id: user._id,
         firstname: user.firstname,
         lastname: user.lastname,
+        method: user.method,
       };
 
       const response : APIResponse = {

@@ -22,3 +22,9 @@
     background-color: var(--pink);
     cursor:unset;
 }
+
+@media (max-width: 600px) {
+    .step  {
+        margin-right: 10px;
+    }
+}
