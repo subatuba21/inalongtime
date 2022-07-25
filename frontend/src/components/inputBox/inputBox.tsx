@@ -26,9 +26,12 @@ export const InputBox = (props:
     if (!props.valueState.value) {
       props.valueState.set('');
     }
-    const value = inputRef.current?.value as string;
-    errorCheck(value);
-  }, []);
+    if (props.validation?.formErrorState &&
+      props.validation.formErrorState.value[props.name] === undefined) {
+      const value = inputRef.current?.value as string;
+      errorCheck(value);
+    }
+  }, [props?.validation?.formErrorState?.value]);
 
   const errorCheck = (value: string) => {
     if (props.validation) {

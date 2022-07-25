@@ -3,7 +3,7 @@ import {GalleryContent} from 'shared/dist/editor/classes/galleryContent';
 import {allowedFileTypes, allowedFileTypesSchema}
   from 'shared/dist/types/fileTypes';
 import {DraftFrontendState} from 'shared/dist/types/draft';
-import editorStyles from '../galleryEditor.module.css';
+import editorStyles from '../GalleryEditor.module.css';
 import styles from './imageEditModalContent.module.css';
 import {Button} from 'react-bootstrap';
 import {useRef, useState} from 'react';

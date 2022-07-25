@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {FormEvent, useEffect, useRef, useState} from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import {useSelector} from 'react-redux';
@@ -25,26 +26,27 @@ export const RegisterForm = () => {
   const [processingRegister, setProcessingRegister] = useState(false);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(clearError(CentralErrors.signupError));
-    const matchingPasswordsError = 'matchingPasswordsError';
-    const matchingPasswordsErrorMessage = 'Passwords do not match';
-    if (password!=password2 && errorMessageBox.current) {
-      const errorsCopy = {...errors};
-      errorsCopy[matchingPasswordsError] = [matchingPasswordsErrorMessage];
-      setErrors(errorsCopy);
-      const error : CentralError = {
-        type: CentralErrors.signupError,
-        message: matchingPasswordsErrorMessage,
-      };
-      dispatch(addError(error));
-    } else {
-      dispatch(clearError(CentralErrors.signupError));
-      const errorsCopy = {...errors};
-      errorsCopy[matchingPasswordsError] = [];
-      setErrors(errorsCopy);
-    };
-  }, [password, password2]);
+  // useEffect(() => {
+  //   dispatch(clearError(CentralErrors.signupError));
+  //   const matchingPasswordsError = 'matchingPasswordsError';
+  //   const matchingPasswordsErrorMessage = 'Passwords do not match';
+  //   if (password!=password2 && errorMessageBox.current) {
+  //     const errorsCopy = {...errors};
+  //     errorsCopy[matchingPasswordsError] = [matchingPasswordsErrorMessage];
+  //     setErrors(errorsCopy);
+  //     const error : CentralError = {
+  //       type: CentralErrors.signupError,
+  //       message: matchingPasswordsErrorMessage,
+  //     };
+  //     dispatch(addError(error));
+  //   } else {
+  //     dispatch(clearError(CentralErrors.signupError));
+  //     console.log(errors);
+  //     const errorsCopy = {...errors};
+  //     errorsCopy[matchingPasswordsError] = [];
+  //     setErrors(errorsCopy);
+  //   };
+  // }, [password, password2]);
 
   const register = (event: FormEvent)=> {
     setProcessingRegister(true);
@@ -57,6 +59,7 @@ export const RegisterForm = () => {
     }
 
     if (!captchaRef.current || !captchaRef.current.getValue()) {
+      setProcessingRegister(false);
       return;
     }
 
@@ -67,7 +70,6 @@ export const RegisterForm = () => {
       password,
       recaptchaToken: captchaRef.current.getValue() as string,
     }));
-
     setProcessingRegister(false);
   };
 
