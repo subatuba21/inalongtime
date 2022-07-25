@@ -1,5 +1,6 @@
 import {useSelector} from 'react-redux';
-import {GalleryContent} from 'shared/dist/editor/classes/galleryContent';
+import {GalleryContent,
+  MediaResourceArray} from 'shared/dist/editor/classes/galleryContent';
 import {allowedFileTypes, allowedFileTypesSchema}
   from 'shared/dist/types/fileTypes';
 import {DraftFrontendState} from 'shared/dist/types/draft';
@@ -9,6 +10,10 @@ import {Button} from 'react-bootstrap';
 import {useRef, useState} from 'react';
 import {BaseMediaPlayer} from
   '../../../../components/BaseMediaPlayer/baseMediaPlayer';
+import {editorAPI} from '../../../../api/editor';
+import {useAppDispatch} from '../../../../store/store';
+import {changeContent, saveDraft} from '../../../../store/editor';
+import {deactivateModal} from '../../../../store/modal';
 
 
 export const AddImageSetting = -1;
@@ -17,6 +22,7 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
   const editorState = useSelector(
       (state) => (state as any).editor) as DraftFrontendState;
   const content = editorState.content as GalleryContent;
+  const dispatch = useAppDispatch();
   const [isDraggedOver, toggleIsDraggedOver] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [currentFile, setCurrentFile] = useState<File | null>(null);
@@ -24,6 +30,46 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
    useState<allowedFileTypes | undefined>();
   const [currentMessageText, setCurrentMessageText] = useState<string>('');
   const fileInput = useRef<HTMLInputElement>(null);
+  const captionInput = useRef<HTMLTextAreaElement>(null);
+  const [isUploading, toggleIsUploading] = useState(false);
+
+  const addImage = async () => {
+    toggleIsUploading(true);
+    if (currentFile) {
+      const result = await editorAPI.addResource(editorState._id, currentFile);
+      if (result.success) {
+        const resourceId = result.resourceId as string;
+        const newContent = new GalleryContent();
+        const editorContent = editorState.content as GalleryContent;
+        const galleryImageArray : MediaResourceArray =
+        editorContent.mediaResourceArray ?
+        editorContent.mediaResourceArray : [];
+
+        if (props.mediaArrayIndex === AddImageSetting) {
+          galleryImageArray.push({
+            description: captionInput.current?.value || '',
+            mediaResourceURL: resourceId,
+          });
+        } else {
+          galleryImageArray[props.mediaArrayIndex] = {
+            description: captionInput.current?.value || '',
+            mediaResourceURL: resourceId,
+          };
+        }
+
+        newContent.initialize({
+          description: editorContent.description ?
+            editorContent.description : '',
+          mediaResourceArray: galleryImageArray,
+        });
+
+        dispatch(changeContent(newContent));
+        dispatch(saveDraft('data'));
+        dispatch(deactivateModal());
+      }
+    }
+    toggleIsUploading(false);
+  };
 
   const onFileSelect : React.ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.currentTarget.files && event.currentTarget.files.length > 0) {
@@ -44,7 +90,6 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
     event.preventDefault();
     let file : File | null = null;
     toggleIsDraggedOver(false);
-    console.log(event.dataTransfer.files);
     if (event.dataTransfer.items) {
       file = event.dataTransfer.items[0].getAsFile();
     } else {
@@ -103,7 +148,7 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
 
   return <div id={styles.imageEditModalContent}>
     <h3 className={editorStyles.fieldName}>Image Caption</h3>
-    <textarea defaultValue={caption}>
+    <textarea defaultValue={caption} ref={captionInput}>
     </textarea>
     <br />
     <h3 className={editorStyles.fieldName}>Upload New Media</h3>
@@ -139,7 +184,7 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
       </>
     }
 
-    <Button>
+    <Button onClick={addImage} style={isUploading ? {opacity: 0.8} : {}}>
       {props.mediaArrayIndex === AddImageSetting ? 'Add' : 'Edit'}
     </Button>
 

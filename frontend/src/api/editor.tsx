@@ -25,6 +25,12 @@ interface deleteDraftResult {
   error?: CentralError
 }
 
+interface addResourceResult {
+  success: boolean,
+  resourceId?: string,
+  error?: CentralError
+}
+
 export const editorAPI = {
   getDraft: async (draftID: string) : Promise<getDraftResult> => {
     try {
@@ -162,6 +168,47 @@ export const editorAPI = {
       return {
         success: false,
         error,
+      };
+    }
+  },
+
+  addResource: async (draftID: string, resource: File) : Promise<addResourceResult> => {
+    try {
+      const res = await axios({
+        method: 'post',
+        url: `/api/draft/${draftID}/resource`,
+        data: {
+          file: resource,
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (res.status === 200) {
+        return {
+          success: true,
+          resourceId: res.data.data.resourceId,
+        };
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      if ((error as any)?.response?.data?.error?.message) {
+        return {
+          success: false,
+          error: {
+            type: CentralErrors.addResourceError,
+            message: (error as any)?.response?.data?.error?.message,
+          },
+        };
+      }
+      return {
+        success: false,
+        error: {
+          type: CentralErrors.addResourceError,
+          message: 'There was an unknown error adding a resource.',
+        },
       };
     }
   },
