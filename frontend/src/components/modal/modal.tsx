@@ -9,9 +9,9 @@ export const Modal = () => {
   const modalState = useSelector((state) => (state as any).modal) as ModalState;
   const dispatch = useAppDispatch();
   const emptyFunc = () => {};
-  const onClose = (func?: Function) => {
-    if (func) func();
-    modalState.onClose ? modalState.onClose() : null;
+  const onClose = async (func?: Function) => {
+    if (func) await func();
+    modalState.onClose ? await modalState.onClose() : null;
     dispatch(deactivateModal());
   };
 
@@ -29,14 +29,17 @@ export const Modal = () => {
       {modalState.dangerButton ?
       <Button variant="secondary"
         onClick={
-          () => onClose((modalState.dangerButton as any).onClick || emptyFunc)}>
+          async () =>
+            await onClose(
+                (modalState.dangerButton as any).onClick || emptyFunc)}>
         {modalState.dangerButton?.text}
       </Button> : <></>}
       {modalState.successButton ?
       <Button variant="primary"
         onClick={
-          () => onClose((modalState.successButton as any)
-              .onClick || emptyFunc)}>
+          async () => await onClose(
+              (modalState.successButton as any)
+                  .onClick || emptyFunc)}>
         {modalState.successButton?.text}</Button> : <></>}
     </BootstrapModal.Footer> : <></>}
   </BootstrapModal>;

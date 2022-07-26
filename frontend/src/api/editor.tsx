@@ -20,7 +20,7 @@ interface getDraftResult {
   data?: DraftResponseBody,
 }
 
-interface deleteDraftResult {
+interface deleteResult {
   success: boolean,
   error?: CentralError
 }
@@ -54,7 +54,7 @@ export const editorAPI = {
     }
   },
 
-  deleteDraft: async (draftID: string) : Promise<deleteDraftResult> => {
+  deleteDraft: async (draftID: string) : Promise<deleteResult> => {
     try {
       const res = await axios({
         method: 'delete',
@@ -208,6 +208,28 @@ export const editorAPI = {
         error: {
           type: CentralErrors.addResourceError,
           message: 'There was an unknown error adding a resource.',
+        },
+      };
+    }
+  },
+
+  deleteResource: async (draftID: string, resourceId: string) : Promise<deleteResult> => {
+    try {
+      const res = await axios({
+        method: 'delete',
+        url: `/api/draft/${draftID}/resource/${resourceId}`,
+      });
+      if (res.status === 200) {
+        return {
+          success: true,
+        };
+      } else throw new Error();
+    } catch (err) {
+      return {
+        success: false,
+        error: {
+          type: CentralErrors.deleteResourceError,
+          message: 'Unable to delete resource due to unknown error.',
         },
       };
     }

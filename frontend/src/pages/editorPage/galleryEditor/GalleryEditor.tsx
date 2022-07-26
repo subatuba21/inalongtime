@@ -44,7 +44,7 @@ export const GalleryEditor = () => {
       value={content.description} onBlur={() => dispatch(saveDraft('data'))}>
     </textarea>
     <span className={styles.fieldName}>
-        Gallery Images
+        Gallery Media
     </span>
     <div>
       {content ?

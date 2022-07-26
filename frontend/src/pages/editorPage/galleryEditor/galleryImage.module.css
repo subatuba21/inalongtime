@@ -6,6 +6,7 @@
     overflow: hidden;
     display: inline-block;
     margin: 10px;
+    margin-bottom: 0px;
 }
 
 .imageBox:hover {
@@ -29,6 +30,33 @@
 }
 
 .imageBox p {
-    font-size: 13pt;
+    font-size: 11pt;
     color: #fff;
+    padding: 10px;
+}
+
+.toolbar {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 8px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    margin-left: 10px;
+    margin-top: 2px;
+}
+
+.toolbar svg {
+    color: #fff;
+    margin: 5px;
+}
+.toolbar svg:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.container {
+    margin-bottom: 10px;
+    display: inline-block;
 }

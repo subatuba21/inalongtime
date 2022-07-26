@@ -23,6 +23,7 @@ export enum CentralErrors {
     deleteDraftError = 'DELETE_DRAFT_ERROR',
     saveDraftError = 'SAVE_DRAFT_ERROR',
     addResourceError = 'ADD_RESOURCE_ERROR',
+    deleteResourceError = 'DELETE_RESOURCE_ERROR',
 }
 
 export const errorSlice = createSlice({

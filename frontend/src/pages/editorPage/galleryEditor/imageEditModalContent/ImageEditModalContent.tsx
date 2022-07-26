@@ -35,39 +35,57 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
 
   const addImage = async () => {
     toggleIsUploading(true);
+    const editorContent = editorState.content as GalleryContent;
+    const galleryImageArray : MediaResourceArray =
+    editorContent.mediaResourceArray ?
+    editorContent.mediaResourceArray : [];
+    const newContent = new GalleryContent();
+
+    let resourceId = props.mediaArrayIndex !== AddImageSetting ?
+    galleryImageArray[props.mediaArrayIndex].mediaResourceID : '';
+
+    if (!currentFile && props.mediaArrayIndex === AddImageSetting) {
+      setCurrentMessageText('Please select a file to upload');
+      toggleIsUploading(false);
+      return;
+    }
+
     if (currentFile) {
       const result = await editorAPI.addResource(editorState._id, currentFile);
       if (result.success) {
-        const resourceId = result.resourceId as string;
-        const newContent = new GalleryContent();
-        const editorContent = editorState.content as GalleryContent;
-        const galleryImageArray : MediaResourceArray =
-        editorContent.mediaResourceArray ?
-        editorContent.mediaResourceArray : [];
-
-        const newImageEntry = {
-          caption: captionInput.current?.value || '',
-          mediaResourceID: resourceId,
-          mimetype: currentFileType as allowedFileTypes,
-        };
-
-        if (props.mediaArrayIndex === AddImageSetting) {
-          galleryImageArray.push(newImageEntry);
-        } else {
-          galleryImageArray[props.mediaArrayIndex] = newImageEntry;
-        }
-
-        newContent.initialize({
-          description: editorContent.description ?
-            editorContent.description : '',
-          mediaResourceArray: galleryImageArray,
-        });
-
-        dispatch(changeContent(newContent));
-        dispatch(saveDraft('data'));
-        dispatch(deactivateModal());
+        resourceId = result.resourceId as string;
+      } else {
+        setCurrentMessageText(result.error?.message ?
+          result.error.message :
+          'There was an unknown error uploading your file');
+        toggleIsUploading(false);
+        return;
       }
     }
+
+    const newImageEntry = {
+      caption: captionInput.current?.value || '',
+      mediaResourceID: resourceId,
+      mimetype: currentFileType ?
+      currentFileType as allowedFileTypes :
+       galleryImageArray[props.mediaArrayIndex].mimetype,
+    };
+
+    if (props.mediaArrayIndex === AddImageSetting) {
+      galleryImageArray.push(newImageEntry);
+    } else {
+      galleryImageArray[props.mediaArrayIndex] = newImageEntry;
+    }
+
+    newContent.initialize({
+      description: editorContent.description ?
+        editorContent.description : '',
+      mediaResourceArray: galleryImageArray,
+    });
+
+    dispatch(changeContent(newContent));
+    dispatch(saveDraft('data'));
+    dispatch(deactivateModal());
     toggleIsUploading(false);
   };
 
@@ -156,6 +174,7 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
           height: '100%',
           zIndex: 10,
           backgroundColor: 'black',
+          objectFit: 'contain',
         }} /> : null}
       <p>Drag and drop files here or click to upload.</p>
       <input type='file'
@@ -172,7 +191,9 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
         <BaseMediaPlayer
           src={
             `/api/draft/${editorState._id}/resource/${image.mediaResourceID}`}
-          type={image.mimetype} style={{}} /> :
+          type={image.mimetype} style={{
+            width: '100%',
+          }} /> :
       </>
     }
 

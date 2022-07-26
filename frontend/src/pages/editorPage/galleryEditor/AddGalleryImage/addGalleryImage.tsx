@@ -19,7 +19,7 @@ export const AddGalleryImage = () => {
     onClick={onClick}>
     <div>
       <Plus></Plus>
-      <p>Add Image</p>
+      <p>Add Media</p>
     </div>
   </div>;
 };
