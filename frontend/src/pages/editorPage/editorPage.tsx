@@ -16,6 +16,7 @@ import {Spinner} from 'react-bootstrap';
 import {useSelector} from 'react-redux';
 import {GalleryEditor} from './galleryEditor/GalleryEditor';
 import {ArrowUpRightSquareFill} from 'react-bootstrap-icons';
+import {ReminderEditor} from './reminderEditor/reminderEditor';
 
 const LetterEditor =
   lazy(() => import('./letterEditor/LetterEditor')
@@ -74,6 +75,11 @@ export const EditorPage = () => {
 
     case 'gallery': {
       contentEditor = <GalleryEditor />;
+      break;
+    }
+
+    case 'reminder': {
+      contentEditor = <ReminderEditor />;
       break;
     }
 

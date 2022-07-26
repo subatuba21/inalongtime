@@ -38,7 +38,11 @@ export const getDraftContent =
       const file = bucket.file(getContentFilename(userId, draftId));
       if ((await file.exists())[0]) {
         const contentJson = parseDownload(await file.download());
-        return parseContent(contentJson, type);
+        try {
+          return parseContent(contentJson, type);
+        } catch {
+          return new Content();
+        }
       } else {
         return new Content();
       }

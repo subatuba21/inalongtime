@@ -15,15 +15,16 @@ export class ReminderContent extends Content {
         if (!this.initialized) throw new Error('ReminderContent has not been initialized.');
 
         return {
-            test: this.text,
+            text: this.text,
             subject: this.subject,
         }
     } 
 
     deserialize(data: any): void {
-        if (data.subject && typeof data.subject === 'string' && data.text && typeof data.text === 'string') {
+        if (typeof data.subject === 'string' && typeof data.text === 'string') {
             this.subject = data.subject;
-            this. text = data.text;
+            this.text = data.text;
+            this.initialized = true;
         } else {
             throw new Error('Incorrect data needed to deserialize ReminderContent');
         }

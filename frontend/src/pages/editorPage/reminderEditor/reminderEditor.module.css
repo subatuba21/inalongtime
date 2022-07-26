@@ -1,0 +1,9 @@
+#mainDiv {
+    width: 100%;
+}
+
+.fieldName {
+    display: block;
+    font-size: 13pt;
+    font-weight: 500;
+}
