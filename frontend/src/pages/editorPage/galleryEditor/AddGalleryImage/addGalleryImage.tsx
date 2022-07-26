@@ -17,7 +17,9 @@ export const AddGalleryImage = () => {
   };
   return <div className={styles.imageBox} id={styles.addImage}
     onClick={onClick}>
-    <Plus></Plus>
-    <p>Add Image</p>
+    <div>
+      <Plus></Plus>
+      <p>Add Image</p>
+    </div>
   </div>;
 };

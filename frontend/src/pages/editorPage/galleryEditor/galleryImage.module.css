@@ -3,6 +3,9 @@
     border-radius: 5px;
     width: 200px;
     height: 300px;
+    overflow: hidden;
+    display: inline-block;
+    margin: 10px;
 }
 
 .imageBox:hover {
@@ -10,7 +13,9 @@
     cursor: pointer;
 }
 
-#addImage {
+#addImage > div {
+    height: 100%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,7 +28,7 @@
     margin-bottom: -6px;
 }
 
-#addImage p {
+.imageBox p {
     font-size: 13pt;
     color: #fff;
 }

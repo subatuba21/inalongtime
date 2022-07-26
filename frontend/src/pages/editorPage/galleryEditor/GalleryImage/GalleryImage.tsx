@@ -8,6 +8,7 @@ import {ImageEditModalContent} from
   '../imageEditModalContent/ImageEditModalContent';
 import {BaseMediaPlayer}
   from '../../../../components/BaseMediaPlayer/baseMediaPlayer';
+import styles from '../galleryImage.module.css';
 
 export const GalleryImage = (props: {mediaArrayIndex: number}) => {
   const editorState =
@@ -25,10 +26,14 @@ export const GalleryImage = (props: {mediaArrayIndex: number}) => {
     }));
   };
 
-  return <div onClick={onClick}>
+  return <div onClick={onClick} className={styles.imageBox}>
     <BaseMediaPlayer src={
       `/api/draft/${editorState._id}/resource/${image.mediaResourceID}`}
-    type={image.mimetype} style={{}}></BaseMediaPlayer>
+    type={image.mimetype} style={{
+      width: '100%',
+      height: '200px',
+      objectFit: 'contain',
+    }}></BaseMediaPlayer>
     <p>{image.caption}</p>
     <button>edit</button>
   </div>;
