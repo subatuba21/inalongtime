@@ -147,6 +147,10 @@ export const editorSlice = createSlice({
       (state: DraftFrontendState, action: PayloadAction<StepType>) => {
         state.progress[action.payload] = true;
       },
+    changeSendDate:
+      (state: DraftFrontendState, action: PayloadAction<Date>) => {
+        state.nextSendDate = action.payload;
+      },
     setStepUnfinished:
       (state: DraftFrontendState, action: PayloadAction<StepType>) => {
         state.progress[action.payload] = false;
@@ -163,6 +167,7 @@ export const editorSlice = createSlice({
         state.type = action.payload.properties.type;
         state._id = action.payload.properties._id;
         state.userId = action.payload.properties.userId;
+        state.backupEmail = action.payload.properties.backupEmail;
 
         try {
           state.content = parseContent(action.payload.content, state.type);
@@ -179,5 +184,6 @@ export const {changeTitle, changePhoneNumber,
   changeRecipientType, setStepFinished,
   setStepUnfinished,
   loadDraft, changeContent,
+  changeSendDate,
 } =
    editorSlice.actions;

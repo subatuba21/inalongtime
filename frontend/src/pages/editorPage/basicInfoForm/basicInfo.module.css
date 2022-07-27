@@ -8,3 +8,9 @@
     font-size: 13pt;
     font-weight: 500;
 }
+
+.fieldDescription {
+    display: block;
+    font-size: 10pt;
+    font-weight: 400;
+}
