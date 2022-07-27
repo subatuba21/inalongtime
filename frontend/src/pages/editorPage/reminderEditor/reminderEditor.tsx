@@ -2,7 +2,8 @@
 import {useSelector} from 'react-redux';
 import {ReminderContent} from 'shared/dist/editor/classes/reminderContent';
 import {DraftFrontendState} from 'shared/dist/types/draft';
-import {changeContent, saveDraft} from '../../../store/editor';
+import {changeContent, saveDraft,
+  setStepFinished, setStepUnfinished} from '../../../store/editor';
 import {useAppDispatch} from '../../../store/store';
 import styles from './reminderEditor.module.css';
 
@@ -20,6 +21,12 @@ export const ReminderEditor = () => {
     });
     dispatch(changeContent(content));
   }
+
+  if (content.subject && content.subject?.trim() !== '' &&
+  content.text && content.text?.trim() !== '') {
+    dispatch(setStepFinished('content'));
+  } else dispatch(setStepUnfinished('content'));
+
 
   const onSubjectChange : React.ChangeEventHandler<HTMLTextAreaElement> =
     (event) => {

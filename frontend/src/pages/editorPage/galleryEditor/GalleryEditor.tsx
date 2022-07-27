@@ -3,7 +3,8 @@ import {DraftFrontendState} from 'shared/dist/types/draft';
 import styles from './GalleryEditor.module.css';
 import {GalleryContent, MediaResourceArray}
   from 'shared/dist/editor/classes/galleryContent';
-import {changeContent, saveDraft} from '../../../store/editor';
+import {changeContent, saveDraft, setStepFinished,
+  setStepUnfinished} from '../../../store/editor';
 import {useAppDispatch} from '../../../store/store';
 import {AddGalleryImage} from './AddGalleryImage/addGalleryImage';
 import {GalleryImage} from './GalleryImage/GalleryImage';
@@ -22,6 +23,10 @@ export const GalleryEditor = () => {
     });
     dispatch(changeContent(content));
   }
+
+  if ((content.mediaResourceArray) && content.mediaResourceArray.length > 0) {
+    dispatch(setStepFinished('content'));
+  } else dispatch(setStepUnfinished('content'));
 
 
   const onDescriptionChange: React.FormEventHandler<HTMLTextAreaElement> =
