@@ -1233,12 +1233,25 @@
     react-icons "^4.3.1"
     to-style "^1.3.3"
 
+"@draft-js-plugins/focus@^4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@draft-js-plugins/focus/-/focus-4.1.3.tgz#6dc0516c7c57678b629af45eb703620cb79ee95d"
+  integrity sha512-0VWROy2pUT0gK81XJmupT/SvdV9GnPv3dOL89sidZxFBj00LQt+eLnBAv+4dhOokgmlUnBRBqRPvbhlw0nBEfA==
+  dependencies:
+    clsx "^1.0.4"
+    immutable "~3.7.4"
+
 "@draft-js-plugins/image@^4.1.3":
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/@draft-js-plugins/image/-/image-4.1.3.tgz#2a90f9629b5784fb01ad4bc92c2b8125598dc5b5"
   integrity sha512-/+E/dx/6GvcWiw7ViIaeKkVTLJm9cDejZu1tpinb53Cl4iwMT7hN3pwLE270MYcctj5ZdwjleRuMDnx4l/mDtw==
   dependencies:
     clsx "^1.0.4"
+
+"@draft-js-plugins/resizeable@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@draft-js-plugins/resizeable/-/resizeable-5.0.3.tgz#e4ff0a1b733bb1f6ce9a9aa32b5f2fca7c756f8e"
+  integrity sha512-aqhIRIL17C+MqMrZJgNakVrbNTeVsiNtIQszP6VcoPiVPm9RUO12aQAX1c0MfVeKbh9qk0JwNpHglSGd9LIUeA==
 
 "@draft-js-plugins/static-toolbar@^4.1.3":
   version "4.1.3"
