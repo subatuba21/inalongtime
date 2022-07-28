@@ -204,19 +204,22 @@ export const editorSlice = createSlice({
     setFontColor:
       (state: DraftFrontendState, action: PayloadAction<string>) => {
         if (!state.customization) state.customization = baseCustomization;
-        state.customization.fontColor = action.payload;
+        state.customization =
+        {...state.customization, fontColor: action.payload};
       },
 
     setFontFamily:
       (state: DraftFrontendState, action: PayloadAction<string>) => {
         if (!state.customization) state.customization = baseCustomization;
-        state.customization.font = action.payload;
+        state.customization =
+          {...state.customization, font: action.payload};
       },
 
     setBackgroundColor:
       (state: DraftFrontendState, action: PayloadAction<string>) => {
         if (!state.customization) state.customization = baseCustomization;
-        state.customization.backgroundColor = action.payload;
+        state.customization =
+          {...state.customization, backgroundColor: action.payload};
       },
   },
 });
