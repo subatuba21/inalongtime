@@ -16,13 +16,13 @@ export const customizationSchema = z.object({
   backgroundColor: hexSchema,
   font: z.string(),
   fontColor: hexSchema,
-  dontShowInDrafts: z.boolean(),
+  dontShowInDrafts: z.boolean().optional(),
 });
 
 export const resourceSchema = z.object({
   id: z.string(),
   mimetype: z.enum(['image/jpeg', 'image/png', 'video/mp4', 'audio/mp3']),
-})
+});
 
 const draftSchema = z.object({
   _id: z.string().length(24),
@@ -38,12 +38,14 @@ const draftSchema = z.object({
   phoneNumber: z.string(),
   backupEmail: z.string(),
   contactEmail: z.string().optional(),
-  resources: z.array(resourceSchema)
+  resources: z.array(resourceSchema),
+  customization: customizationSchema.optional(),
 }).strict();
 
 export const draftFrontendState = draftSchema.omit({
   contentCloudStoragePath: true,
   lastEdited: true,
+  resources: true,
 }).extend({
   content: z.instanceof(Content).optional(),
   progress: z.object({
@@ -61,6 +63,7 @@ export const editDraftRequestBody = z.object({
     _id: true,
     userId: true,
     payment: true,
+    resources: true,
   }).partial().strip()
 }).partial().strip();
 

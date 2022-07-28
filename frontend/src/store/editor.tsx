@@ -9,6 +9,11 @@ import {Content} from 'shared/dist/editor/classes/content';
 import {CentralError} from './error';
 import {activateModal} from './modal';
 
+export const baseCustomization = {
+  fontColor: '#000000',
+  backgroundColor: '#ffffff',
+  font: 'Open Sans',
+};
 
 const initialState : DraftFrontendState = {
   _id: '',
@@ -26,7 +31,7 @@ const initialState : DraftFrontendState = {
     customize: false,
     confirm: false,
   },
-  resources: [],
+  customization: baseCustomization,
 };
 
 export const saveDraft = createAsyncThunk('editor/save',
@@ -167,6 +172,7 @@ export const editorSlice = createSlice({
         state._id = action.payload.properties._id;
         state.userId = action.payload.properties.userId;
         state.backupEmail = action.payload.properties.backupEmail;
+        state.customization = action.payload.properties.customization;
 
         try {
           state.content = parseContent(action.payload.content, state.type);
@@ -194,6 +200,24 @@ export const editorSlice = createSlice({
           confirm: false,
         };
       },
+
+    setFontColor:
+      (state: DraftFrontendState, action: PayloadAction<string>) => {
+        if (!state.customization) state.customization = baseCustomization;
+        state.customization.fontColor = action.payload;
+      },
+
+    setFontFamily:
+      (state: DraftFrontendState, action: PayloadAction<string>) => {
+        if (!state.customization) state.customization = baseCustomization;
+        state.customization.font = action.payload;
+      },
+
+    setBackgroundColor:
+      (state: DraftFrontendState, action: PayloadAction<string>) => {
+        if (!state.customization) state.customization = baseCustomization;
+        state.customization.backgroundColor = action.payload;
+      },
   },
 });
 
@@ -204,5 +228,7 @@ export const {changeTitle, changePhoneNumber,
   setStepUnfinished,
   loadDraft, changeContent,
   changeSendDate, clearDraft,
+  setFontColor, setFontFamily,
+  setBackgroundColor,
 } =
    editorSlice.actions;
