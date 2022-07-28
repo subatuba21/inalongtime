@@ -1,0 +1,20 @@
+#customizeForm {
+    width: 100%;
+}
+
+.fieldName {
+    display: block;
+    font-size: 13pt;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.fieldDescription {
+    display: block;
+    font-size: 10pt;
+    font-weight: 400;
+}
+
+#customizeForm svg {
+    vertical-align: unset !important;
+}

@@ -17,6 +17,7 @@ import {useSelector} from 'react-redux';
 import {GalleryEditor} from './galleryEditor/GalleryEditor';
 import {ArrowUpRightSquareFill} from 'react-bootstrap-icons';
 import {ReminderEditor} from './reminderEditor/reminderEditor';
+import {CustomizeForm} from './customizeForm/CustomizeForm';
 
 const LetterEditor =
   lazy(() => import('./letterEditor/LetterEditor')
@@ -100,6 +101,11 @@ export const EditorPage = () => {
 
     case 'content': {
       content = contentEditor;
+      break;
+    }
+
+    case 'customize': {
+      content = <CustomizeForm></CustomizeForm>;
       break;
     }
 
