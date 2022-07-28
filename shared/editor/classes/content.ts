@@ -23,4 +23,8 @@ export class Content extends Component {
   initialize(args: any) {
     this.initialized = true;
   }
+
+  getResourceIDs() : string[] {
+    return [];
+  }
 }

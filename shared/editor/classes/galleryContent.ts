@@ -33,6 +33,9 @@ export class GalleryContent extends Content {
     }
 
     serialize(): object {
+        if (this.initialized===false) {
+            throw new Error('GalleryContent has not been initialized.');
+        }
         const data : GalleryData = {
             description: this.description as string,
             mediaResourceArray: this.mediaResourceArray as MediaResourceArray,
@@ -47,4 +50,11 @@ export class GalleryContent extends Content {
         this.initialized = true;
     }
 
+    getResourceIDs(): string[] {
+        if (this.initialized===false) {
+            throw new Error('GalleryContent has not been initialized.');
+        }
+        const mediaArr = this.mediaResourceArray as MediaResourceArray;
+        return mediaArr.map((val) => val.mediaResourceID);
+    }
 }

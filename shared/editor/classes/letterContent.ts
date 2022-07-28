@@ -1,5 +1,6 @@
 import {Content, ContentType} from './content';
 import {EditorState, convertToRaw, convertFromRaw} from 'draft-js';
+import { extractResourceFromURL } from '../../utils/resourceToURL';
 
 export type LetterData = {
   editorState: object,
@@ -44,6 +45,21 @@ export class LetterContent extends Content {
     const cleanString = plainText.replace(regex, ' ').trim(); // replace above characters w/ space
     const wordArray = cleanString.match(/\S+/g);  // matches words according to whitespace
     return wordArray ? wordArray.length : 0;
+  }
+
+  getResourceIDs() : string[] {
+    if (this.initialized===false) {
+      throw new Error('GalleryContent has not been initialized.');
+    }
+    const resourceIDs : string[] = [];
+    const localState = this.editorState as EditorState;
+    const currentState = localState.getCurrentContent();
+    currentState.getAllEntities().forEach((val) => {
+      if (val?.getType().toLowerCase()==='image') {
+        resourceIDs.push(extractResourceFromURL(val.getData().src));
+      }
+    });
+    return resourceIDs;
   }
 
   constructor() {
