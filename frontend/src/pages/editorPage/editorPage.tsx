@@ -5,7 +5,7 @@ import {DraftFrontendState, StepType} from 'shared/dist/types/draft';
 import {BottomBuffer} from '../../components/bottomBuffer/bottomBuffer';
 import {Footer} from '../../components/footer/footer';
 import {Navbar} from '../../components/navbars/Navbar';
-import {getDraft} from '../../store/editor';
+import {clearDraft, getDraft} from '../../store/editor';
 import {activateModal} from '../../store/modal';
 import {useAppDispatch} from '../../store/store';
 import {LoadingPage} from '../loadingPage/loadingPage';
@@ -34,6 +34,8 @@ export const EditorPage = () => {
     if (!id) {
       navigate('/');
     };
+
+    dispatch(clearDraft());
 
     dispatch(getDraft({
       id: id as string,

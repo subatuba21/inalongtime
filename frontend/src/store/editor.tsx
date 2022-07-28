@@ -158,7 +158,6 @@ export const editorSlice = createSlice({
     loadDraft:
       (state: DraftFrontendState, action: PayloadAction<DraftResponseBody>) => {
         state._id = action.payload.properties._id;
-        state.nextSendDate = action.payload.properties.nextSendDate;
         state.phoneNumber = action.payload.properties.phoneNumber;
         state.recipientEmail = action.payload.properties.recipientEmail;
         state.recipientType = action.payload.properties.recipientType;
@@ -175,6 +174,26 @@ export const editorSlice = createSlice({
           state.content = new Content();
         }
       },
+
+    clearDraft:
+      (state: DraftFrontendState, action: PayloadAction<undefined>) => {
+        state._id = '';
+        state.nextSendDate = new Date();
+        state.phoneNumber = '';
+        state.recipientEmail = '';
+        state.recipientType = 'myself';
+        state.title = '';
+        state.type = 'letter';
+        state._id = '';
+        state.userId = '';
+        state.backupEmail = '';
+        state.progress = {
+          info: false,
+          content: false,
+          customize: false,
+          confirm: false,
+        };
+      },
   },
 });
 
@@ -184,6 +203,6 @@ export const {changeTitle, changePhoneNumber,
   changeRecipientType, setStepFinished,
   setStepUnfinished,
   loadDraft, changeContent,
-  changeSendDate,
+  changeSendDate, clearDraft,
 } =
    editorSlice.actions;
