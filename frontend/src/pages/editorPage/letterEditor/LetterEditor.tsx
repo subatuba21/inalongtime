@@ -27,8 +27,10 @@ import {
   OrderedListButton,
   UnorderedListButton,
 } from '@draft-js-plugins/buttons';
-import {Button} from 'react-bootstrap';
-import styles from './letterEditor.module.css';
+import {Image} from 'react-bootstrap-icons';
+import {activateModal} from '../../../store/modal';
+import {UploadImageModalContent} from
+  './UploadImageModalContent.tsx/UploadImageModalContent';
 
 const toolbarPlugin = createToolbarPlugin();
 const {Toolbar} = toolbarPlugin;
@@ -92,6 +94,14 @@ export const LetterEditor = () => {
     return () => clearTimeout(debounced);
   }, [editorState.content]);
 
+  const openImageUpload = () => {
+    dispatch(activateModal({
+      header: 'Upload Image',
+      content: <UploadImageModalContent
+        insertImage={insertImage}></UploadImageModalContent>,
+    }));
+  };
+
 
   return <>
     <Toolbar>
@@ -105,6 +115,16 @@ export const LetterEditor = () => {
             <HeadlineThreeButton {...externalProps} />
             <OrderedListButton {...externalProps} />
             <UnorderedListButton {...externalProps} />
+            <Image style={{
+              height: '100%',
+              marginLeft: '7px',
+              marginRight: '7px',
+              color: 'grey',
+              display: 'inline-block',
+              cursor: 'pointer',
+              position: 'relative',
+              bottom: '4px',
+            }} onClick={openImageUpload}></Image>
           </>
         )
       }
@@ -116,8 +136,5 @@ export const LetterEditor = () => {
         emojiPlugin, imagePlugin, resizeablePlugin]}/>
     <EmojiSuggestions/>
     <EmojiSelect/>
-    <Button id={styles.uploadImageButton} onClick={() => {
-      insertImage('https://picsum.photos/200/300');
-    }}>Upload Image</Button>
   </>;
 };

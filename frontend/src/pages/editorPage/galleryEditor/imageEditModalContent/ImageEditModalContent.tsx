@@ -34,6 +34,7 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
   const [isUploading, toggleIsUploading] = useState(false);
 
   const addImage = async () => {
+    if (isUploading) return;
     toggleIsUploading(true);
     const editorContent = editorState.content as GalleryContent;
     const galleryImageArray : MediaResourceArray =
@@ -104,12 +105,18 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
     }
   };
 
-  const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
+  const onDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     let file : File | null = null;
     toggleIsDraggedOver(false);
     if (event.dataTransfer.items) {
-      file = event.dataTransfer.items[0].getAsFile();
+      if (event.dataTransfer.getData('url')) {
+        const response = await fetch(event.dataTransfer.getData('url'));
+        const blob = await response.blob();
+        file = new File([blob], 'image.jpg', {type: blob.type});
+      } else {
+        file = event.dataTransfer.items[0].getAsFile();
+      }
     } else {
       if (event.dataTransfer.files.length > 0) {
         file = event.dataTransfer.files[0];
