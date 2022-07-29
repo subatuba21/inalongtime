@@ -24,7 +24,7 @@ export const resourceSchema = z.object({
   mimetype: z.enum(['image/jpeg', 'image/png', 'video/mp4', 'audio/mp3']),
 });
 
-const draftSchema = z.object({
+export const draftSchema = z.object({
   _id: z.string().length(24),
   userId: z.string().length(24),
   recipientType: recipientTypeSchema,
@@ -37,7 +37,6 @@ const draftSchema = z.object({
   title: z.string(),
   phoneNumber: z.string(),
   backupEmail: z.string(),
-  contactEmail: z.string().optional(),
   resources: z.array(resourceSchema),
   customization: customizationSchema.optional(),
 }).strict();

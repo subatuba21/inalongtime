@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
 import {DownloadResponse, File, Storage} from '@google-cloud/storage';
-import {DraftType} from 'shared/dist/types/draft';
+import {DraftSchema, DraftType} from 'shared/dist/types/draft';
 import {Content} from 'shared/dist/editor/classes/content';
 import {parseContent} from 'shared/dist/editor/parseContent';
 import {Metadata} from '@google-cloud/storage/build/src/nodejs-common';
 import fs from 'fs';
+import {deleteResourceFromDraft} from '../../db/draft';
 const storage = new Storage({
   keyFilename: `${__dirname}/${process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE_PATH}`,
 });
@@ -106,6 +107,19 @@ export const getDraftReadStream = async (userId: string, draftId: string, resour
     throw new Error('File does not exist.');
   }
 };
+
+export const deleteUnnecessaryFiles = async (userId: string, draftSchema: DraftSchema) => {
+  const draftId = draftSchema._id;
+  const content = await getDraftContent(userId, draftId, draftSchema.type);
+  const contentResources = content.getResourceIDs();
+  for (const resource of draftSchema.resources) {
+    if (!contentResources.includes(resource.id)) {
+      await deleteDraftResource(userId, draftId, resource.id);
+      await deleteResourceFromDraft(draftId, resource.id);
+    }
+  }
+};
+
 
 const parseDownload = (file: DownloadResponse) => {
   return JSON.parse(file[0].toString('utf8'));

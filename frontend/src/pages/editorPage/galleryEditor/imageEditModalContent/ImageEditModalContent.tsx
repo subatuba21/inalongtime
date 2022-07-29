@@ -200,7 +200,7 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
             `/api/draft/${editorState._id}/resource/${image.mediaResourceID}`}
           type={image.mimetype} style={{
             width: '100%',
-          }} /> :
+          }} />
       </>
     }
 

@@ -1,4 +1,6 @@
 import {Collection, Db, ObjectId} from 'mongodb';
+import {Future} from 'shared/dist/types/future';
+import {futureSchema} from 'shared/types/future';
 import logger from '../logger';
 import {FutureSchema} from '../utils/schemas/future';
 import {DbResponse} from './setup';
@@ -11,26 +13,19 @@ export const setFutureDb = async (db: Db) => {
 export type FutureInput = Omit<Omit<FutureSchema, '_id'>, 'currentDate'>;
 
 export interface FutureDbResponse extends DbResponse {
-    future: FutureSchema | null;
+    future: Future | undefined;
 }
 
 export const addFuture =
-    async (future: FutureInput)
+    async (future: Future)
     : Promise<FutureDbResponse> => {
       try {
-        const currentDate = new Date();
-        const res = await futureCol.insertOne(
-            {...future, currentDate,
-              userId: new ObjectId(future.userId.toString())});
+        const res = await futureCol.insertOne(future);
         if (res.acknowledged) {
           logger.verbose(`Added future with id ${res.insertedId}`);
           return {
             success: true,
-            future: {
-              _id: res.insertedId.toString(),
-              ...future,
-              currentDate,
-            },
+            future,
           };
         } else throw new Error('MongoDB error: write not allowed.');
       } catch (err: any) {
@@ -38,7 +33,7 @@ export const addFuture =
         return {
           success: false,
           error: err.message,
-          future: null,
+          future: undefined,
         };
       }
     };
@@ -50,9 +45,7 @@ export const getFuture = async (_id: string) : Promise<FutureDbResponse> => {
       logger.verbose(`Found future with id ${_id}`);
       return {
         success: true,
-        future: {...res, _id,
-          userId: (res as any).userId.toString(),
-        } as FutureSchema,
+        future: futureSchema.parse(res),
       };
     } else {
       throw new Error('Future not found.');
@@ -62,7 +55,7 @@ export const getFuture = async (_id: string) : Promise<FutureDbResponse> => {
     return {
       success: false,
       error: err.message,
-      future: null,
+      future: undefined,
     };
   }
 };
