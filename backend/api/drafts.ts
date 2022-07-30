@@ -13,7 +13,7 @@ import {getUserDrafts} from './middleware/draft/getUserDrafts';
 import {getDraft, populateDraftFromDB} from './middleware/draft/getDraft';
 import {deleteDraft} from './middleware/draft/deleteDraft';
 import {getResource} from './middleware/draft/getResource';
-import {convertDraftToFuture, onlyAllowUnpaid,
+import {convertDraftToFuture, deleteUnnecessaryFiles, onlyAllowUnpaid,
   setIsDraftIsPaid} from './middleware/fulfillment';
 import {returnIsDraftPaid} from './middleware/draft/isDraftPaid';
 
@@ -45,6 +45,7 @@ draftRouter.get('/:id/paid', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft, populateDraftFromDB,
     setIsDraftIsPaid, returnIsDraftPaid);
 draftRouter.put('/:id/complete-unpaid', mustBeLoggedIn, extractDraftIDFromURL,
-    authorizeDraft, populateDraftFromDB, setIsDraftIsPaid,
+    authorizeDraft, populateDraftFromDB,
+    deleteUnnecessaryFiles, setIsDraftIsPaid,
     onlyAllowUnpaid,
     convertDraftToFuture);

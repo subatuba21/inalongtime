@@ -7,20 +7,17 @@ if (process.env.NODE_ENV === 'test') {
 } else config();
 
 import express from 'express';
-import {authRouter} from './api/auth';
-import {futureRouter} from './api/future';
 import {getDb, setupDb} from './db/setup';
 import logger from './logger';
 import {setUserDb} from './db/auth';
-import passport from 'passport';
 import './utils/passport/setup';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import {handleEndError} from './utils/handleEndError';
 import path from 'path';
-import {draftRouter} from './api/drafts';
 import {setDraftDb} from './db/draft';
 import {setFutureDb} from './db/future';
+import {apiRouter} from './api/apiRouter';
 
 
 const app = express();
@@ -35,13 +32,7 @@ app.use(session({
   }),
 }));
 
-app.use(express.json());
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.use('/api/future', futureRouter);
-app.use('/api/auth', authRouter);
-app.use('/api/draft', draftRouter);
+app.use('/api', apiRouter);
 app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
