@@ -10,9 +10,12 @@ import {uploadResource, allowFileTypes}
   from './middleware/draft/uploadResource';
 import {deleteResource} from './middleware/draft/deleteResource';
 import {getUserDrafts} from './middleware/draft/getUserDrafts';
-import {getDraft} from './middleware/draft/getDraft';
+import {getDraft, populateDraftFromDB} from './middleware/draft/getDraft';
 import {deleteDraft} from './middleware/draft/deleteDraft';
 import {getResource} from './middleware/draft/getResource';
+import {convertDraftToFuture, onlyAllowUnpaid,
+  setIsDraftIsPaid} from './middleware/fulfillment';
+import {returnIsDraftPaid} from './middleware/draft/isDraftPaid';
 
 
 // eslint-disable-next-line new-cap
@@ -20,7 +23,7 @@ export const draftRouter = Router();
 
 draftRouter.get('/user', mustBeLoggedIn, getUserDrafts);
 draftRouter.post('/', mustBeLoggedIn, extractDraftType, addNewDraft);
-draftRouter.put('/:id',
+draftRouter.put('/:id', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft, extractDraftType,
     extractEditDraftData, editDraft);
 draftRouter.get('/:id', mustBeLoggedIn,
@@ -38,3 +41,10 @@ draftRouter.get('/:id/resource/:resourceId', mustBeLoggedIn,
 draftRouter.delete('/:id/resource/:resourceId', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft,
     extractResourceId, deleteResource);
+draftRouter.get('/:id/paid', mustBeLoggedIn,
+    extractDraftIDFromURL, authorizeDraft, populateDraftFromDB,
+    setIsDraftIsPaid, returnIsDraftPaid);
+draftRouter.put('/:id/complete-unpaid', mustBeLoggedIn, extractDraftIDFromURL,
+    authorizeDraft, populateDraftFromDB, setIsDraftIsPaid,
+    onlyAllowUnpaid,
+    convertDraftToFuture);

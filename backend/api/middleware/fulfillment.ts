@@ -23,9 +23,27 @@ export const setIsDraftIsPaid =
       const content =
         await getDraftContent(draft.userId, draft._id, draft.type);
       if (!req.draft) req.draft = {};
-      req.draft.paid = isDraftPaid(draft, content).paid;
+      req.draft.paidInfo = isDraftPaid(draft, content);
       next();
     };
+
+export const onlyAllowUnpaid =
+  async (req: express.Request, res: express.Response, next: Function) => {
+    const paidInfo = req.draft?.paidInfo;
+    if (paidInfo?.paid === true) {
+      const response : APIResponse = {
+        data: null,
+        error: {
+          code: StatusCodes.FORBIDDEN,
+          message: 'This draft needs to be paid for.',
+        },
+      };
+      res.status(response.error?.code as number)
+          .end(JSON.stringify(response));
+      return;
+    }
+    next();
+  };
 
 export const convertDraftToFuture =
     async (req: express.Request, res: express.Response, next: Function) => {

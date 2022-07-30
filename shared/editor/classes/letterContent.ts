@@ -54,9 +54,15 @@ export class LetterContent extends Content {
     const resourceIDs : string[] = [];
     const localState = this.editorState as EditorState;
     const currentState = localState.getCurrentContent();
-    currentState.getAllEntities().forEach((val) => {
-      if (val?.getType().toLowerCase()==='image') {
-        resourceIDs.push(extractResourceFromURL(val.getData().src));
+    const raw = convertToRaw(currentState).entityMap;
+    const entityKeys = Object.keys(raw);
+    entityKeys.forEach((key) => {
+      const val = raw[key];
+      if (val?.type==='image') {
+        const resourceID = extractResourceFromURL(val.data?.src);
+        if (!resourceIDs.includes(resourceID)) {
+          resourceIDs.push(resourceID);
+        }
       }
     });
     return resourceIDs;

@@ -19,7 +19,10 @@ declare module 'express-serve-static-core' {
         id?: string,
         type?: DraftType,
         dbObject?: DraftSchema,
-        paid?: boolean,
+        paidInfo?: {
+          paid: boolean;
+          reason: string;
+        },
       },
       future?: {
         id?: string,
