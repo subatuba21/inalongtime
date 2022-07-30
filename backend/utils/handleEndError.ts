@@ -10,7 +10,7 @@ export const handleEndError =
         error: unknownError,
       };
 
-      logger.error(err);
+      logger.error(err.message);
 
       if (req.logout) req.logout(() => {});
 

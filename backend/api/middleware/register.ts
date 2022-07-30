@@ -79,6 +79,8 @@ export const registerUser =
           error: null,
           data: userData,
         };
+        (req.session as any).passport = {};
+        (req.session as any).passport.user = user.user._id;
         res.end(JSON.stringify(response));
       } else {
         if (user.error === DBError.UNIQUE_ENTITY_ALREADY_EXISTS) {
