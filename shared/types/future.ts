@@ -6,9 +6,12 @@ import {ObjectId} from 'mongodb';
 export const mongoDbSchema = z.string().length(24).transform((id) => new ObjectId(id))
 
 export const futureSchema = draftSchema.extend({
-    recipientEmail: z.string().email(),
+    recipientEmail: z.string().refine((arg) => {
+        if (arg === "") return true;
+        else return validator.isEmail(arg);
+    }),
     phoneNumber: z.string().refine((ph) => {
-        validator.isMobilePhone(ph, 'any', {
+        return validator.isMobilePhone(ph, 'any', {
             strictMode: true,
         })
     }, 'Invalid phone number.'),

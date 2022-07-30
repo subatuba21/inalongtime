@@ -20,6 +20,7 @@ export const addFuture =
     async (future: Future)
     : Promise<FutureDbResponse> => {
       try {
+        console.log(future);
         const res = await futureCol.insertOne(future);
         if (res.acknowledged) {
           logger.verbose(`Added future with id ${res.insertedId}`);
@@ -29,7 +30,7 @@ export const addFuture =
           };
         } else throw new Error('MongoDB error: write not allowed.');
       } catch (err: any) {
-        logger.verbose(`Unable to add future: err.message`);
+        logger.verbose(`Unable to add future: ${err.message}`);
         return {
           success: false,
           error: err.message,

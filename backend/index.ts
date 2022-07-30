@@ -20,6 +20,7 @@ import {handleEndError} from './utils/handleEndError';
 import path from 'path';
 import {draftRouter} from './api/drafts';
 import {setDraftDb} from './db/draft';
+import {setFutureDb} from './db/future';
 
 
 const app = express();
@@ -56,6 +57,7 @@ export const start = async (options?: {
   const client = getDb();
   setUserDb(client);
   setDraftDb(client);
+  setFutureDb(client);
   const server = app.listen(PORT,
       () => logger.info('Server started on port ' + PORT));
   return server;

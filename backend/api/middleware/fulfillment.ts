@@ -35,7 +35,9 @@ export const onlyAllowUnpaid =
         data: null,
         error: {
           code: StatusCodes.FORBIDDEN,
-          message: 'This draft needs to be paid for.',
+          message:
+          // eslint-disable-next-line max-len
+          'This draft does not meet the free tier limits and needs to be paid for.',
         },
       };
       res.status(response.error?.code as number)

@@ -32,7 +32,7 @@ export const draftSchema = z.object({
   lastEdited: dateSchema,
   nextSendDate: dateSchema,
   intervalInDays: z.number().optional(),
-  contentCloudStoragePath: z.string().url(),
+  contentCloudStoragePath: z.string(),
   type: draftTypeSchema,
   title: z.string(),
   phoneNumber: z.string(),
