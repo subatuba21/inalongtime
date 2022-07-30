@@ -34,7 +34,8 @@ draftRouter.post('/:id/resource', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft,
     fileUpload({
       useTempFiles: true,
-    }), allowFileTypes, uploadResource);
+    }), allowFileTypes,
+    populateDraftFromDB, deleteUnnecessaryFiles, uploadResource);
 draftRouter.get('/:id/resource/:resourceId', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft,
     extractResourceId, getResource);
