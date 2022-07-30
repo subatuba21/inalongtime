@@ -9,6 +9,7 @@ import {DraftSchema} from 'shared/types/draft';
 import {deleteUnnecessaryFiles as deleteUnnecessaryFilesFunc, getDraftContent}
   from '../../utils/contentStorage/draft';
 import {isDraftPaid} from '../../utils/draftPaid';
+import {deleteDraftIdFromUser} from '../../db/auth';
 
 export const deleteUnnecessaryFiles =
   async (req: express.Request, res: express.Response, next: Function) => {
@@ -56,6 +57,7 @@ export const convertDraftToFuture =
         const result = await addFuture(future);
         if (result.success) {
           const result = await deleteDraft(draft._id);
+          await deleteDraftIdFromUser(draft.userId, draft._id);
           if (!result.success) {
             return;
           }
@@ -70,7 +72,7 @@ export const convertDraftToFuture =
       } catch (err) {
         let message = 'Unable to send draft to future.';
         if (err instanceof ZodError) {
-          message = err.message;
+          message = 'Please complete draft before sending to future.';
         }
 
         const response : APIResponse = {

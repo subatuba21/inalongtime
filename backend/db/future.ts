@@ -20,7 +20,7 @@ export const addFuture =
     async (future: Future)
     : Promise<FutureDbResponse> => {
       try {
-        console.log(future);
+        logger.verbose(future);
         const res = await futureCol.insertOne(future);
         if (res.acknowledged) {
           logger.verbose(`Added future with id ${res.insertedId}`);

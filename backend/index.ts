@@ -18,7 +18,9 @@ import path from 'path';
 import {setDraftDb} from './db/draft';
 import {setFutureDb} from './db/future';
 import {apiRouter} from './api/apiRouter';
-
+// import {populateDraftFromDB} from './api/middleware/draft/getDraft';
+// import {convertDraftToFuture} from './api/middleware/fulfillment';
+// import {processPayment} from './api/middleware/payment';
 
 const app = express();
 

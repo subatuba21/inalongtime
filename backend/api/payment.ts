@@ -1,20 +1,28 @@
 import {Router} from 'express';
 import {StatusCodes} from 'http-status-codes';
-import {PaymentData} from '../utils/schemas/payment';
+import {DraftSchema} from 'shared/dist/types/draft';
+import logger from '../logger';
 import {createPaymentLink} from '../utils/stripe/generatePaymentLink';
-import {stripe} from '../utils/stripe/setup';
 import {APIResponse} from '../utils/types/apiStructure';
+import {authorizeDraft} from './middleware/draft/authorizeDraft';
+import {populateDraftFromDB} from './middleware/draft/getDraft';
+import {extractDraftIDFromURL} from './middleware/extract';
 import {mustBeLoggedIn} from './middleware/login';
-import {checkDraftValidity, extractPaymentData} from './middleware/payment';
+import {checkDraftValidity, processPayment} from './middleware/payment';
+import {convertDraftToFuture,
+  deleteUnnecessaryFiles} from './middleware/fulfillment';
+import express from 'express';
 
 // eslint-disable-next-line new-cap
 export const paymentRouter = Router();
 
-paymentRouter.post('/paymentlink', mustBeLoggedIn,
-    extractPaymentData, checkDraftValidity, async (req, res) => {
+paymentRouter.get('/link/:id',
+    mustBeLoggedIn, extractDraftIDFromURL,
+    authorizeDraft, populateDraftFromDB,
+    checkDraftValidity, async (req, res) => {
       try {
-        const data = req.data as PaymentData;
-        const paymentLink = await createPaymentLink(data.userId, data.draftId);
+        const draft = req.draft?.dbObject as DraftSchema;
+        const paymentLink = await createPaymentLink(draft.userId, draft._id);
         const response : APIResponse = {
           data: {
             paymentLink: paymentLink.url,
@@ -22,7 +30,8 @@ paymentRouter.post('/paymentlink', mustBeLoggedIn,
           error: null,
         };
         res.end(JSON.stringify(response));
-      } catch {
+      } catch (err) {
+        logger.verbose(err);
         const response : APIResponse = {
           data: null,
           error: {
@@ -34,19 +43,6 @@ paymentRouter.post('/paymentlink', mustBeLoggedIn,
       }
     });
 
-paymentRouter.post('/success', async (req, res) => {
-  try {
-    const endpointSecret = process.env.STRIPE_ENDPOINT_EVENT as string;
-    const sig = req.headers['stripe-signature'] as string;
-    const event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-
-    if (event.type === 'checkout.session.completed') {
-
-      // more fulfillment functions
-    }
-
-    res.end();
-  } catch (err: any) {
-    res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-});
+paymentRouter.post('/success', express.raw({type: 'application/json'}),
+    processPayment,
+    populateDraftFromDB, deleteUnnecessaryFiles, convertDraftToFuture);
