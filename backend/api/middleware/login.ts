@@ -5,6 +5,8 @@ import {ClientUserData,
 import {credentialsInvalid, needToLogin} from 'shared/dist/types/apiErrors';
 import {APIResponse} from '../../utils/types/apiStructure';
 import logger from '../../logger';
+import {StatusCodes} from 'http-status-codes';
+import {getToken} from '../../db/forgotPassword';
 
 // Passport reads directly from req.body.username/email and req.body.password
 // Defies request convention out of necessity.
@@ -113,4 +115,50 @@ export const logoutMiddleware =
   async (req: express.Request, res: express.Response, next: Function) => {
     req.logout({}, () => null);
     res.end();
+  };
+
+export const getUserIDandTokenFromQuery =
+  async (req: express.Request, res: express.Response, next: Function) => {
+    const userId = req.query.id;
+    const token = req.query.token;
+    if (userId && token &&
+      typeof userId === 'string' && typeof token === 'string') {
+      req.userId = userId;
+      req.token = token;
+      next();
+    } else {
+      const response : APIResponse = {
+        data: null,
+        error: {
+          code: StatusCodes.BAD_REQUEST,
+          message: 'Invalid query parameters',
+        },
+      };
+      res.status(response.error?.code as number).end(JSON.stringify(response));
+    }
+  };
+
+export const loginWithToken =
+  async (req: express.Request, res: express.Response, next: Function) => {
+    const userId = req.userId as string;
+    const token = req.token as string;
+
+    const dbToken = await getToken(token);
+    if (dbToken && dbToken.userId === userId) {
+      (req.session as any).passport = {_id: userId};
+      const response : APIResponse = {
+        data: null,
+        error: null,
+      };
+      res.end(JSON.stringify(response));
+    } else {
+      const response : APIResponse = {
+        data: null,
+        error: {
+          code: StatusCodes.BAD_REQUEST,
+          message: 'Token is invalid or expired.',
+        },
+      };
+      res.status(response.error?.code as number).end(JSON.stringify(response));
+    }
   };

@@ -28,6 +28,10 @@ declare module 'express-serve-static-core' {
         id?: string,
         dbObject: Future
       }
-      resourceId?: string
+      resourceId?: string,
+      newPassword?: string,
+      email?: string,
+      userId?: string,
+      token?: string,
     }
 }

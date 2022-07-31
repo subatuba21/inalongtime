@@ -193,3 +193,18 @@ export const deleteFutureIdFromUser =
       return DBError.ENTITY_NOT_FOUND;
     }
   };
+
+export const changePassword = async (userID: string, newPassword: string) => {
+  try {
+    const hashedPass = await hashPassword(newPassword);
+    await userCol.updateOne({
+      _id: new ObjectId(userID),
+    }, {
+      $set: {
+        passwordHash: hashedPass,
+      },
+    });
+  } catch (err) {
+    return DBError.ENTITY_NOT_FOUND;
+  }
+};
