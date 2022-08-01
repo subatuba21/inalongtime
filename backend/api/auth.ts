@@ -1,7 +1,10 @@
 import {Router} from 'express';
 import passport from 'passport';
-import {extractNewPassword} from './middleware/forgotpassword';
+import {extractEmail, extractNewPassword,
+  sendForgotPasswordEmail} from './middleware/forgotpassword';
 import {
+  getUserIDandTokenFromQuery,
+  loginWithToken,
   logoutMiddleware,
   mustBeLoggedIn,
   passportAuthenticateLocal, returnCurrentUser} from './middleware/login';
@@ -24,6 +27,8 @@ authRouter.get('/google/callback',
 authRouter.post('/logout', logoutMiddleware);
 authRouter.get('/current', returnCurrentUser);
 authRouter.post('/login', passportAuthenticateLocal);
+authRouter.post('/forgot-password', extractEmail, sendForgotPasswordEmail);
+authRouter.get('/login-with-token', getUserIDandTokenFromQuery, loginWithToken);
 authRouter.post('/register', extractRegisterInput,
     verifyRecaptcha, registerUser);
 authRouter.post('/reset-password', mustBeLoggedIn, extractNewPassword);

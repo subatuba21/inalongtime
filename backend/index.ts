@@ -18,6 +18,7 @@ import path from 'path';
 import {setDraftDb} from './db/draft';
 import {setFutureDb} from './db/future';
 import {apiRouter} from './api/apiRouter';
+import {setForgotPasswordCol} from './db/forgotPassword';
 // import {populateDraftFromDB} from './api/middleware/draft/getDraft';
 // import {convertDraftToFuture} from './api/middleware/fulfillment';
 // import {processPayment} from './api/middleware/payment';
@@ -51,6 +52,7 @@ export const start = async (options?: {
   setUserDb(client);
   setDraftDb(client);
   setFutureDb(client);
+  setForgotPasswordCol(client);
   const server = app.listen(PORT,
       () => logger.info('Server started on port ' + PORT));
   return server;

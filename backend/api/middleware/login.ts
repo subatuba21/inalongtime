@@ -6,8 +6,9 @@ import {credentialsInvalid, needToLogin} from 'shared/dist/types/apiErrors';
 import {APIResponse} from '../../utils/types/apiStructure';
 import logger from '../../logger';
 import {StatusCodes} from 'http-status-codes';
-import {getToken} from '../../db/forgotPassword';
+import {deleteToken, getToken} from '../../db/forgotPassword';
 import {validateToken} from '../../utils/token';
+import {manuallySerializeUser} from '../../utils/passport/setup';
 
 // Passport reads directly from req.body.username/email and req.body.password
 // Defies request convention out of necessity.
@@ -146,20 +147,11 @@ export const loginWithToken =
 
     const dbToken = await getToken(userId);
     if (dbToken && await validateToken(token, dbToken.token)) {
-      const response : APIResponse = {
-        data: null,
-        error: null,
-      };
-      res.end(JSON.stringify(response));
+      manuallySerializeUser(req, userId);
+      res.redirect('/forgot-password');
+      await deleteToken(userId);
       return;
     } else {
-      const response : APIResponse = {
-        data: null,
-        error: {
-          code: StatusCodes.BAD_REQUEST,
-          message: 'Token is invalid or expired.',
-        },
-      };
-      res.status(response.error?.code as number).end(JSON.stringify(response));
+      res.redirect('/login');
     }
   };

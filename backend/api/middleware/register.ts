@@ -9,6 +9,7 @@ import {registerUser as registerUserToDb} from '../../db/auth';
 import express from 'express';
 import {DBError} from '../../db/errors';
 import axios from 'axios';
+import {manuallySerializeUser} from '../../utils/passport/setup';
 
 export const extractRegisterInput =
 async (req: express.Request, res: express.Response, next: Function) => {
@@ -79,8 +80,7 @@ export const registerUser =
           error: null,
           data: userData,
         };
-        (req.session as any).passport = {};
-        (req.session as any).passport.user = user.user._id;
+        manuallySerializeUser(req, user.user._id);
         res.end(JSON.stringify(response));
       } else {
         if (user.error === DBError.UNIQUE_ENTITY_ALREADY_EXISTS) {

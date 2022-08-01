@@ -3,6 +3,7 @@ import {getUser} from '../../db/auth';
 import logger from '../../logger';
 import {googleStrategy} from './googleStrategy';
 import {localStrategy} from './localStrategy';
+import express from 'express';
 
 passport.use(localStrategy);
 passport.use(googleStrategy);
@@ -25,3 +26,9 @@ passport.deserializeUser(async (id: string, done) => {
         `Unable to deserialize user with ID: ${id}. No error specified.`));
   }
 });
+
+export const manuallySerializeUser = (req: express.Request, userId: string) => {
+  logger.verbose('Manually serializing user');
+  if (!(req.session as any).passport) (req.session as any).passport = {};
+  (req.session as any).passport.user = userId;
+};

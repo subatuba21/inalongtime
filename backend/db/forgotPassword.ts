@@ -72,3 +72,31 @@ export const getToken =
       };
     }
   };
+
+export const deleteToken =
+  async (userId: string) : Promise<TokenResponse> => {
+    try {
+      const res = await forgotPasswordCol.deleteMany({userId});
+      if (res.acknowledged) {
+        logger.verbose(`Deleted token with user id ${userId}`);
+        return {
+          success: true,
+          token: '',
+          userId,
+          expiry: new Date(),
+        };
+      } else {
+        throw new Error('Token not found.');
+      }
+    } catch (err: any) {
+      logger.warn(
+          `Unable to delete token with user id ${userId}: ${err.message}`);
+      return {
+        success: false,
+        error: err.message,
+        token: '',
+        userId: '',
+        expiry: new Date(),
+      };
+    }
+  };
