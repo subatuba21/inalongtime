@@ -21,6 +21,8 @@ import {setUserState} from './store/user';
 import {useSelector} from 'react-redux';
 import {Modal} from './components/modal/modal';
 import {AccountPage} from './pages/accountPage/AccountPage';
+import {ForgotPasswordPage} from
+  './pages/forgotPasswordPage/ForgotPasswordPage';
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -56,6 +58,13 @@ export const App = () => {
             <LoginPage></LoginPage>
           </DontAllowIfLoggedIn>
         }/>
+
+        <Route path='/forgot-password' element={
+          <DontAllowIfLoggedIn>
+            <ForgotPasswordPage></ForgotPasswordPage>
+          </DontAllowIfLoggedIn>
+        }/>
+
         <Route path='/signup' element={
           <DontAllowIfLoggedIn>
             <RegisterPage></RegisterPage>

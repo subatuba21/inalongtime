@@ -17,8 +17,14 @@ export interface LoginResult {
     };
 }
 
-export interface LogoutResult {
+export interface SuccessResult {
     success: boolean;
+}
+
+export interface LogoutResult extends SuccessResult {
+}
+
+export interface ForgotPasswordResult extends SuccessResult {
 }
 
 export interface RegisterInput {
@@ -133,6 +139,30 @@ export const authAPI = {
             _id: res.data.data._id,
             method: res.data.data.method,
           },
+        };
+      }
+    } catch (err) {}
+
+    return {
+      success: false,
+    };
+  },
+
+  forgotPassword: async (email: string) : Promise<SuccessResult> => {
+    try {
+      const res = await axios({
+        method: 'post',
+        url: '/api/auth/forgot-password',
+        data: {
+          data: {
+            email,
+          },
+        },
+      });
+
+      if (res.status===200) {
+        return {
+          success: true,
         };
       }
     } catch (err) {}
