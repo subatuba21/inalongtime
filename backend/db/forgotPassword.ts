@@ -45,14 +45,15 @@ export const addToken =
   };
 
 export const getToken =
-  async (token: string) : Promise<TokenResponse> => {
+  async (userId: string) : Promise<TokenResponse> => {
     try {
-      const res = await forgotPasswordCol.findOne({token});
-      if (res && res.expiry > new Date()) {
-        logger.verbose(`Found token with token ${token}`);
+      const res = await forgotPasswordCol.findOne(
+          {userId, expiry: {$gt: new Date()}});
+      if (res) {
+        logger.verbose(`Found token with user id ${userId}`);
         return {
           success: true,
-          token,
+          token: res.token,
           userId: res.userId,
           expiry: res.expiry,
         };
@@ -60,7 +61,8 @@ export const getToken =
         throw new Error('Token not found.');
       }
     } catch (err: any) {
-      logger.warn(`Unable to find token with token ${token}: ${err.message}`);
+      logger.warn(
+          `Unable to find token with user id ${userId}: ${err.message}`);
       return {
         success: false,
         error: err.message,

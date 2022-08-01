@@ -4,6 +4,10 @@ import {APIResponse} from '../../utils/types/apiStructure';
 import {changePassword as changePasswordDB,
   getUserByEmail} from '../../db/auth';
 import {unknownError} from 'shared/dist/types/apiErrors';
+import {addToken} from '../../db/forgotPassword';
+import {createToken, hashToken} from '../../utils/token';
+import {sendForgotPasswordEmail as sendForgotPasswordEmailFunc}
+  from '../../utils/email/forgotPasswordEmail';
 
 export const extractNewPassword =
     (req: express.Request, res: express.Response, next: Function) => {
@@ -65,6 +69,9 @@ export const sendForgotPasswordEmail =
         const email = req.email as string;
         const userRes = await getUserByEmail(email);
         if (userRes.success && userRes.user) {
+          const token = createToken();
+          await addToken(await hashToken(token), userRes.user._id);
+          await sendForgotPasswordEmailFunc(email, token, userRes.user._id);
           const response : APIResponse = {
             data: null,
             error: null,

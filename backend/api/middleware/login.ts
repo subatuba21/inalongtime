@@ -7,6 +7,7 @@ import {APIResponse} from '../../utils/types/apiStructure';
 import logger from '../../logger';
 import {StatusCodes} from 'http-status-codes';
 import {getToken} from '../../db/forgotPassword';
+import {validateToken} from '../../utils/token';
 
 // Passport reads directly from req.body.username/email and req.body.password
 // Defies request convention out of necessity.
@@ -143,14 +144,14 @@ export const loginWithToken =
     const userId = req.userId as string;
     const token = req.token as string;
 
-    const dbToken = await getToken(token);
-    if (dbToken && dbToken.userId === userId) {
-      (req.session as any).passport = {_id: userId};
+    const dbToken = await getToken(userId);
+    if (dbToken && await validateToken(token, dbToken.token)) {
       const response : APIResponse = {
         data: null,
         error: null,
       };
       res.end(JSON.stringify(response));
+      return;
     } else {
       const response : APIResponse = {
         data: null,
