@@ -25,7 +25,7 @@ export const LoginPage = () => {
       </div>
       <div className={`block-centered ${styles.centeredDiv} whiteText`}>
       Forgot password?&nbsp;
-        <Link className='pinkText' to='/forgot'>Click here.</Link>
+        <Link className='pinkText' to='/forgot-password'>Click here.</Link>
       </div>
       <BottomBuffer></BottomBuffer>
     </div>

@@ -75,7 +75,7 @@ export const ForgotPasswordForm = () => {
             }
           }></InputBox>
       </div>
-      <p>If your account exists, we will send you a
+      <p>If your account exists, we will email you a
         link you can use to login and reset your password.</p>
       <Button variant='info' id={styles.button} type='submit' style={{
         opacity: processing ? '.5' : '1',

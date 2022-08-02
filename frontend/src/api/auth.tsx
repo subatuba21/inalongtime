@@ -171,6 +171,30 @@ export const authAPI = {
       success: false,
     };
   },
+
+  resetPassword: async (password: string) => {
+    try {
+      const res = await axios({
+        method: 'post',
+        url: '/api/auth/reset-password',
+        data: {
+          data: {
+            password,
+          },
+        },
+      });
+
+      if (res.status===200) {
+        return {
+          success: true,
+        };
+      }
+    } catch (err) {}
+
+    return {
+      success: false,
+    };
+  },
 };
 
 export const getAuthApi = () => authAPI;

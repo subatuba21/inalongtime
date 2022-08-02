@@ -11,9 +11,9 @@ import {sendForgotPasswordEmail as sendForgotPasswordEmailFunc}
 
 export const extractNewPassword =
     (req: express.Request, res: express.Response, next: Function) => {
-      if (req.body.data?.newPassword &&
-        typeof req.body.data.newPassword === 'string') {
-        req.newPassword = req.body.data.newPassword;
+      if (req.body.data?.password &&
+        typeof req.body.data.password === 'string') {
+        req.newPassword = req.body.data.password;
         next();
       } else {
         const response : APIResponse = {

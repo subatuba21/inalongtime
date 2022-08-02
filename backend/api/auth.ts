@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import passport from 'passport';
-import {extractEmail, extractNewPassword,
+import {changePassword, extractEmail, extractNewPassword,
   sendForgotPasswordEmail} from './middleware/forgotpassword';
 import {
   getUserIDandTokenFromQuery,
@@ -31,4 +31,5 @@ authRouter.post('/forgot-password', extractEmail, sendForgotPasswordEmail);
 authRouter.get('/login-with-token', getUserIDandTokenFromQuery, loginWithToken);
 authRouter.post('/register', extractRegisterInput,
     verifyRecaptcha, registerUser);
-authRouter.post('/reset-password', mustBeLoggedIn, extractNewPassword);
+authRouter.post('/reset-password',
+    mustBeLoggedIn, extractNewPassword, changePassword);
