@@ -26,10 +26,10 @@ const initialState : DraftFrontendState = {
   phoneNumber: '',
   nextSendDate: new Date(),
   progress: {
-    info: false,
-    content: false,
-    customize: false,
-    confirm: false,
+    info: 'unopened',
+    content: 'unopened',
+    customize: 'unopened',
+    confirm: 'unopened',
   },
   customization: baseCustomization,
 };
@@ -150,7 +150,7 @@ export const editorSlice = createSlice({
       },
     setStepFinished:
       (state: DraftFrontendState, action: PayloadAction<StepType>) => {
-        state.progress[action.payload] = true;
+        state.progress[action.payload] = 'finished';
       },
     changeSendDate:
       (state: DraftFrontendState, action: PayloadAction<Date>) => {
@@ -158,7 +158,7 @@ export const editorSlice = createSlice({
       },
     setStepUnfinished:
       (state: DraftFrontendState, action: PayloadAction<StepType>) => {
-        state.progress[action.payload] = false;
+        state.progress[action.payload] = 'unfinished';
       },
     loadDraft:
       (state: DraftFrontendState, action: PayloadAction<DraftResponseBody>) => {
@@ -194,10 +194,10 @@ export const editorSlice = createSlice({
         state.userId = '';
         state.backupEmail = '';
         state.progress = {
-          info: false,
-          content: false,
-          customize: false,
-          confirm: false,
+          info: 'unopened',
+          content: 'unopened',
+          customize: 'unopened',
+          confirm: 'unopened',
         };
       },
 

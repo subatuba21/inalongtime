@@ -15,7 +15,7 @@ import {changeTitle, saveDraft, changePhoneNumber,
 } from '../../../store/editor';
 import {useAppDispatch} from '../../../store/store';
 import {useSelector} from 'react-redux';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import DatePicker from 'react-date-picker';
 import validate from 'validator';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -26,6 +26,10 @@ export const BasicInfo = () => {
   const editorState =
     useSelector((state) => (state as any).editor) as DraftFrontendState;
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setStepUnfinished('info'));
+  }, []);
 
   const onBlur = () => dispatch(saveDraft('properties'));
 

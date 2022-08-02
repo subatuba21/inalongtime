@@ -1,18 +1,27 @@
 /* eslint-disable no-unused-vars */
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import styles from './confirmForm.module.css';
 import Button from 'react-bootstrap/Button';
 import {useSelector} from 'react-redux';
 import {DraftFrontendState} from 'shared/dist/types/draft';
+import {useAppDispatch} from '../../../store/store';
+import {setStepUnfinished} from '../../../store/editor';
+
 export const ConfirmForm = () => {
   const [firstStepDone, setFirstStepDone] = useState(false);
   const [secondStepDone, setSecondStepDone] = useState(false);
   const editorState = useSelector(
       (state) => (state as any).editor as DraftFrontendState);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setStepUnfinished('confirm'));
+  }, []);
 
   const allowedToConfirm =
-    (editorState.progress.content &&
-        editorState.progress.info && editorState.progress.customize);
+    (editorState.progress.content === 'finished' &&
+        editorState.progress.info === 'finished' &&
+        editorState.progress.customize === 'finished');
 
 
   return <div id={styles.confirmForm} className='box'>

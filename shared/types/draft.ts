@@ -41,6 +41,8 @@ export const draftSchema = z.object({
   customization: customizationSchema.optional(),
 }).strict();
 
+export const ProgressState = z.enum(['finished', 'unfinished', 'unopened']);
+
 export const draftFrontendState = draftSchema.omit({
   contentCloudStoragePath: true,
   lastEdited: true,
@@ -48,10 +50,10 @@ export const draftFrontendState = draftSchema.omit({
 }).extend({
   content: z.instanceof(Content).optional(),
   progress: z.object({
-    'info': z.boolean(),
-    'content': z.boolean(),
-    'customize': z.boolean(),
-    'confirm': z.boolean(),
+    'info': ProgressState,
+    'content': ProgressState,
+    'customize': ProgressState,
+    'confirm': ProgressState,
   }).strict(),
 });
 

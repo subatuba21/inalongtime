@@ -18,6 +18,10 @@
     font-size: 20pt;
 }
 
+#mainDiv h5 {
+    line-height: 1.5;
+}
+
 @media (max-width: 600px) {
     #mainDiv {
         margin-top: 30px;
