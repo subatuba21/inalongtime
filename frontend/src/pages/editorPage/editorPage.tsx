@@ -132,7 +132,7 @@ export const EditorPage = () => {
             All fields are autosaved.
         </p>
         <p id={styles.previewURL}>
-          <a href='https://inalongtime.com/preview/sbbbrebf48357bt53h'>
+          <a href={`/preview/${id}`} target="_blank" rel="noreferrer">
             <ArrowUpRightSquareFill style={{
               marginRight: '9px',
               position: 'relative',

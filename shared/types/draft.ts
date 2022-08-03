@@ -102,4 +102,5 @@ export type StepType = 'info' | 'content' | 'customize' | 'confirm';
 export type MiniDraft = z.infer<typeof miniDraft>;
 export type UserDraftsResponseData = z.infer<typeof userDraftsResponseData>;
 export type Resource = z.infer<typeof resourceSchema>;
+export type CustomizationSchema = z.infer<typeof customizationSchema>;
 

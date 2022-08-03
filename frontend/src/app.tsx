@@ -23,6 +23,7 @@ import {Modal} from './components/modal/modal';
 import {AccountPage} from './pages/accountPage/AccountPage';
 import {ForgotPasswordPage} from
   './pages/forgotPasswordPage/ForgotPasswordPage';
+import {ContentViewer} from './pages/ContentViewer/ContentViewer';
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -83,6 +84,11 @@ export const App = () => {
         <Route path='/draft/:id' element={
           <LoggedInRouteGuard>
             <EditorPage></EditorPage>
+          </LoggedInRouteGuard>}/>
+
+        <Route path='/preview/:id' element={
+          <LoggedInRouteGuard>
+            <ContentViewer mode='preview'></ContentViewer>
           </LoggedInRouteGuard>}/>
 
         <Route path='/account' element={
