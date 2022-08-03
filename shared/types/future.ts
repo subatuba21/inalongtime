@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { draftSchema } from "./draft";
+import { dateSchema, DraftSchema, draftSchema } from "./draft";
 import validator from 'validator';
 import {ObjectId} from 'mongodb';
 
@@ -19,6 +19,27 @@ export const futureSchema = draftSchema.extend({
     backupEmail: z.string().email(),
     _id: mongoDbSchema,
     userId: mongoDbSchema,
+    nextSendDate: dateSchema,
+    viewed: z.boolean(),
+    createdAt: dateSchema,
 });
+
+export const futureFrontendData = futureSchema.pick({
+    title: true,
+    createdAt: true,
+});
+
+export const futureResponseBody = z.object({
+    content: z.any(),
+    properties: futureFrontendData.strip()
+});
+
+export const preprocessDraft = z.preprocess((arg) => {
+    if (arg) {
+        const draft = arg as any;
+        draft.viewed = false;
+        draft.createdAt = new Date();
+    }
+}, futureSchema);
 
 export type Future = z.infer<typeof futureSchema>;

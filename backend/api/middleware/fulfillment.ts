@@ -2,7 +2,7 @@ import express from 'express';
 import {StatusCodes} from 'http-status-codes';
 import {deleteDraft} from '../../db/draft';
 import {APIResponse} from '../../utils/types/apiStructure';
-import {futureSchema} from '../../../shared/types/future';
+import {preprocessDraft} from '../../../shared/types/future';
 import {ZodError} from 'zod';
 import {addFuture} from '../../db/future';
 import {DraftSchema} from 'shared/types/draft';
@@ -53,7 +53,7 @@ export const convertDraftToFuture =
       const draft = req.draft?.dbObject as DraftSchema;
 
       try {
-        const future = futureSchema.parse(draft);
+        const future = preprocessDraft.parse(draft);
         const result = await addFuture(future);
         if (result.success) {
           const result = await deleteDraft(draft._id);
