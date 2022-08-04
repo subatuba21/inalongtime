@@ -188,7 +188,7 @@ export const deleteResourceFromDraft = async (
     }, {
       $pull: {
         resources: {
-          id: resourceId,
+          id: new ObjectId(resourceId),
         },
       },
     });

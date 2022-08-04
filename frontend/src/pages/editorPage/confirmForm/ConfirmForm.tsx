@@ -73,7 +73,7 @@ export const ConfirmForm = () => {
         }));
         return;
       }
-      window.location.replace(result.link as string);
+      window.location.assign(result.link as string);
     } else {
       const result = await editorAPI.confirmUnpaidDraft(editorState._id);
       if (!result.success) {

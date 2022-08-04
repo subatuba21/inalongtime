@@ -10,6 +10,7 @@ import {useEffect, useState} from 'react';
 import {editorAPI} from '../../api/editor';
 import {DraftType, CustomizationSchema} from 'shared/dist/types/draft';
 import styles from './ContentViewer.module.css';
+import WebFont from 'webfontloader';
 
 export const ContentViewer = (props: {
     mode: 'preview' | 'future'
@@ -64,6 +65,14 @@ export const ContentViewer = (props: {
 
   let jsxContent : any = <></>;
 
+  if (customization?.font) {
+    WebFont.load({
+      google: {
+        families: [customization.font],
+      },
+    });
+  }
+
   switch (contentType) {
     case 'letter': {
       const letter = content as LetterContent;
@@ -88,6 +97,7 @@ export const ContentViewer = (props: {
     backgroundColor: customization?.backgroundColor ?
     customization.backgroundColor : '#fff',
     color: customization?.fontColor ? customization.fontColor : '#000',
+    fontFamily: customization?.font ? customization.font : 'Open Sans',
   }}>
     <h3>{title}</h3>
     {jsxContent}

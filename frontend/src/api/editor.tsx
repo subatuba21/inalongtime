@@ -311,7 +311,7 @@ export const editorAPI = {
   confirmUnpaidDraft: async (draftID: string) : Promise<booleanResult> => {
     try {
       const res = await axios({
-        method: 'post',
+        method: 'put',
         url: `/api/draft/${draftID}/complete-unpaid`,
       });
       if (res.status === 200) {

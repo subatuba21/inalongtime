@@ -112,8 +112,6 @@ export const deleteUnnecessaryFiles = async (userId: string, draftSchema: DraftS
   const draftId = draftSchema._id;
   const content = await getDraftContent(userId, draftId, draftSchema.type);
   const contentResources = content.getResourceIDs();
-  console.log(contentResources);
-  console.log(draftSchema.resources);
   for (const resource of draftSchema.resources) {
     if (!contentResources.includes(resource.id)) {
       await deleteDraftResource(userId, draftId, resource.id);
