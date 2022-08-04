@@ -61,6 +61,62 @@ export const getFuture = async (_id: string) : Promise<FutureDbResponse> => {
   }
 };
 
+export const getFuturesBySenderId =
+    async (senderId: string) : Promise<MultipleFutureDbResponse> => {
+      try {
+        const res = await futureCol.find(
+            {userId: new ObjectId(senderId)}).toArray();
+
+        logger.verbose(`Found futures with senderId ${senderId}`);
+        return {
+          success: true,
+          futures: res.map((arg) => futureSchema.parse(arg)),
+        };
+      } catch (err: any) {
+        logger.verbose(`Unable to find futures with senderId 
+        ${senderId}: ${err.message}`);
+        return {
+          success: false,
+          error: err.message,
+          futures: [],
+        };
+      }
+    };
+
+export const getRecievedFutures =
+    async (recipientId: string, recipientEmail: string)
+    : Promise<MultipleFutureDbResponse> => {
+      try {
+        const res = await futureCol.find(
+            {
+              nextSendDate: {$lte: new Date()},
+              $or: [
+                {recipientEmail: {$eq: recipientEmail}},
+                {backupEmail: {$eq: recipientEmail}},
+                {
+                  userId: {$eq: recipientId},
+                  recipientType: {$eq: 'myself'},
+                },
+              ],
+            }).toArray();
+
+        logger.verbose(`Found futures with recipientId ${recipientId}`);
+        return {
+          success: true,
+          futures: res.map((arg) => futureSchema.parse(arg)),
+        };
+      } catch (err: any) {
+        logger.verbose(`Unable to find futures with recipientId 
+        ${recipientId}: ${err.message}`);
+        return {
+          success: false,
+          error: err.message,
+          futures: [],
+        };
+      }
+    };
+
+
 export const setFutureViewed = async (_id: string) : Promise<boolean> => {
   try {
     const res = await futureCol.updateOne(
