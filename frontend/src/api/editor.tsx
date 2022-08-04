@@ -31,6 +31,25 @@ interface addResourceResult {
   error?: CentralError
 }
 
+interface booleanResult {
+  success: boolean,
+  error?: CentralError
+  result: boolean
+}
+
+interface paidResult {
+  success: boolean,
+  error?: CentralError
+  paid: boolean
+  reason: string,
+}
+
+interface getPaymentLinkResult {
+  success: boolean,
+  link?: string,
+  error?: CentralError
+}
+
 export const editorAPI = {
   getDraft: async (draftID: string) : Promise<getDraftResult> => {
     try {
@@ -231,6 +250,84 @@ export const editorAPI = {
           type: CentralErrors.deleteResourceError,
           message: 'Unable to delete resource due to unknown error.',
         },
+      };
+    }
+  },
+
+  checkDraftIsPaid: async (draftID: string) : Promise<paidResult> => {
+    try {
+      const res = await axios({
+        method: 'get',
+        url: `/api/draft/${draftID}/paid`,
+      });
+      if (res.status === 200) {
+        return {
+          success: true,
+          paid: res.data.data.paidInfo.paid,
+          reason: res.data.data.paidInfo.reason,
+        };
+      } else throw new Error();
+    } catch (err) {
+      return {
+        success: false,
+        paid: false,
+        reason: '',
+        error: {
+          type: CentralErrors.getDraftError,
+          message: 'Unable to check if draft is paid due to unknown error.',
+        },
+      };
+    }
+  },
+
+  getPaymentLink: async (draftID: string) : Promise<getPaymentLinkResult> => {
+    try {
+      const res = await axios({
+        method: 'get',
+        url: `/api/payment/link/${draftID}`,
+      });
+      if (res.status === 200) {
+        return {
+          success: true,
+          link: res.data.data.paymentLink,
+        };
+      } else throw new Error();
+    } catch (err: any) {
+      let errMessage = 'Unable to get payment link due to unknown error.';
+      if (typeof err.response?.data?.error?.message === 'string') {
+        errMessage = err.response.data.error.message;
+      }
+
+      return {
+        success: false,
+        error: {
+          type: CentralErrors.getDraftError,
+          message: errMessage,
+        },
+      };
+    }
+  },
+
+  confirmUnpaidDraft: async (draftID: string) : Promise<booleanResult> => {
+    try {
+      const res = await axios({
+        method: 'post',
+        url: `/api/draft/${draftID}/complete-unpaid`,
+      });
+      if (res.status === 200) {
+        return {
+          success: true,
+          result: true,
+        };
+      } else throw new Error();
+    } catch (err) {
+      return {
+        success: false,
+        error: {
+          type: CentralErrors.getDraftError,
+          message: 'Unable to confirm draft due to unknown error.',
+        },
+        result: false,
       };
     }
   },

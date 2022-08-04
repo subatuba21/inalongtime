@@ -6,13 +6,86 @@ import {useSelector} from 'react-redux';
 import {DraftFrontendState} from 'shared/dist/types/draft';
 import {useAppDispatch} from '../../../store/store';
 import {setStepUnfinished} from '../../../store/editor';
+import {editorAPI} from '../../../api/editor';
+import {activateModal} from '../../../store/modal';
+import {Spinner} from 'react-bootstrap';
+import {useNavigate} from 'react-router-dom';
 
 export const ConfirmForm = () => {
   const [firstStepDone, setFirstStepDone] = useState(false);
   const [secondStepDone, setSecondStepDone] = useState(false);
+
   const editorState = useSelector(
       (state) => (state as any).editor as DraftFrontendState);
   const dispatch = useAppDispatch();
+  const [thirdStepContent, setThirdStepContent] = useState(<></>);
+  const [thirdStepDone, setThirdStepDone] = useState(false);
+  const navigate = useNavigate();
+  const [paid, setPaid] = useState(false);
+
+  const onfinishSecondStep = async () => {
+    setSecondStepDone(true);
+    setThirdStepContent(<>
+      <div style={{textAlign: 'center'}}>
+        <Spinner animation={'grow'} style={{color: 'black', fontSize: '25px'}}>
+        </Spinner>
+      </div>
+    </>);
+    const paidResult = await editorAPI.checkDraftIsPaid(editorState._id);
+    if (!paidResult.success) {
+      dispatch(activateModal({
+        content: <div>Unable to save draft.
+          Error: {paidResult?.error?.message || 'unknown.'}</div>,
+        header: 'Error: Unable to save draft',
+      }));
+    }
+
+    setPaid(paidResult.paid);
+
+    if (paidResult.paid === false) {
+      setThirdStepContent(<p>
+        Good news! Your draft falls into the free tier!
+        Once you click the confirm button, your draft will be sent to the
+        future!
+      </p>);
+    } else {
+      setThirdStepContent(<p>
+        Your draft does not fall into the free tier.
+        The reason: {paidResult.reason} You can check our
+        pricing details <a href={'https://inalongtime.com/pricing'}>here</a>.
+        <br/>
+        <br/>
+        Good news: it is only $2.50 + tax! Click the confirm button below
+        to pay and send your draft into the future!
+      </p>);
+    }
+  };
+
+
+  const onFinishThirdStep = async () => {
+    setThirdStepDone(true);
+    if (paid) {
+      const result = await editorAPI.getPaymentLink(editorState._id);
+      if (!result.success) {
+        dispatch(activateModal({
+          content: <div>{result?.error?.message}</div>,
+          header: 'Error: Unable to confirm draft',
+        }));
+        return;
+      }
+      window.location.replace(result.link as string);
+    } else {
+      const result = await editorAPI.confirmUnpaidDraft(editorState._id);
+      if (!result.success) {
+        dispatch(activateModal({
+          content: <div>{result?.error?.message}</div>,
+          header: 'Error: Unable to confirm draft',
+        }));
+        return;
+      }
+      navigate('/success');
+    }
+  };
 
   useEffect(() => {
     dispatch(setStepUnfinished('confirm'));
@@ -33,27 +106,39 @@ export const ConfirmForm = () => {
     </div>
     <div className={!allowedToConfirm ? styles.disabled : null}>
       <h4>1. Confirm Basic Info</h4>
+      <p>
+        <b>Title:</b> {editorState.title}<br/>
+        <b>Recipient: </b>
+        {editorState.recipientType === 'myself' ? 'Myself' :
+        editorState.recipientEmail}<br/>
+        <b>Type:</b> {editorState.type}<br/>
+        <b>Send Date</b> {editorState.nextSendDate.toLocaleDateString()}<br/>
+        <b>Phone Number:</b> {editorState.phoneNumber}<br/>
+        <b>Backup Email:</b> {editorState.backupEmail}<br/>
+      </p>
       <Button onClick={() => setFirstStepDone(true)}
-        disabled={!allowedToConfirm}>Confirm</Button>
+        disabled={!allowedToConfirm}>
+        {firstStepDone ? 'Confirmed' : 'Confirm'}
+      </Button>
     </div>
     <div className={!firstStepDone ? styles.disabled : null}>
       <h4>
         2. Confirm Preview
       </h4>
-      <p>Is this what you want to see in the future? <a>LINK</a></p>
-      <Button onClick={() => setSecondStepDone(true)}
-        disabled={!firstStepDone}>Confirm</Button>
+      <p>Is this what you want to see in the future?
+        <a href={`/preview/${editorState._id}`}
+          target='_blank' rel="noreferrer">&nbsp;Preview</a></p>
+      <Button onClick={onfinishSecondStep}
+        disabled={!firstStepDone}>{secondStepDone ? 'Confirmed' : 'Confirm'}
+      </Button>
     </div>
     <div className={!secondStepDone ? styles.disabled : null}>
       <h4>
         3. Payment
       </h4>
-      <p>It looks like your app didn&apos;t fall
-            under our free tier because it had over 150 words.
-            More details on our pricing here. <br />
-            To finish up, click the button below to pay our $2.50 fee.
-      </p>
-      <Button disabled={!secondStepDone}>Confirm</Button>
+      {thirdStepContent}
+      <Button disabled={!secondStepDone || thirdStepDone}
+        onClick={onFinishThirdStep}>Confirm</Button>
     </div>
   </div>;
 };

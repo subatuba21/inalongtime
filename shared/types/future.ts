@@ -39,6 +39,7 @@ export const preprocessDraft = z.preprocess((arg) => {
         const draft = arg as any;
         draft.viewed = false;
         draft.createdAt = new Date();
+        return draft;
     }
 }, futureSchema);
 

@@ -3,7 +3,7 @@ import {PaymentData, paymentDataSchema} from '../../utils/schemas/payment';
 import {APIResponse} from '../../utils/types/apiStructure';
 import {unknownError} from 'shared/dist/types/apiErrors';
 import {DraftSchema} from 'shared/dist/types/draft';
-import {futureSchema} from 'shared/types/future';
+import {preprocessDraft} from 'shared/types/future';
 import {StatusCodes} from 'http-status-codes';
 import {stripe} from '../../utils/stripe/setup';
 import Stripe from 'stripe';
@@ -29,9 +29,11 @@ export const extractPaymentData =
 export const checkDraftValidity =
     async (req: express.Request, res: express.Response, next: Function) => {
       const draft = req.draft?.dbObject as DraftSchema;
-      const parseRes = await futureSchema.safeParseAsync(draft);
+      const parseRes = await preprocessDraft.safeParseAsync(draft);
       if (parseRes.success) next();
       else {
+        logger.warn(`Draft ${draft._id} is invalid. 
+        Error: ${parseRes.error.message}`);
         const response : APIResponse = {
           data: null,
           error: {
