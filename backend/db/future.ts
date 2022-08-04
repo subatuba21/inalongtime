@@ -116,10 +116,19 @@ export const getFuturesBySendDate =
 export const getFuturesWeekOldNotVisited =
     async () : Promise<MultipleFutureDbResponse> => {
       try {
+        const beginningToday = new Date(new Date().toDateString());
+
+        const sevenDaysAgo = new Date(
+            beginningToday.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const sixDaysAgo = new Date(
+            beginningToday.getTime() - 6 * 24 * 60 * 60 * 1000);
+
         const res = await futureCol.find({
           viewed: false,
           nextSendDate: {
-            $lt: new Date(new Date().getTime() - (1000 * 60 * 60 * 24 * 7))},
+            $lt: sixDaysAgo,
+            $gte: sevenDaysAgo,
+          },
         }).toArray();
 
         logger.verbose(

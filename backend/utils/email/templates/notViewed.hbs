@@ -2,9 +2,11 @@
     <nav>
         IN A LONG TIME
     </nav>
-    <h3>The {contentType} you sent has not been viewed!</h3>
-    <p>On {dateString}, you sent {personName} a {contentType}. However, they haven't opened it yet. Click on the button below to see what you sent and possibly send it yourself.</p>
+    <h3>The {{contentType}} you sent has not been viewed.</h3>
+    <p>On {{nextSendDate}}, you sent a {{contentType}} to {{recipientEmail}}. 
+        However, they haven't opened it yet. We just sent it to the backup email: {{backupEmail}}.
+        Click on the button below to see what you sent and possibly send it yourself.</p>
     <button>
-        <a href="{{{hostAddress}}}/api/future/{{{id}}}">View {contentType}</a>
+        <a href="{{{hostAddress}}}/future/{{{id}}}">View {{contentType}}</a>
     </button>
 </div>

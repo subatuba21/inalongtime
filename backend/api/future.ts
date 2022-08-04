@@ -2,9 +2,11 @@ import {Router} from 'express';
 import {StatusCodes} from 'http-status-codes';
 import {notFoundError, unknownError} from 'shared/dist/types/apiErrors';
 import {futureResponseBody} from 'shared/dist/types/future';
+import {getUser} from '../db/auth';
 import {getFuture, setFutureViewed} from '../db/future';
 import logger from '../logger';
 import {getDraftContent} from '../utils/contentStorage/draft';
+import {sendFutureViewedEmail} from '../utils/email/futureViewedEmail';
 import {APIResponse} from '../utils/types/apiStructure';
 import {extractDraftIDFromURL} from './middleware/extract';
 
@@ -72,6 +74,11 @@ futureRouter.get('/:id', extractDraftIDFromURL, async (req, res) => {
 
     if (!future.future?.viewed) {
       await setFutureViewed(id);
+      const user = await getUser(future.future._id.toString());
+
+      if (user.success) {
+        await sendFutureViewedEmail(user.user?.email as string, future.future);
+      }
     }
   } catch (err) {
     logger.warn(err);
