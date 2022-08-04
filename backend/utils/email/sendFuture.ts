@@ -3,6 +3,7 @@ import path from 'path';
 import {Future} from 'shared/dist/types/future';
 import {compile} from 'handlebars';
 import {transporter} from './setup';
+import {formatDate} from '../formatDate';
 
 const futureEmail = compile(fs.readFileSync(
     path.join(__dirname, './templates/sendFuture.hbs'), 'utf8'));
@@ -14,9 +15,11 @@ export const sendFutureEmail =
         contentType = 'goals sheet';
       }
 
-      const data = {...future, contentType};
+      const data = {...future, contentType,
+        senderName, _id: future._id.toString(),
+        createdAt: formatDate(future.createdAt)};
       const html = futureEmail({
-        data,
+        ...data,
         hostAddress: process.env.HOST_ADDRESS,
       });
 

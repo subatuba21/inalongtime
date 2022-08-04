@@ -3,7 +3,11 @@ import { dateSchema, DraftSchema, draftSchema } from "./draft";
 import validator from 'validator';
 import {ObjectId} from 'mongodb';
 
-export const mongoDbSchema = z.string().length(24).transform((id) => new ObjectId(id))
+export const mongoDbSchema = z.preprocess((arg) => {
+    if (arg instanceof ObjectId)  {
+        return arg.toString();
+    }
+}, z.string().length(24).transform((id) => new ObjectId(id)));
 
 export const futureSchema = draftSchema.extend({
     recipientEmail: z.string().refine((arg) => {
