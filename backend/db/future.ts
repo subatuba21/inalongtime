@@ -78,3 +78,66 @@ export const setFutureViewed = async (_id: string) : Promise<boolean> => {
     return false;
   }
 };
+
+export interface MultipleFutureDbResponse extends DbResponse {
+  futures: Future[];
+}
+
+export const getFuturesBySendDate =
+    async (sendDate: Date) : Promise<MultipleFutureDbResponse> => {
+      try {
+        const beginningToday = new Date(sendDate.toDateString());
+        const beginningTomorrow =
+          new Date(beginningToday.getTime() + 24 * 60 * 60 * 1000);
+
+        const res = await futureCol.find({nextSendDate: {
+          $gte: beginningToday,
+          $lt: beginningTomorrow,
+        }}).toArray();
+
+        logger.verbose(
+            `Found ${res.length} futures with send date ${sendDate}`);
+        return {
+          success: true,
+          futures: res.map((future) => futureSchema.parse(future)),
+        };
+      } catch (err: any) {
+        logger.verbose(
+            `Unable to find futures with send date 
+            ${sendDate}: ${err.message}`);
+        return {
+          success: false,
+          error: err.message,
+          futures: [],
+        };
+      }
+    };
+
+export const getFuturesWeekOldNotVisited =
+    async () : Promise<MultipleFutureDbResponse> => {
+      try {
+        const res = await futureCol.find({
+          viewed: false,
+          nextSendDate: {
+            $lt: new Date(new Date().getTime() - (1000 * 60 * 60 * 24 * 7))},
+        }).toArray();
+
+        logger.verbose(
+            `Found ${res.length} futures that are week old and not viewed`);
+        return {
+          success: true,
+          futures: res.map((future) => futureSchema.parse(future)),
+        };
+      } catch (err: any) {
+        logger.verbose(
+            `Unable to find futures that are a week 
+            old and not viewed ${err.message}`);
+        return {
+          success: false,
+          error: err.message,
+          futures: [],
+        };
+      }
+    };
+
+

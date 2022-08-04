@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/cron": "^2.0.0",
+    "cron": "^2.1.0",
     "draft-js": "^0.11.7",
     "joi": "^17.6.0",
     "validator": "^13.7.0",
