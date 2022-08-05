@@ -41,11 +41,11 @@ export const Navbar = (props?: {type?: 'index' | 'home'}) => {
     </div>;
 
     mobileMenu = <div id={styles.mobileMenu}>
-      <Link to='/home' className='whiteText'>Pricing</Link>
-      <Link to='/drafts' className='whiteText'>FAQs</Link>
-      <Link to='/sent' className='whiteText'>About</Link>
-      <Link to='/account' className='bold whiteText'>Login</Link>
-      <Link to='/account' className='bold pinkText'>Signup</Link>
+      <Link to='/pricing' className='whiteText'>Pricing</Link>
+      <Link to='/faqs' className='whiteText'>FAQs</Link>
+      <Link to='/about' className='whiteText'>About</Link>
+      <Link to='/login' className='bold whiteText'>Login</Link>
+      <Link to='/signup' className='bold pinkText'>Signup</Link>
     </div>;
   }
 

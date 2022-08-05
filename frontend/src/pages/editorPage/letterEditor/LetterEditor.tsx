@@ -1,5 +1,5 @@
 import {AtomicBlockUtils, EditorState} from 'draft-js';
-import Editor, {composeDecorators} from '@draft-js-plugins/editor';
+import Editor from '@draft-js-plugins/editor';
 import 'draft-js/dist/Draft.css';
 import '@draft-js-plugins/static-toolbar/lib/plugin.css';
 import '@draft-js-plugins/emoji/lib/plugin.css';
@@ -8,7 +8,6 @@ import '../../../css/drafteditor.css';
 import createEmojiPlugin from '@draft-js-plugins/emoji';
 import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
 import createImagePlugin from '@draft-js-plugins/image';
-import createResizeablePlugin from '@draft-js-plugins/resizeable';
 import {LetterContent} from
   'shared/dist/editor/classes/letterContent';
 import {useSelector} from 'react-redux';
@@ -38,11 +37,7 @@ const {Toolbar} = toolbarPlugin;
 const emojiPlugin = createEmojiPlugin();
 const {EmojiSuggestions, EmojiSelect} = emojiPlugin;
 
-
-const resizeablePlugin = createResizeablePlugin();
-const imagePlugin = createImagePlugin({decorator: composeDecorators(
-    resizeablePlugin.decorator,
-)});
+const imagePlugin = createImagePlugin();
 
 
 export const LetterEditor = () => {
@@ -133,7 +128,7 @@ export const LetterEditor = () => {
       editorState={letterEditorState}
       onChange={onChange} onBlur={() => dispatch(saveDraft('data'))}
       plugins={[toolbarPlugin,
-        emojiPlugin, imagePlugin, resizeablePlugin]}/>
+        emojiPlugin, imagePlugin]}/>
     <EmojiSuggestions/>
     <EmojiSelect/>
   </>;

@@ -1,8 +1,79 @@
-#container {
+#background {
     min-height: 100vh;
     width: 100vw;
+    text-align: center;
     background-color: white;
     position: absolute;
     top: 0;
     left: 0;
+    padding-bottom: 40px;
+}
+
+#letter {
+    display: inline-block;
+    width: 800px;
+    max-width: 90%;
+    margin-top: 5vh;
+    font-size: 15pt;
+    text-align: left;
+}
+
+#letter img {
+    width: 500px;
+    max-width: 80%;
+    display: block;
+    margin: 0 auto;
+    height: fit-content !important;
+}
+
+#background header {
+    font-size: 24pt;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 5px;
+}
+
+#background span.createdOn, #background span.author {
+    display: block;
+    font-size: 13pt;
+    font-family: 'DM Sans', sans-serif;
+}
+
+#background span.author {
+    margin-bottom: 5vh;
+}
+
+#letter header, #letter h1, #letter h2, #letter h3, #letter h4, #letter h5, #letter h6 {
+    font-family: 'DM Sans', sans-serif !important;
+}
+
+#reminder {
+    display: inline-block;
+    width: 600px;
+    max-width: 90%;
+    margin-top: 5vh;
+    font-size: 15pt;
+    text-align: left;
+}
+
+#reminder #topRow {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: flex-end;
+    margin-bottom: 30px;
+}
+
+#reminder #clock {
+    width: 80px;
+}
+
+#reminder #subject {
+    flex-grow: 1;
+}
+
+#reminder #subject p {
+    margin-bottom: 10px;
 }

@@ -24,6 +24,7 @@ import {AccountPage} from './pages/accountPage/AccountPage';
 import {ForgotPasswordPage} from
   './pages/forgotPasswordPage/ForgotPasswordPage';
 import {ContentViewer} from './pages/ContentViewer/ContentViewer';
+import {SuccessPage} from './pages/successPage/successPage';
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -94,6 +95,11 @@ export const App = () => {
         <Route path='/account' element={
           <LoggedInRouteGuard>
             <AccountPage></AccountPage>
+          </LoggedInRouteGuard>}/>
+
+        <Route path='/success' element={
+          <LoggedInRouteGuard>
+            <SuccessPage></SuccessPage>
           </LoggedInRouteGuard>}/>
 
         <Route path='/load' element={

@@ -74,10 +74,14 @@ futureRouter.get('/:id', extractDraftIDFromURL, async (req, res) => {
 
     if (!future.future?.viewed) {
       await setFutureViewed(id);
-      const user = await getUser(future.future._id.toString());
 
-      if (user.success) {
-        await sendFutureViewedEmail(user.user?.email as string, future.future);
+      if (future.future.recipientType === 'someone else' ) {
+        const user = await getUser(future.future._id.toString());
+
+        if (user.success) {
+          await sendFutureViewedEmail(
+            user.user?.email as string, future.future);
+        }
       }
     }
   } catch (err) {

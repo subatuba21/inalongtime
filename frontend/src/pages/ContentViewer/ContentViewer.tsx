@@ -86,20 +86,30 @@ export const ContentViewer = (props: {
     case 'reminder': {
       const reminder = content as ReminderContent;
       jsxContent = <>
-        <h4>{reminder.subject}</h4>
-        <p>{reminder.text}</p>
+        <div id={styles.topRow}>
+          <img src='https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/320/twitter/322/alarm-clock_23f0.png'
+            id={styles.clock}></img>
+          <div id={styles.subject}>
+            <p>{reminder.subject}</p>
+          </div>
+        </div>
+        <p id={styles.reminderText}>{reminder.text}</p>
       </>;
       break;
     }
   }
 
-  return <div id={styles.container} style={{
+  return <div id={styles.background} style={{
     backgroundColor: customization?.backgroundColor ?
-    customization.backgroundColor : '#fff',
-    color: customization?.fontColor ? customization.fontColor : '#000',
-    fontFamily: customization?.font ? customization.font : 'Open Sans',
-  }}>
-    <h3>{title}</h3>
-    {jsxContent}
+  customization.backgroundColor : '#fff'}}>
+    <div id={styles[contentType || 'none']} style={{
+      color: customization?.fontColor ? customization.fontColor : '#000',
+      fontFamily: customization?.font ? customization.font : 'Open Sans',
+    }}>
+      <header>{title}</header>
+      <span className={styles.createdOn}>Sent on January 1st, 2010</span>
+      <span className={styles.author}>By Subhajit Das</span>
+      {jsxContent}
+    </div>;
   </div>;
 };
