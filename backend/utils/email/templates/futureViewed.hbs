@@ -1,10 +1,15 @@
-<div>
-    <nav>
-        IN A LONG TIME
-    </nav>
+<div style="text-align:center;">
+    <div style="max-width: 400px; display:inline-block; text-align: left;">
+        <nav>
+            <img src="{{{hostAddress}}}/logo.png" alt="in a long time logo"></img>
+        </nav>
     <h3>The {{contentType}} you sent has been viewed.</h3>
     <p>On {{nextSendDate}}, you sent a {{contentType}} to {{recipientEmail}}. Looks like they just opened it. You can click the button below to see it yourself.</p>
-    <button>
-        <a href="{{{hostAddress}}}/future/{{{id}}}">View {{contentType}}</a>
+     <button style="background-color:purple; color:white; border:0px; padding:10px; border-radius:5px; !important">
+            <a href="{{{hostAddress}}}/future/{{{id}}}"
+            style="color:white !important; text-decoration:none !important;"
+            onMouseOver="this.style.color='white'"
+            onMouseOut="this.style.color='white'">View {{contentType}}</a>
     </button>
+</div>
 </div>
