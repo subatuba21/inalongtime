@@ -7,6 +7,7 @@ export const mongoDbSchema = z.preprocess((arg) => {
     if (arg instanceof ObjectId)  {
         return arg.toString();
     }
+    return arg;
 }, z.string().length(24).transform((id) => new ObjectId(id)));
 
 export const futureSchema = draftSchema.extend({

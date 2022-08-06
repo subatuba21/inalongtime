@@ -148,7 +148,7 @@ export const loginWithToken =
     const dbToken = await getToken(userId);
     if (dbToken && await validateToken(token, dbToken.token)) {
       manuallySerializeUser(req, userId);
-      res.redirect('/forgot-password');
+      res.redirect('/account');
       await deleteToken(userId);
       return;
     } else {
