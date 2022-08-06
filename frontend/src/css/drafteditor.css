@@ -18,3 +18,7 @@ div.DraftEditor-editorContainer, div.public-DraftEditor-content {
     border-radius: 5px;
     overflow: hidden;
 }
+
+div.DraftEditor-root img {
+  max-width: 500px;
+}
