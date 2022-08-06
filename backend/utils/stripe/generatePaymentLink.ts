@@ -15,5 +15,11 @@ export const createPaymentLink = async (userId: string, draftId: string) => {
     automatic_tax: {
       enabled: true,
     },
+    after_completion: {
+      type: 'redirect',
+      redirect: {
+        url: `${process.env.HOST_ADDRESS}/success`,
+      },
+    },
   });
 };

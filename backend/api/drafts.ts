@@ -36,8 +36,8 @@ draftRouter.post('/:id/resource', mustBeLoggedIn,
       useTempFiles: true,
     }), allowFileTypes,
     populateDraftFromDB, deleteUnnecessaryFiles, uploadResource);
-draftRouter.get('/:id/resource/:resourceId', mustBeLoggedIn,
-    extractDraftIDFromURL, authorizeDraft,
+draftRouter.get('/:id/resource/:resourceId',
+    extractDraftIDFromURL, mustBeLoggedIn, authorizeDraft,
     extractResourceId, getResource);
 draftRouter.delete('/:id/resource/:resourceId', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft,
