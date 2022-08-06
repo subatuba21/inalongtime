@@ -104,6 +104,11 @@
 
 #reminder #subject p {
     margin-bottom: 10px;
+    white-space: pre-wrap;
+}
+
+#reminder #reminderText {
+    white-space: pre-wrap;
 }
 
 #gallery img, #gallery video, #gallery audio {
