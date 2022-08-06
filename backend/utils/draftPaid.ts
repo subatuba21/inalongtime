@@ -1,4 +1,5 @@
 import {Content} from 'shared/dist/editor/classes/content';
+import {ReminderContent} from 'shared/dist/editor/classes/reminderContent';
 import {LetterContent} from 'shared/dist/editor/classes/letterContent';
 import {DraftSchema} from 'shared/dist/types/draft';
 
@@ -26,6 +27,17 @@ export const isDraftPaid =
           };
         }
       }
+
+      if (draft.type === 'reminder') {
+        const reminderContent = content as ReminderContent;
+        if (reminderContent.getWordCount() > 200) {
+          return {
+            paid: true,
+            reason: 'This draft is over 200 words.',
+          };
+        }
+      }
+
 
       return {
         paid: false,

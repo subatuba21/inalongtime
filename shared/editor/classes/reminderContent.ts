@@ -38,4 +38,12 @@ export class ReminderContent extends Content {
         this.text = args.text;
         this.initialized = true;
     }
+
+    getWordCount() {
+        let count = 0;
+        count += this.subject?.split(' ').length ?? 0;
+        count += this.text?.split(' ').length ?? 0;
+        return count;
+      }
+    
 }
