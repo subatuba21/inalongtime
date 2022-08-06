@@ -45,10 +45,6 @@
     margin-bottom: 5vh;
 }
 
-#letter header, #letter h1, #letter h2, #letter h3, #letter h4, #letter h5, #letter h6 {
-    font-family: 'DM Sans', sans-serif !important;
-}
-
 #reminder {
     display: inline-block;
     width: 600px;
