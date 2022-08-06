@@ -5,6 +5,7 @@ import {parseContent} from 'shared/dist/editor/parseContent';
 import {stateToHTML} from 'draft-js-export-html';
 import parse from 'html-react-parser';
 import {ReminderContent} from 'shared/dist/editor/classes/reminderContent';
+import {formatDate} from 'shared/dist/utils/formatDate';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import {editorAPI} from '../../api/editor';
@@ -16,6 +17,8 @@ import {GalleryContent,
 import {Carousel, CarouselItem} from 'react-bootstrap';
 import {BaseMediaPlayer} from
   '../../components/BaseMediaPlayer/baseMediaPlayer';
+import {UserState} from '../../store/user';
+import {useSelector} from 'react-redux';
 
 export const ContentViewer = (props: {
     mode: 'preview' | 'future'
@@ -37,6 +40,7 @@ export const ContentViewer = (props: {
   useState<CustomizationSchema | undefined>(undefined);
   const [contentType, setContentType] =
     useState<DraftType | undefined>(undefined);
+  const userState = useSelector((state) => (state as any).user) as UserState;
 
   useEffect(() => {
     const getData = async () => {
@@ -139,8 +143,10 @@ export const ContentViewer = (props: {
       fontFamily: customization?.font ? customization.font : 'Open Sans',
     }}>
       <header>{title}</header>
-      <span className={styles.createdOn}>Sent on January 1st, 2010</span>
-      <span className={styles.author}>By Subhajit Das</span>
+      <span className={styles.createdOn}>Sent on {props.mode === 'preview' ?
+      formatDate(new Date()) : ''}</span>
+      <span className={styles.author}>By {props.mode === 'preview' ?
+      userState.firstName + ' ' + userState.lastName : ''}</span>
       {jsxContent}
     </div>
   </div>;

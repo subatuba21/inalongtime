@@ -3,7 +3,7 @@ import path from 'path';
 import {Future} from 'shared/dist/types/future';
 import {compile} from 'handlebars';
 import {transporter} from './setup';
-import {formatDate} from '../formatDate';
+import {formatDate} from 'shared/dist/utils/formatDate';
 
 const futureViewedEmail = compile(fs.readFileSync(
     path.join(__dirname, './templates/futureViewed.hbs'), 'utf8'));
