@@ -58,6 +58,34 @@
     text-align: left;
 }
 
+#gallery {
+    display: inline-block;
+    width: 700px;
+    max-width: 90%;
+    margin-top: 5vh;
+    font-size: 15pt;
+    text-align: left;
+}
+
+#gallery .description {
+    white-space: pre-wrap;
+}
+
+.carouselCaption {
+    background-color: rgba(0, 0, 0, 0.8);
+    position: unset;
+    margin-top: 0px;
+    padding: 10px;
+    margin-bottom: 50px;
+    font-size: 12pt;
+    padding: 0px;
+}
+
+.carouselCaption * {
+    color: white !important;
+    white-space: pre-wrap;
+}
+
 #reminder #topRow {
     display: flex;
     flex-direction: row;
@@ -76,4 +104,9 @@
 
 #reminder #subject p {
     margin-bottom: 10px;
+}
+
+#gallery img, #gallery video, #gallery audio {
+    width: 100%;
+    min-height: 300px;
 }

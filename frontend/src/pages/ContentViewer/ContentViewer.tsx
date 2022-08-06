@@ -11,6 +11,11 @@ import {editorAPI} from '../../api/editor';
 import {DraftType, CustomizationSchema} from 'shared/dist/types/draft';
 import styles from './ContentViewer.module.css';
 import WebFont from 'webfontloader';
+import {GalleryContent,
+  MediaResourceArray} from 'shared/dist/editor/classes/galleryContent';
+import {Carousel, CarouselItem} from 'react-bootstrap';
+import {BaseMediaPlayer} from
+  '../../components/BaseMediaPlayer/baseMediaPlayer';
 
 export const ContentViewer = (props: {
     mode: 'preview' | 'future'
@@ -30,7 +35,6 @@ export const ContentViewer = (props: {
   const [title, setTitle] = useState<string>('');
   const [customization, setCustomization] =
   useState<CustomizationSchema | undefined>(undefined);
-
   const [contentType, setContentType] =
     useState<DraftType | undefined>(undefined);
 
@@ -97,6 +101,34 @@ export const ContentViewer = (props: {
       </>;
       break;
     }
+
+    case 'gallery': {
+      const gallery = content as GalleryContent;
+      const galleryItems : any[] = [];
+      (gallery.mediaResourceArray as MediaResourceArray)
+          .forEach((media, i) => {
+            galleryItems.push(<CarouselItem key={i}>
+              <BaseMediaPlayer
+                type={media.mimetype}
+                src={`/api/draft/${id}/resource/${media.mediaResourceID}`}
+                style={{}}></BaseMediaPlayer>
+              <Carousel.Caption className={styles.carouselCaption}
+                style={!media.caption ? {height: '0px'} : {}}>
+                <p style={{padding: '10px'}}>{media.caption}</p>
+              </Carousel.Caption>
+
+            </CarouselItem>);
+          });
+
+      jsxContent = jsxContent = <>
+        <p className={styles.description}>{gallery.description}</p>
+        <Carousel variant="dark" interval={null}>
+          {
+            galleryItems
+          }
+        </Carousel>
+      </>;
+    }
   }
 
   return <div id={styles.background} style={{
@@ -110,6 +142,6 @@ export const ContentViewer = (props: {
       <span className={styles.createdOn}>Sent on January 1st, 2010</span>
       <span className={styles.author}>By Subhajit Das</span>
       {jsxContent}
-    </div>;
+    </div>
   </div>;
 };

@@ -145,7 +145,7 @@ export const BasicInfo = () => {
         'Recipient phone number' : 'Your phone number'}</span>
       <span className={styles.fieldDescription}>Please add country code and
       then 10-digit phone number. Example (US): +18888888888</span>
-      <InputBox name='phonenumber' placeholder='999-999-9999'
+      <InputBox name='phonenumber' placeholder='+11234567890'
         valueState={{value: editorState.phoneNumber,
           set: (ph: string) => dispatch(changePhoneNumber(ph))}}
         onBlur={onBlur}
