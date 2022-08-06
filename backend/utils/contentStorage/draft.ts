@@ -6,6 +6,7 @@ import {parseContent} from 'shared/dist/editor/parseContent';
 import {Metadata} from '@google-cloud/storage/build/src/nodejs-common';
 import fs from 'fs';
 import {deleteResourceFromDraft} from '../../db/draft';
+import logger from '../../logger';
 const storage = new Storage({
   keyFilename: `${__dirname}/${process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE_PATH}`,
 });
@@ -114,8 +115,13 @@ export const deleteUnnecessaryFiles = async (userId: string, draftSchema: DraftS
   const contentResources = content.getResourceIDs();
   for (const resource of draftSchema.resources) {
     if (!contentResources.includes(resource.id)) {
-      await deleteDraftResource(userId, draftId, resource.id);
-      await deleteResourceFromDraft(draftId, resource.id);
+      try {
+        await deleteDraftResource(userId, draftId, resource.id);
+        await deleteResourceFromDraft(draftId, resource.id);
+      } catch (e) {
+        const err = e as Error;
+        logger.warn(err.message);
+      }
     }
   }
 };

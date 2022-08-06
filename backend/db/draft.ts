@@ -167,7 +167,7 @@ export const addResourceToDraft = async (
       _id: new ObjectId(draftId),
     }, {
       $addToSet: {
-        resources: resource,
+        resources: {...resource, id: new ObjectId(resource.id)},
       },
     });
 
