@@ -167,7 +167,7 @@ export const addResourceToDraft = async (
       _id: new ObjectId(draftId),
     }, {
       $addToSet: {
-        resources: {...resource, id: new ObjectId(resource.id)},
+        resources: {...resource, id: resource.id},
       },
     });
 
@@ -188,7 +188,7 @@ export const deleteResourceFromDraft = async (
     }, {
       $pull: {
         resources: {
-          id: new ObjectId(resourceId),
+          id: resourceId,
         },
       },
     });
