@@ -11,6 +11,7 @@ import {useEffect, useState} from 'react';
 import {editorAPI} from '../../api/editor';
 import {DraftType, CustomizationSchema} from 'shared/dist/types/draft';
 import styles from './ContentViewer.module.css';
+import loadingStyles from './LoadingPage.module.css';
 import WebFont from 'webfontloader';
 import {GalleryContent,
   MediaResourceArray} from 'shared/dist/editor/classes/galleryContent';
@@ -34,6 +35,8 @@ export const ContentViewer = (props: {
 
 
   const [isLoading, setIsLoading] = useState(true);
+  const [waitTimeDone, setWaitTimeDone] = useState(false);
+
   const [content, setContent] = useState<Content | undefined>(undefined);
   const [title, setTitle] = useState<string>('');
   const [customization, setCustomization] =
@@ -59,6 +62,9 @@ export const ContentViewer = (props: {
           setCustomization(res.data?.properties.customization);
         }
         setIsLoading(false);
+        setTimeout(() => {
+          setWaitTimeDone(true);
+        }, 2000);
       } else {
 
       }
@@ -67,8 +73,15 @@ export const ContentViewer = (props: {
     getData();
   }, []);
 
+  const loadingPageText = props.mode === 'preview' ?
+  'Reload the page to see the latest changes.' :
+   'Get ready to time travel.';
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (<div id={loadingStyles.loadingPage}>
+      <h1 className='logo'>in a long time</h1>
+      <p>{loadingPageText}</p>
+    </div>);
   }
 
   let jsxContent : any = <></>;
@@ -135,19 +148,27 @@ export const ContentViewer = (props: {
     }
   }
 
-  return <div id={styles.background} style={{
-    backgroundColor: customization?.backgroundColor ?
+  return (
+    <>
+      {waitTimeDone ? <></> : <div id={loadingStyles.loadingPage}
+        className={loadingStyles.slideLeft}>
+        <h1 className='logo'>in a long time</h1>
+        <p>{loadingPageText}</p>
+      </div>}
+      <div id={styles.background} style={{
+        backgroundColor: customization?.backgroundColor ?
   customization.backgroundColor : '#fff'}}>
-    <div id={styles[contentType || 'none']} style={{
-      color: customization?.fontColor ? customization.fontColor : '#000',
-      fontFamily: customization?.font ? customization.font : 'Open Sans',
-    }}>
-      <header>{title}</header>
-      <span className={styles.createdOn}>Sent on {props.mode === 'preview' ?
+        <div id={styles[contentType || 'none']} style={{
+          color: customization?.fontColor ? customization.fontColor : '#000',
+          fontFamily: customization?.font ? customization.font : 'Open Sans',
+        }}>
+          <header>{title}</header>
+          <span className={styles.createdOn}>Sent on {props.mode === 'preview' ?
       formatDate(new Date()) : ''}</span>
-      <span className={styles.author}>By {props.mode === 'preview' ?
+          <span className={styles.author}>By {props.mode === 'preview' ?
       userState.firstName + ' ' + userState.lastName : ''}</span>
-      {jsxContent}
-    </div>
-  </div>;
+          {jsxContent}
+        </div>
+      </div>
+    </>);
 };

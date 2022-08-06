@@ -1,0 +1,41 @@
+#loadingPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+    position: absolute;
+    z-index: 10;
+}
+
+#loadingPage > h1 {
+    color: rgba(0, 0, 0, 0.6);
+    position: relative;
+    bottom: 10vh;
+}
+
+
+#loadingPage > p {
+    position: relative;
+    bottom: 10vh;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.slideLeft {
+    animation: slideLeft 2s;
+}
+
+@keyframes slideLeft {
+    0% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
