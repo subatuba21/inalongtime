@@ -163,7 +163,8 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
 
   return <div id={styles.imageEditModalContent}>
     <h3 className={editorStyles.fieldName}>Image Caption</h3>
-    <textarea defaultValue={image ? image.caption : ''} ref={captionInput}>
+    <textarea defaultValue={image ? image.caption : ''} ref={captionInput}
+      rows={8}>
     </textarea>
     <br />
     <h3 className={editorStyles.fieldName}>Upload New Media</h3>
@@ -191,6 +192,11 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
     {currentMessageText ? <p>{currentMessageText}</p> : null}
     {currentFile ? <Button onClick={removeFile}
       id={styles.removeButton}>Remove</Button> : null}
+
+    <Button onClick={addImage} style={isUploading ? {opacity: 0.8} : {}}>
+      {props.mediaArrayIndex === AddImageSetting ? 'Add' : 'Complete Edit'}
+    </Button>
+
     {
       props.mediaArrayIndex === AddImageSetting ? <></> : <>
         <br />
@@ -203,10 +209,5 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
           }} />
       </>
     }
-
-    <Button onClick={addImage} style={isUploading ? {opacity: 0.8} : {}}>
-      {props.mediaArrayIndex === AddImageSetting ? 'Add' : 'Edit'}
-    </Button>
-
   </div>;
 };

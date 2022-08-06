@@ -56,11 +56,13 @@ export const ReminderEditor = () => {
   return <div className='box' id={styles.mainDiv}>
     <span className={styles.fieldName}>Reminder Subject</span>
     <textarea name="subject" onChange={onSubjectChange} onBlur={save}
-      defaultValue={content.subject || ''}>
+      defaultValue={content.subject || ''} rows={8}>
     </textarea>
+    <br/>
+    <br/>
     <span className={styles.fieldName}>Reminder Message</span>
     <textarea name="message" onChange={onMessageChange} onBlur={save}
-      defaultValue={content.text || ''}>
+      defaultValue={content.text || ''} rows={8}>
     </textarea>
   </div>;
 };

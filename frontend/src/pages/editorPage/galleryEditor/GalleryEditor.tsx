@@ -48,6 +48,8 @@ export const GalleryEditor = () => {
       rows={3} onInput={onDescriptionChange}
       value={content.description} onBlur={() => dispatch(saveDraft('data'))}>
     </textarea>
+    <br/>
+    <br/>
     <span className={styles.fieldName}>
         Gallery Media
     </span>
