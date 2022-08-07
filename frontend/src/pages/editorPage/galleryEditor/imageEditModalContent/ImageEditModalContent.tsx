@@ -186,7 +186,7 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
         }} /> : null}
       <p>Drag and drop files here or click to upload.</p>
       <input type='file'
-        accept='image/jpeg,image/png,video/mp4,audio/mp3'
+        accept={allowedFileTypesSchema._def.values.join(',')}
         onChange={onFileSelect} ref={fileInput}></input>
     </div>
     {currentMessageText ? <p>{currentMessageText}</p> : null}

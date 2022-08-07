@@ -1,7 +1,8 @@
 import {useState, useRef} from 'react';
 import {useSelector} from 'react-redux';
 import {DraftFrontendState} from 'shared/dist/types/draft';
-import {allowedLetterImageFileTypes, allowedLetterImageFileTypesSchema}
+import {allowedFileTypesSchema,
+  allowedLetterImageFileTypes, allowedLetterImageFileTypesSchema}
   from 'shared/dist/types/fileTypes';
 import {editorAPI} from '../../../../api/editor';
 import {BaseMediaPlayer} from
@@ -134,7 +135,7 @@ export const UploadImageModalContent =
     }} /> : null}
         <p>Drag and drop files here or click to upload.</p>
         <input type='file'
-          accept='image/jpeg,image/png,video/mp4,audio/mp3'
+          accept={allowedFileTypesSchema._def.values.join(',')}
           onChange={onFileSelect} ref={fileInput}></input>
       </div>
       {currentMessageText ? <p>{currentMessageText}</p> : null}

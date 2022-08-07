@@ -51,7 +51,12 @@ export const GalleryEditor = () => {
     <br/>
     <br/>
     <span className={styles.fieldName}>
-        Gallery Media
+        Gallery Media <br/>
+      <span style={{
+        fontSize: '0.8em',
+      }}>
+        You can add image, video, and audio files to your gallery.
+      </span>
     </span>
     <div>
       {content ?

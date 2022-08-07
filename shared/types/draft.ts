@@ -1,5 +1,6 @@
 import {z} from 'zod';
 import { Content } from '../editor/classes/content';
+import { allowedFileTypesSchema } from './fileTypes';
 
 export const draftTypeSchema =
   z.enum(['letter', 'gallery', 'reminder']);
@@ -21,7 +22,7 @@ export const customizationSchema = z.object({
 
 export const resourceSchema = z.object({
   id: z.string(),
-  mimetype: z.enum(['image/jpeg', 'image/png', 'video/mp4', 'audio/mp3']),
+  mimetype: allowedFileTypesSchema,
 });
 
 export const draftSchema = z.object({
