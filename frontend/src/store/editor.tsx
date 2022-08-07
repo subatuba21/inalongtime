@@ -128,7 +128,8 @@ export const editorSlice = createSlice({
         },
     changePhoneNumber:
         (state: DraftFrontendState, action: PayloadAction<string>) => {
-          state.phoneNumber = action.payload;
+          const withoutPlusses = action.payload.replace(/\+/g, '');
+          state.phoneNumber = `+${withoutPlusses}`;
         },
     changeContentType:
     (state: DraftFrontendState, action: PayloadAction<DraftType>) => {

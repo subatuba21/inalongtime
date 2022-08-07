@@ -147,7 +147,7 @@ export const BasicInfo = () => {
       then 10-digit phone number. Example (US): 18888888888</span>
       <InputBox name='phonenumber' placeholder='11234567890'
         valueState={{value: editorState.phoneNumber,
-          set: (ph: string) => dispatch(changePhoneNumber(`+${ph}`))}}
+          set: (ph: string) => dispatch(changePhoneNumber(ph))}}
         onBlur={onBlur}
         validation={{
           formErrorState: {
@@ -157,8 +157,10 @@ export const BasicInfo = () => {
           validationFunction: (input: string) => {
             const errors = [];
             if (input.length===0) errors.push('Phone number cannot be blank.');
+            const withoutPlusses = input.replace(/\+/g, '');
+            console.log(withoutPlusses);
 
-            if (!validate.isMobilePhone(`+${input}`, 'any', {
+            if (!validate.isMobilePhone(`+${withoutPlusses}`, 'any', {
               strictMode: true,
             })) {
               errors.push(
