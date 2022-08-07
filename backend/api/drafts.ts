@@ -39,6 +39,9 @@ draftRouter.post('/:id/resource', mustBeLoggedIn,
 draftRouter.get('/:id/resource/:resourceId',
     extractDraftIDFromURL, mustBeLoggedIn, authorizeDraft,
     extractResourceId, getResource);
+draftRouter.head('/:id/resource/:resourceId', mustBeLoggedIn,
+    extractDraftIDFromURL, authorizeDraft,
+    extractResourceId, getResource);
 draftRouter.delete('/:id/resource/:resourceId', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft,
     extractResourceId, deleteResource);

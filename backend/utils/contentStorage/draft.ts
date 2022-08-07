@@ -81,7 +81,7 @@ export const postDraftResource = async (userId: string, draftId: string, resourc
   const uploadFunc = () : Promise<void> => {
     return new Promise((resolve, reject) => {
       fs.createReadStream(uploadFilePath)
-          .pipe(file.createWriteStream({gzip: true, contentType: contentType}))
+          .pipe(file.createWriteStream({contentType: contentType}))
           .on('finish', () => resolve())
           .on('error', () => reject(new Error('Error writing file to cloud storage')));
     });
@@ -98,17 +98,13 @@ export const deleteDraftResource = async (userId: string, draftId: string, resou
   await file.delete();
 };
 
-export const getDraftReadStream = async (userId: string, draftId: string, resourceId: string) => {
+export const getDraftFile = async (userId: string, draftId: string, resourceId: string) => {
   const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
   const fileName = getContentResourceFileName(userId, draftId, resourceId);
   const file = bucket.file(fileName);
 
   if (await file.exists()) {
-    const contentType = (await file.getMetadata())[0].contentType || 'none';
-    return {
-      stream: file.createReadStream(),
-      contentType,
-    };
+    return file;
   } else {
     throw new Error('File does not exist.');
   }
