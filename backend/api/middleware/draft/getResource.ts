@@ -22,7 +22,7 @@ async (req: express.Request, res: express.Response, next: Function) => {
     const contentType = metadata.contentType ?? 'undefined';
     headers['Content-Type'] = contentType;
 
-    if (contentType.startsWith('video')) {
+    if (contentType.startsWith('video') || contentType.startsWith('audio')) {
       const options : any = {};
 
       let start;
