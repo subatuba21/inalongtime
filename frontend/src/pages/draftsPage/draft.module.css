@@ -17,6 +17,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 .right {
@@ -50,13 +51,22 @@
     cursor: pointer;
 }
 
-.icons #edit:hover {
+.icons #edit {
     color: blue;
+}
+
+.icons #edit:hover {
+    color: rgb(66, 66, 255);
 }
 
 .icons #close:hover {
     color: red;
 }
+
+#close {
+    color: rgb(253, 86, 86);
+}
+
 
 @media (max-width: 600px) {
     .title {

@@ -25,6 +25,7 @@ import {ForgotPasswordPage} from
   './pages/forgotPasswordPage/ForgotPasswordPage';
 import {ContentViewer} from './pages/ContentViewer/ContentViewer';
 import {SuccessPage} from './pages/successPage/successPage';
+import {Head} from './components/Head/Head';
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -52,53 +53,63 @@ export const App = () => {
 
   return isLoading ? <LoadingPage /> :
   <>
+    <Head title='' />
     <Modal></Modal>
     <BrowserRouter>
       <Routes>
         <Route path='/login' element={
           <DontAllowIfLoggedIn>
+            <Head title='Login' />
             <LoginPage></LoginPage>
           </DontAllowIfLoggedIn>
         }/>
 
         <Route path='/forgot-password' element={
           <DontAllowIfLoggedIn>
+            <Head title='Forgot Password' />
             <ForgotPasswordPage></ForgotPasswordPage>
           </DontAllowIfLoggedIn>
         }/>
 
         <Route path='/signup' element={
           <DontAllowIfLoggedIn>
+            <Head title='Signup' />
             <RegisterPage></RegisterPage>
           </DontAllowIfLoggedIn>
         }/>
         <Route path='/home' element={
           <LoggedInRouteGuard>
+            <Head title='Home' />
             <HomePage></HomePage>
           </LoggedInRouteGuard>}/>
 
         <Route path='/drafts' element={
           <LoggedInRouteGuard>
+            <Head title='Drafts' />
             <DraftsPage></DraftsPage>
           </LoggedInRouteGuard>}/>
 
         <Route path='/draft/:id' element={
           <LoggedInRouteGuard>
+            <Head title='Editor' />
             <EditorPage></EditorPage>
           </LoggedInRouteGuard>}/>
 
         <Route path='/preview/:id' element={
           <LoggedInRouteGuard>
+            <Head title='Preview' />
             <ContentViewer mode='preview'></ContentViewer>
           </LoggedInRouteGuard>}/>
 
         <Route path='/account' element={
           <LoggedInRouteGuard>
+            <Head title='Account Info' />
             <AccountPage></AccountPage>
           </LoggedInRouteGuard>}/>
 
         <Route path='/success' element={
           <LoggedInRouteGuard>
+            <Head title='Success' />
             <SuccessPage></SuccessPage>
           </LoggedInRouteGuard>}/>
 

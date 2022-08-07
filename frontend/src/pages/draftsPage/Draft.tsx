@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import styles from './draft.module.css';
-import {XLg, Pen} from 'react-bootstrap-icons';
+import {Pencil, XCircleFill} from 'react-bootstrap-icons';
 import {useAppDispatch} from '../../store/store';
 import {activateModal} from '../../store/modal';
 import {deleteDraft} from '../../store/editor';
@@ -17,14 +17,14 @@ export const Draft = (props: {
   const navigate = useNavigate();
 
   return <div style={styles} id={styles.container}>
-    <span className={styles.title}>
+    <span className={styles.title} onClick={() => navigate(`/draft/${props.id}`)}>
       {props.name.trim().length > 0 ? props.name : 'No title'}
     </span>
 
     <span className={styles.right}>
       <span className={styles.icons}>
-        <Pen id={styles.edit} onClick={() => navigate(`/draft/${props.id}`)}></Pen>
-        <XLg id={styles.close} onClick={() => dispatch(activateModal({
+        <Pencil id={styles.edit} onClick={() => navigate(`/draft/${props.id}`)}></Pencil>
+        <XCircleFill id={styles.close} onClick={() => dispatch(activateModal({
           header: 'Confirm',
           content: <>{`Are you sure you want to delete the draft titled '${processedName}'? You can't go back.`}</>,
           successButton: {
@@ -44,7 +44,7 @@ export const Draft = (props: {
               }));
             },
           },
-        }))}></XLg>
+        }))}></XCircleFill>
       </span>
       <span className={styles.type}>
         {props.type[0].toUpperCase() + props.type.substring(1)}
