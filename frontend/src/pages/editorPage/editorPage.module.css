@@ -68,6 +68,41 @@
     cursor:unset;
 }
 
+#bottomRow {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    gap: 15px;
+}
+
+#nextButton {
+    background-color: var(--pink);
+    border-radius: 5px;
+    cursor: pointer;
+    color: black;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-weight: 500;
+}
+
+#bottomPreview {
+    background-color: lightcyan;
+    border-radius: 5px;
+    cursor: pointer;
+    color: black;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-weight: 500;
+}
+
+#bottomPreview > a {
+    color: black;
+}
+
 @media (max-width: 600px) {
     #mainDiv {
         margin-top: 30px;

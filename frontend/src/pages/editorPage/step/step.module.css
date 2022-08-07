@@ -23,6 +23,10 @@
     cursor:unset;
 }
 
+.unfinished {
+    color: rgb(255, 91, 91);
+}
+
 @media (max-width: 600px) {
     .step  {
         margin-right: 10px;

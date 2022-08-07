@@ -153,6 +153,54 @@ export const EditorPage = () => {
             currentStep={currentStep} setStep={setStep}></Step>
         </div>
         {content}
+        <div id={styles.bottomRow}>
+          <div id={styles.nextButton} onClick={() => {
+            let nextStep = '';
+            switch (currentStep) {
+              case 'info': {
+                nextStep = 'content';
+                break;
+              }
+
+              case 'content': {
+                nextStep = 'customize';
+                break;
+              }
+
+              case 'customize': {
+                nextStep = 'confirm';
+                break;
+              }
+
+              case 'confirm': {
+                nextStep = 'confirm';
+                break;
+              }
+
+              default: {
+                nextStep = 'info';
+              }
+            }
+
+            setStep(nextStep as StepType);
+            window.scrollTo({
+              top: 0,
+            });
+          }}>
+            Next
+          </div>
+          <div id={styles.bottomPreview}>
+            <a href={`/preview/${id}`} target="_blank" rel="noreferrer">
+              <ArrowUpRightSquareFill style={{
+                marginRight: '9px',
+                position: 'relative',
+                bottom: '2px',
+                fontSize: '15pt',
+              }}></ArrowUpRightSquareFill>
+            Open Preview
+            </a>
+          </div>
+        </div>
       </div>
       <BottomBuffer></BottomBuffer>
     </div>
