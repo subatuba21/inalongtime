@@ -7,6 +7,7 @@ import {Metadata} from '@google-cloud/storage/build/src/nodejs-common';
 import fs from 'fs';
 import {deleteResourceFromDraft} from '../../db/draft';
 import logger from '../../logger';
+import {allowedFileTypes} from 'shared/dist/types/fileTypes';
 const storage = new Storage({
   keyFilename: `${__dirname}/${process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE_PATH}`,
 });
@@ -60,7 +61,7 @@ export const deleteDraftContent = async (userId: string, draftId: string) => {
   });
 };
 
-export const postDraftResource = async (userId: string, draftId: string, resourceId: string, uploadFilePath: string, fileSize: number) => {
+export const postDraftResource = async (userId: string, draftId: string, resourceId: string, uploadFilePath: string, fileSize: number, contentType: allowedFileTypes) => {
   const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
   let totalStorage = 0;
   const folder = await bucket.getFiles({
@@ -80,7 +81,7 @@ export const postDraftResource = async (userId: string, draftId: string, resourc
   const uploadFunc = () : Promise<void> => {
     return new Promise((resolve, reject) => {
       fs.createReadStream(uploadFilePath)
-          .pipe(file.createWriteStream({gzip: true}))
+          .pipe(file.createWriteStream({gzip: true, contentType: contentType}))
           .on('finish', () => resolve())
           .on('error', () => reject(new Error('Error writing file to cloud storage')));
     });
@@ -103,7 +104,11 @@ export const getDraftReadStream = async (userId: string, draftId: string, resour
   const file = bucket.file(fileName);
 
   if (await file.exists()) {
-    return file.createReadStream();
+    const contentType = (await file.getMetadata())[0].contentType || 'none';
+    return {
+      stream: file.createReadStream(),
+      contentType,
+    };
   } else {
     throw new Error('File does not exist.');
   }

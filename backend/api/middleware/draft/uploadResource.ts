@@ -6,7 +6,8 @@ import {postDraftResource} from '../../../utils/contentStorage/draft';
 import {UserSchema} from '../../../utils/schemas/user';
 import {APIResponse} from '../../../utils/types/apiStructure';
 import {resourceSchema} from 'shared/dist/types/draft';
-import {allowedFileTypesSchema} from 'shared/dist/types/fileTypes';
+import {allowedFileTypes,
+  allowedFileTypesSchema} from 'shared/dist/types/fileTypes';
 import fs from 'fs';
 
 export const allowFileTypes =
@@ -72,7 +73,8 @@ export const uploadResource =
         const resourceId = new ObjectId().toString();
         try {
           await postDraftResource(
-              user._id, draftId, resourceId, file.tempFilePath, file.size);
+              user._id, draftId, resourceId, file.tempFilePath,
+              file.size, file.mimetype as allowedFileTypes);
         } catch (err) {
           const error = err as Error;
           const response : APIResponse = {

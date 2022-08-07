@@ -1,5 +1,6 @@
 import express from 'express';
 import {StatusCodes} from 'http-status-codes';
+import logger from '../../../logger';
 import {getDraftReadStream} from '../../../utils/contentStorage/draft';
 import {UserSchema} from '../../../utils/schemas/user';
 import {APIResponse} from '../../../utils/types/apiStructure';
@@ -10,13 +11,16 @@ async (req: express.Request, res: express.Response, next: Function) => {
   const resourceId = req.resourceId as string;
 
   try {
-    const headers = {
+    const headers : Record<string, string> = {
       'Cache-Control': 'max-age=604800',
     };
-    const readStream = await getDraftReadStream(user._id, draftId, resourceId);
+    const {stream, contentType} =
+      await getDraftReadStream(user._id, draftId, resourceId);
+    headers['Content-Type'] = contentType;
     res.status(200).set(headers);
-    readStream.pipe(res);
+    stream.pipe(res);
   } catch (err) {
+    logger.error((err as any).message);
     const response : APIResponse = {
       error: {
         code: StatusCodes.NOT_FOUND,
