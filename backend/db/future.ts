@@ -1,16 +1,12 @@
 import {Collection, Db, ObjectId} from 'mongodb';
-import {Future} from 'shared/dist/types/future';
-import {futureSchema} from 'shared/types/future';
+import {Future, futureSchema} from 'shared/dist/types/future';
 import logger from '../logger';
-import {FutureSchema} from '../utils/schemas/future';
 import {DbResponse} from './setup';
 
 let futureCol : Collection;
 export const setFutureDb = async (db: Db) => {
   futureCol = db.collection('futures');
 };
-
-export type FutureInput = Omit<Omit<FutureSchema, '_id'>, 'currentDate'>;
 
 export interface FutureDbResponse extends DbResponse {
     future: Future | undefined;

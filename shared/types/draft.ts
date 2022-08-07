@@ -2,7 +2,7 @@ import {z} from 'zod';
 import { Content } from '../editor/classes/content';
 
 export const draftTypeSchema =
-  z.enum(['letter', 'gallery', 'reminder', 'journal', 'goals']);
+  z.enum(['letter', 'gallery', 'reminder']);
 
 export const recipientTypeSchema = z.enum(['myself', 'someone else']);
 
