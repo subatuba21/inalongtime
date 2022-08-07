@@ -144,10 +144,10 @@ export const BasicInfo = () => {
         {editorState.recipientType === 'someone else' ?
         'Recipient phone number' : 'Your phone number'}</span>
       <span className={styles.fieldDescription}>Please add country code and
-      then 10-digit phone number. Example (US): +18888888888</span>
-      <InputBox name='phonenumber' placeholder='+11234567890'
+      then 10-digit phone number. Example (US): 18888888888</span>
+      <InputBox name='phonenumber' placeholder='11234567890'
         valueState={{value: editorState.phoneNumber,
-          set: (ph: string) => dispatch(changePhoneNumber(ph))}}
+          set: (ph: string) => dispatch(changePhoneNumber(`+${ph}`))}}
         onBlur={onBlur}
         validation={{
           formErrorState: {
@@ -158,7 +158,7 @@ export const BasicInfo = () => {
             const errors = [];
             if (input.length===0) errors.push('Phone number cannot be blank.');
 
-            if (!validate.isMobilePhone(input, 'any', {
+            if (!validate.isMobilePhone(`+${input}`, 'any', {
               strictMode: true,
             })) {
               errors.push(

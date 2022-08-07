@@ -26,6 +26,7 @@ import {ForgotPasswordPage} from
 import {ContentViewer} from './pages/ContentViewer/ContentViewer';
 import {SuccessPage} from './pages/successPage/successPage';
 import {Head} from './components/Head/Head';
+import {SentPage} from './pages/sentPage/SentPage';
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -99,6 +100,12 @@ export const App = () => {
           <LoggedInRouteGuard>
             <Head title='Preview' />
             <ContentViewer mode='preview'></ContentViewer>
+          </LoggedInRouteGuard>}/>
+
+        <Route path='/sent' element={
+          <LoggedInRouteGuard>
+            <Head title='Sent' />
+            <SentPage></SentPage>
           </LoggedInRouteGuard>}/>
 
         <Route path='/account' element={

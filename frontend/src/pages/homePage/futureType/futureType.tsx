@@ -12,7 +12,7 @@ interface contentType {
     description: String;
     uses: String[];
     image: string
-    type: DraftType,
+    type?: DraftType,
     notReleased?: boolean
 }
 
@@ -43,7 +43,6 @@ const types : Record<string, contentType> = {
     description: 'Keep yourself accountable.',
     uses: ['Reflecting on a past goal', 'Motivation to succeed'],
     image: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/322/person-lifting-weights_1f3cb-fe0f.png',
-    type: 'goals',
     notReleased: true,
   },
   journal: {
@@ -51,7 +50,6 @@ const types : Record<string, contentType> = {
     description: 'Make an entry at regular intervals.',
     uses: ['Seeing your growth', 'Birthday letters'],
     image: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/322/open-book_1f4d6.png',
-    type: 'journal',
     notReleased: true,
   },
 
@@ -79,7 +77,7 @@ export const FutureType = (props: {typeId: string, smallImage? : boolean}) => {
     <button className={styles.bottomButton}
       onClick={() => {
         if (type.notReleased!==true) {
-          dispatch(createDraft({type: types[props.typeId].type,
+          dispatch(createDraft({type: types[props.typeId].type as DraftType,
             onSuccess: (draftId) => {
               navigate('/draft/' + draftId);
             }, onFailure: (error: CentralError) => {
