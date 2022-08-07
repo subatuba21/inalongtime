@@ -20,6 +20,7 @@ import {BaseMediaPlayer} from
   '../../components/BaseMediaPlayer/baseMediaPlayer';
 import {UserState} from '../../store/user';
 import {useSelector} from 'react-redux';
+import {Headphones} from 'react-bootstrap-icons';
 
 export const ContentViewer = (props: {
     mode: 'preview' | 'future'
@@ -125,10 +126,26 @@ export const ContentViewer = (props: {
       (gallery.mediaResourceArray as MediaResourceArray)
           .forEach((media, i) => {
             galleryItems.push(<CarouselItem key={i}>
+              {media.mimetype.startsWith('audio') ? <div style={{
+                display: 'flex',
+                width: '100%',
+                height: '250px',
+                margin: '0px',
+                padding: '0px',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+                <Headphones style={{
+                  fontSize: '25pt',
+                }}></Headphones>
+              </div> : <></>}
               <BaseMediaPlayer
                 type={media.mimetype}
                 src={`/api/draft/${id}/resource/${media.mediaResourceID}`}
-                style={{}}></BaseMediaPlayer>
+                style={{}}
+                plyr={true}
+              ></BaseMediaPlayer>
               <Carousel.Caption className={styles.carouselCaption}
                 style={!media.caption ? {height: '0px'} : {}}>
                 <p style={{padding: '10px'}}>{media.caption}</p>
