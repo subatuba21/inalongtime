@@ -17,6 +17,7 @@ import {convertDraftToFuture, deleteUnnecessaryFiles, onlyAllowUnpaid,
   setIsDraftIsPaid} from './middleware/fulfillment';
 import {returnIsDraftPaid} from './middleware/draft/isDraftPaid';
 import {getSentFutures} from './middleware/draft/getSentFutures';
+import {handleFutureResource} from './middleware/handleFutureResource';
 
 
 // eslint-disable-next-line new-cap
@@ -39,8 +40,15 @@ draftRouter.post('/:id/resource', mustBeLoggedIn,
     }), allowFileTypes,
     populateDraftFromDB, deleteUnnecessaryFiles, uploadResource);
 draftRouter.get('/:id/resource/:resourceId',
-    extractDraftIDFromURL, mustBeLoggedIn, authorizeDraft,
-    extractResourceId, getResource);
+    extractDraftIDFromURL, extractResourceId,
+    handleFutureResource, (req, res, next) => {
+      if (req.future?.id) {
+        extractResourceId(req, res, next);
+        getResource(req, res, next);
+      } else {
+
+      }
+    }, mustBeLoggedIn, authorizeDraft, getResource);
 draftRouter.head('/:id/resource/:resourceId', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft,
     extractResourceId, getResource);

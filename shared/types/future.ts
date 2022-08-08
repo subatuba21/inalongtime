@@ -27,6 +27,7 @@ export const futureSchema = draftSchema.extend({
     userId: mongoDbSchema,
     nextSendDate: dateSchema,
     viewed: z.boolean(),
+    filesAccesible: z.boolean().default(true),
     createdAt: dateSchema,
 });
 
@@ -54,6 +55,7 @@ export const preprocessDraft = z.preprocess((arg) => {
     if (arg) {
         const draft = arg as any;
         draft.viewed = false;
+        draft.filesAccesible = true;
         draft.createdAt = new Date();
         return draft;
     }

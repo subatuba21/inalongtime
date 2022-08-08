@@ -26,7 +26,7 @@ declare module 'express-serve-static-core' {
       },
       future?: {
         id?: string,
-        dbObject: Future
+        dbObject?: Future
       }
       resourceId?: string,
       newPassword?: string,

@@ -3,7 +3,8 @@ import {StatusCodes} from 'http-status-codes';
 import {notFoundError, unknownError} from 'shared/dist/types/apiErrors';
 import {futureResponseBody} from 'shared/dist/types/future';
 import {getUser} from '../db/auth';
-import {getFuture, setFutureViewed} from '../db/future';
+import {getFuture, setFilesAccessibleFalse,
+  setFutureViewed} from '../db/future';
 import logger from '../logger';
 import {getDraftContent} from '../utils/contentStorage/draft';
 import {sendFutureViewedEmail} from '../utils/email/futureViewedEmail';
@@ -66,14 +67,12 @@ futureRouter.get('/:id', extractDraftIDFromURL, async (req, res) => {
       properties: future.future,
     });
 
-    const response : APIResponse = {
-      data: futureRes,
-      error: null,
-    };
-    res.end(JSON.stringify(response));
-
     if (!future.future?.viewed) {
       await setFutureViewed(id);
+
+      setTimeout(async () => {
+        await setFilesAccessibleFalse(id);
+      }, 1000 * 60 * 10);
 
       if (future.future.recipientType === 'someone else' ) {
         const user = await getUser(future.future._id.toString());
@@ -84,6 +83,12 @@ futureRouter.get('/:id', extractDraftIDFromURL, async (req, res) => {
         }
       }
     }
+
+    const response : APIResponse = {
+      data: futureRes,
+      error: null,
+    };
+    res.end(JSON.stringify(response));
   } catch (err) {
     logger.warn(err);
     const response : APIResponse = {

@@ -133,6 +133,25 @@ export const setFutureViewed = async (_id: string) : Promise<boolean> => {
   }
 };
 
+export const setFilesAccessibleFalse =
+  async (_id: string) : Promise<boolean> => {
+    try {
+      const res = await futureCol.updateOne(
+          {_id: new ObjectId(_id)},
+          {$set: {filesAccessible: false}},
+      );
+      if (res.matchedCount === 1) {
+        logger.verbose(`Updated future with id ${_id}`);
+        return true;
+      } else {
+        throw new Error('Future not found.');
+      }
+    } catch (err: any) {
+      logger.verbose(`Unable to update future with id ${_id}: ${err.message}`);
+      return false;
+    }
+  };
+
 export interface MultipleFutureDbResponse extends DbResponse {
   futures: Future[];
 }
