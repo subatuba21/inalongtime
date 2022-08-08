@@ -28,6 +28,7 @@ import {ContentViewer} from './pages/ContentViewer/ContentViewer';
 import {SuccessPage} from './pages/successPage/successPage';
 import {Head} from './components/Head/Head';
 import {SentPage} from './pages/sentPage/SentPage';
+import {RecievedPage} from './pages/recievedPage/RecievedPage';
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -113,6 +114,13 @@ export const App = () => {
             <Head title='Sent' />
             <SentPage></SentPage>
           </LoggedInRouteGuard>}/>
+
+        <Route path='/recieved' element={
+          <LoggedInRouteGuard>
+            <Head title='Recieved' />
+            <RecievedPage />
+          </LoggedInRouteGuard>}/>
+
 
         <Route path='/account' element={
           <LoggedInRouteGuard>

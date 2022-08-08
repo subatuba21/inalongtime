@@ -57,7 +57,7 @@ export const DraftsPage = () => {
         </p>
         <p className={styles.question}>
           <h3 className='pinkText'>Q: How many drafts can I have at a time?</h3>
-          <p className='whiteText'>You can have up to three drafts at a time.
+          <p className='whiteText'>You can have up to seven drafts at a time.
           </p>
         </p>
       </div>

@@ -13,6 +13,7 @@ export const Navbar = (props?: {type?: 'index' | 'home'}) => {
     <Link to='/home'>New</Link>
     <Link to='/drafts'>Drafts</Link>
     <Link to='/sent'>Sent</Link>
+    <Link to='/recieved'>Recieved</Link>
   </div>;
 
   let navbarRight = <div id={styles.navbarRight}>
@@ -24,6 +25,7 @@ export const Navbar = (props?: {type?: 'index' | 'home'}) => {
     <Link to='/home' className='whiteText'>New</Link>
     <Link to='/drafts' className='whiteText'>Drafts</Link>
     <Link to='/sent' className='whiteText'>Sent</Link>
+    <Link to='/recieved' className='whiteText'>Recieved</Link>
     <Link to='/account' className='bold whiteText'>Account Info</Link>
     <a onClick={() => dispatch(logout())} className='bold pinkText'>Logout</a>
   </div>;
