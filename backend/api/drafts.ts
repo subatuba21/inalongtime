@@ -18,6 +18,9 @@ import {convertDraftToFuture, deleteUnnecessaryFiles, onlyAllowUnpaid,
 import {returnIsDraftPaid} from './middleware/draft/isDraftPaid';
 import {getSentFutures} from './middleware/draft/getSentFutures';
 import {handleFutureResource} from './middleware/handleFutureResource';
+import {allowedToAccessFuture} from '../utils/allowedFutureAccess';
+import {Future} from 'shared/types/future';
+import {UserSchema} from '../utils/schemas/user';
 
 
 // eslint-disable-next-line new-cap
@@ -42,11 +45,14 @@ draftRouter.post('/:id/resource', mustBeLoggedIn,
 draftRouter.get('/:id/resource/:resourceId',
     extractDraftIDFromURL, extractResourceId,
     handleFutureResource, (req, res, next) => {
-      if (req.future?.id) {
+      if (req.future?.id &&
+        allowedToAccessFuture(req.future.dbObject as Future, {
+          user: req.user ? req.user as UserSchema : undefined,
+        })) {
         extractResourceId(req, res, next);
         getResource(req, res, next);
       } else {
-
+        next();
       }
     }, mustBeLoggedIn, authorizeDraft, getResource);
 draftRouter.head('/:id/resource/:resourceId', mustBeLoggedIn,

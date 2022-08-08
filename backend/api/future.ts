@@ -6,8 +6,10 @@ import {getUser} from '../db/auth';
 import {getFuture, setFilesAccessibleFalse,
   setFutureViewed} from '../db/future';
 import logger from '../logger';
+import {allowedToAccessFuture} from '../utils/allowedFutureAccess';
 import {getDraftContent} from '../utils/contentStorage/draft';
 import {sendFutureViewedEmail} from '../utils/email/futureViewedEmail';
+import {UserSchema} from '../utils/schemas/user';
 import {APIResponse} from '../utils/types/apiStructure';
 import {extractDraftIDFromURL} from './middleware/extract';
 
@@ -39,25 +41,22 @@ futureRouter.get('/:id', extractDraftIDFromURL, async (req, res) => {
     return;
   }
 
-  if (future.future?.viewed && !future.future?.filesAccessible) {
-    const user = req.user;
-    if (!user || (user.email !== future.future?.recipientEmail &&
-      user.email !== future.future?.backupEmail &&
-      user._id !== future.future?.userId.toString())) {
-      const response : APIResponse = {
-        data: null,
-        error: {
-          code: StatusCodes.FORBIDDEN,
-          message:
+  if (!allowedToAccessFuture(future.future, {
+    user: req.user ? req.user as UserSchema : undefined,
+  })) {
+    const response : APIResponse = {
+      data: null,
+      error: {
+        code: StatusCodes.FORBIDDEN,
+        message:
           `Please log in or create an account to view this page . 
           You must use the account that was sent the 
           email with the link to this page.`,
-        },
-      };
+      },
+    };
 
-      res.status(StatusCodes.FORBIDDEN).json(response);
-      return;
-    }
+    res.status(StatusCodes.FORBIDDEN).json(response);
+    return;
   }
 
   try {
@@ -69,7 +68,10 @@ futureRouter.get('/:id', extractDraftIDFromURL, async (req, res) => {
       properties: future.future,
     });
 
-    if (!future.future?.viewed) {
+    if (!future.future?.viewed &&
+      !(future.future.recipientType === 'someone else' &&
+      req.user &&
+      req.user._id === future.future.userId)) {
       await setFutureViewed(id);
 
       setTimeout(async () => {

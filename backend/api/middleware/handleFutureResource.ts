@@ -10,6 +10,7 @@ export const handleFutureResource =
         if (futureOb.viewed === true && futureOb.filesAccessible === true) {
           req.future = {};
           req.future.id = futureOb._id;
+          req.future.dbObject = futureOb;
           req.draft = {};
           req.draft.id = futureOb._id;
         }
