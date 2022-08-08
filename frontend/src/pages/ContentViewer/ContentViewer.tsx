@@ -162,6 +162,14 @@ export const ContentViewer = (props: {
           }
         </Carousel>
       </>;
+
+      break;
+    }
+
+    default: {
+      jsxContent = <h1>
+        Content is blank. Please add content, refresh the page, and try again.
+      </h1>;
     }
   }
 

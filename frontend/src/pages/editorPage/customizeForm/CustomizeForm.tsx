@@ -27,7 +27,7 @@ export const CustomizeForm = () => {
           dispatch(setFontFamily(font.family));
           dispatch(saveDraft('properties'));
         }
-      }></FontPicker>
+      } limit={200} sort={'popularity'}></FontPicker>
     <br />
     <br />
     <span className={styles.fieldName}>
