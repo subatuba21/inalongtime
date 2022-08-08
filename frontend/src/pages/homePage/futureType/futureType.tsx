@@ -1,5 +1,5 @@
 import {useNavigate} from 'react-router-dom';
-import {alreadyThreeDrafts} from 'shared/dist/types/apiErrors';
+import {tooManyDrafts} from 'shared/dist/types/apiErrors';
 import {DraftType} from 'shared/dist/types/draft';
 import {createDraft} from '../../../store/editor';
 import {CentralError} from '../../../store/error';
@@ -84,7 +84,7 @@ export const FutureType = (props: {typeId: string, smallImage? : boolean}) => {
               dispatch(activateModal({
                 header: 'Error while creating draft.',
                 content: <>{error.message}</>,
-                successButton: error.message === alreadyThreeDrafts.message ?
+                successButton: error.message === tooManyDrafts.message ?
                 {
                   text: 'Go to drafts',
                   onClick: () => {

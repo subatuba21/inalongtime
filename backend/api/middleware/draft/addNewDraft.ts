@@ -1,5 +1,5 @@
 import {ObjectID} from 'mongodb';
-import {alreadyThreeDrafts, unknownError} from 'shared/dist/types/apiErrors';
+import {tooManyDrafts, unknownError} from 'shared/dist/types/apiErrors';
 import {DraftType,
   DraftResponseBody, draftResponseBody} from 'shared/dist/types/draft';
 import {addDraftIdToUser} from '../../../db/auth';
@@ -15,10 +15,10 @@ export const addNewDraft =
       const user = req.user as UserSchema;
       const numDrafts = user.draftIDs ? user.draftIDs.length : 0;
 
-      if (numDrafts===undefined || numDrafts >= 3) {
+      if (numDrafts===undefined || numDrafts >= 7) {
         const response : APIResponse = {
           data: null,
-          error: alreadyThreeDrafts,
+          error: tooManyDrafts,
         };
         res.status(response.error?.code as number)
             .end(JSON.stringify(response));

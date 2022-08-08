@@ -47,8 +47,8 @@ export const needToLogin : APIError = {
   code: StatusCodes.UNAUTHORIZED,
 };
 
-export const alreadyThreeDrafts : APIError = {
-  message: 'You already have three drafts in your account.',
+export const tooManyDrafts : APIError = {
+  message: 'You already have seven drafts in your account.',
   code: StatusCodes.CONFLICT,
 };
 

@@ -6,7 +6,7 @@ import {futureFrontendData, FutureFrontendData} from 'shared/dist/types/future';
 import axios, {AxiosError} from 'axios';
 import {draftResponseBody, DraftType} from 'shared/dist/types/draft';
 import {FutureResponseBody, futureResponseBody} from 'shared/dist/types/future';
-import {alreadyThreeDrafts} from
+import {tooManyDrafts} from
   'shared/dist/types/apiErrors';
 import {CentralError, CentralErrors} from '../store/error';
 
@@ -178,12 +178,12 @@ export const editorAPI = {
     } catch (err) {
       const error = err as AxiosError;
       if ((error.response as any)?.data?.error?.message ===
-      alreadyThreeDrafts.message) {
+      tooManyDrafts.message) {
         return {
           success: false,
           error: {
             type: CentralErrors.addDraftError,
-            message: alreadyThreeDrafts.message,
+            message: tooManyDrafts.message,
           },
         };
       } else {

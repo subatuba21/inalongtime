@@ -20,20 +20,20 @@ export const isDraftPaid =
 
       if (draft.type === 'letter') {
         const letterContent = content as LetterContent;
-        if (letterContent.getWordCount() > 200) {
+        if (letterContent.getWordCount() > 150) {
           return {
             paid: true,
-            reason: 'This draft is over 200 words.',
+            reason: 'This draft is over 150 words.',
           };
         }
       }
 
       if (draft.type === 'reminder') {
         const reminderContent = content as ReminderContent;
-        if (reminderContent.getWordCount() > 200) {
+        if (reminderContent.getWordCount() > 150) {
           return {
             paid: true,
-            reason: 'This draft is over 200 words.',
+            reason: 'This draft is over 150 words.',
           };
         }
       }
