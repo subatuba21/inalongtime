@@ -17,7 +17,9 @@ export const addFuture =
     : Promise<FutureDbResponse> => {
       try {
         logger.verbose(future);
-        const res = await futureCol.insertOne(future);
+        const res = await futureCol.insertOne(
+            {...future, _id:
+              new ObjectId(future._id), userId: new ObjectId(future.userId)});
         if (res.acknowledged) {
           logger.verbose(`Added future with id ${res.insertedId}`);
           return {

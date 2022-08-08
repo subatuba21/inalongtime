@@ -1,6 +1,6 @@
 #mainDiv {
     width: 600px;
-    max-width: 80%;
+    max-width: 90%;
     margin: 0 auto;
     margin-top: 50px;
 }
@@ -8,4 +8,31 @@
 #mainDiv > h2 {
     font-size: 25pt;
     margin-bottom: 30px;
+}
+
+.question {
+    margin-top: 50px;
+}
+
+.question h3 {
+    font-size: 20pt;
+}
+
+#mainDiv h5 {
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    #mainDiv {
+        margin-top: 30px;
+    }
+
+    #mainDiv > h2 {
+        font-size: 20pt;
+        margin-bottom: 20px;
+    }
+
+    .question h3 {
+        font-size: 15pt;
+    }
 }

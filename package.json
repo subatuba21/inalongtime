@@ -2,6 +2,6 @@
     "private": true,
     "workspaces": {
         "packages": ["frontend", "backend", "shared"],
-        "nohoist": ["**/eslint-config-google", "**/eslint-config-google/**"]
+        "nohoist": ["**/eslint-config-google", "**/eslint-config-google/**", "**/mongodb", "**/mongodb/**"]
     }
 }

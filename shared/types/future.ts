@@ -1,14 +1,15 @@
 import { z } from "zod";
 import { dateSchema, DraftSchema, draftSchema } from "./draft";
 import validator from 'validator';
-import {ObjectId} from 'mongodb';
 
-export const mongoDbSchema = z.preprocess((arg) => {
-    if (arg instanceof ObjectId)  {
-        return arg.toString();
+export const mongoDbSchema = z.preprocess((arg: any) => {
+    if (typeof arg === 'object' && typeof arg.toString === 'function') {
+        return (arg as any).toString();
     }
     return arg;
-}, z.string().length(24).transform((id) => new ObjectId(id)));
+},z.string().refine((arg: string) => {
+    return validator.isMongoId(arg);
+}));
 
 export const futureSchema = draftSchema.extend({
     recipientEmail: z.string().refine((arg) => {
@@ -29,10 +30,18 @@ export const futureSchema = draftSchema.extend({
     createdAt: dateSchema,
 });
 
-export const futureFrontendData = futureSchema.pick({
-    title: true,
-    createdAt: true,
+export const futureFrontendData = z.object({
+    futures: z.array(futureSchema.pick({
+        title: true,
+        createdAt: true,
+        nextSendDate: true,
+        recipientEmail: true,
+        recipientType: true,
+        type: true,
+    }).strip())
 });
+
+export type FutureFrontendData = z.infer<typeof futureFrontendData>;
 
 export const futureResponseBody = z.object({
     content: z.any(),

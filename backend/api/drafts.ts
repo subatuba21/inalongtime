@@ -16,12 +16,14 @@ import {getResource} from './middleware/draft/getResource';
 import {convertDraftToFuture, deleteUnnecessaryFiles, onlyAllowUnpaid,
   setIsDraftIsPaid} from './middleware/fulfillment';
 import {returnIsDraftPaid} from './middleware/draft/isDraftPaid';
+import {getSentFutures} from './middleware/draft/getSentFutures';
 
 
 // eslint-disable-next-line new-cap
 export const draftRouter = Router();
 
 draftRouter.get('/user', mustBeLoggedIn, getUserDrafts);
+draftRouter.get('/sent', mustBeLoggedIn, getSentFutures);
 draftRouter.post('/', mustBeLoggedIn, extractDraftType, addNewDraft);
 draftRouter.put('/:id', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft, extractDraftType,
