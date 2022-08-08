@@ -59,7 +59,8 @@ export const Sent = (props: {
           </span>
         </p>
       </>,
-      successButton: new Date() >= props.arrivalDate ? {
+      successButton: new Date() >= props.arrivalDate ||
+      props.recipientType === 'someone else' ? {
         text: 'View',
         onClick: () => {
           navigate(`/future/${props._id}`);

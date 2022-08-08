@@ -59,6 +59,10 @@ code {
   color: white;
 }
 
+.blueText {
+  color: lightcyan;
+}
+
 .gradientFinishText {
   color: var(--gradient-finish);
 }
