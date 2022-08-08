@@ -22,12 +22,14 @@ futureRouter.get('/:id', extractDraftIDFromURL, async (req, res) => {
     error: notFoundError,
   };
 
+  logger.verbose(console.log(future));
+
   if (!future.success || !future.future) {
     res.status(404).json(notFoundRes);
     return;
   }
 
-  if ((future.future?.nextSendDate as Date) < new Date()) {
+  if ((future.future?.nextSendDate as Date) > new Date()) {
     const response : APIResponse = {
       data: null,
       error: notFoundError,
@@ -37,7 +39,7 @@ futureRouter.get('/:id', extractDraftIDFromURL, async (req, res) => {
     return;
   }
 
-  if (future.future?.viewed) {
+  if (future.future?.viewed && !future.future?.filesAccessible) {
     const user = req.user;
     if (!user || (user.email !== future.future?.recipientEmail &&
       user.email !== future.future?.backupEmail &&

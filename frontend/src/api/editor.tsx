@@ -5,6 +5,7 @@ import {DraftResponseBody, EditDraftRequestBody,
 import {futureFrontendData, FutureFrontendData} from 'shared/dist/types/future';
 import axios, {AxiosError} from 'axios';
 import {draftResponseBody, DraftType} from 'shared/dist/types/draft';
+import {FutureResponseBody, futureResponseBody} from 'shared/dist/types/future';
 import {alreadyThreeDrafts} from
   'shared/dist/types/apiErrors';
 import {CentralError, CentralErrors} from '../store/error';
@@ -25,6 +26,12 @@ interface getDraftResult {
   success: boolean,
   error?: CentralError,
   data?: DraftResponseBody,
+}
+
+interface getFutureResult {
+  success: boolean,
+  error?: CentralError,
+  data?: FutureResponseBody,
 }
 
 interface deleteResult {
@@ -75,6 +82,28 @@ export const editorAPI = {
         error: {
           type: CentralErrors.getDraftError,
           message: 'Unable to find requested draft.',
+        },
+      };
+    }
+  },
+
+  getFuture: async (futureId: string) : Promise<getFutureResult> => {
+    try {
+      const res = await axios({
+        method: 'get',
+        url: `/api/future/${futureId}`,
+      });
+      const data = await futureResponseBody.parseAsync(res.data?.data);
+      return {
+        success: true,
+        data,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        error: {
+          type: CentralErrors.getDraftError,
+          message: 'Unable to find requested future.',
         },
       };
     }

@@ -7,7 +7,7 @@ export const handleFutureResource =
       const future = await getFuture(id);
       if (future.success) {
         const futureOb = future.future as Future;
-        if (futureOb.viewed === true && futureOb.filesAccesible === true) {
+        if (futureOb.viewed === true && futureOb.filesAccessible === true) {
           req.future = {};
           req.future.id = futureOb._id;
           req.draft = {};

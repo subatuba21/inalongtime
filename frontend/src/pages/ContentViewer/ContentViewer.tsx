@@ -44,6 +44,7 @@ export const ContentViewer = (props: {
   useState<CustomizationSchema | undefined>(undefined);
   const [contentType, setContentType] =
     useState<DraftType | undefined>(undefined);
+  const [createdAt, setCreatedAt] = useState<Date | undefined>(undefined);
   const userState = useSelector((state) => (state as any).user) as UserState;
 
   useEffect(() => {
@@ -67,7 +68,25 @@ export const ContentViewer = (props: {
           setWaitTimeDone(true);
         }, 2000);
       } else {
+        const res = await editorAPI.getFuture(id);
+        if (res.success) {
+          setContent(
+              parseContent(res.data?.content,
+                res.data?.properties.type as DraftType));
 
+          setContentType(res.data?.properties.type);
+
+          setTitle(res.data?.properties.title ?
+            res.data?.properties.title : '');
+
+          setCustomization(res.data?.properties.customization);
+
+          setCreatedAt(res.data?.properties.createdAt);
+        }
+        setIsLoading(false);
+        setTimeout(() => {
+          setWaitTimeDone(true);
+        }, 2000);
       }
     };
 
@@ -76,7 +95,7 @@ export const ContentViewer = (props: {
 
   const loadingPageText = props.mode === 'preview' ?
   'Reload the page to see the latest changes.' :
-   'Get ready to time travel.';
+   'Get ready.';
 
   if (isLoading) {
     return (<div id={loadingStyles.loadingPage}>
@@ -189,7 +208,7 @@ export const ContentViewer = (props: {
         }}>
           <header>{title}</header>
           <span className={styles.createdOn}>Sent on {props.mode === 'preview' ?
-      formatDate(new Date()) : ''}</span>
+      formatDate(new Date()) : formatDate(createdAt || new Date())}</span>
           <span className={styles.author}>By {props.mode === 'preview' ?
       userState.firstName + ' ' + userState.lastName : ''}</span>
           {jsxContent}

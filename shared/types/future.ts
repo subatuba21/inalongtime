@@ -27,9 +27,9 @@ export const futureSchema = draftSchema.extend({
     userId: mongoDbSchema,
     nextSendDate: dateSchema,
     viewed: z.boolean(),
-    filesAccesible: z.boolean().default(true),
+    filesAccessible: z.boolean().default(true),
     createdAt: dateSchema,
-});
+}).strip();
 
 export const futureFrontendData = z.object({
     futures: z.array(futureSchema.pick({
@@ -48,7 +48,14 @@ export type FutureFrontendData = z.infer<typeof futureFrontendData>;
 
 export const futureResponseBody = z.object({
     content: z.any(),
-    properties: futureFrontendData.strip()
+    properties: futureSchema.pick({
+        title: true,
+        createdAt: true,
+        nextSendDate: true,
+        type: true,
+        _id: true,
+        customization: true
+    }).strip()
 });
 
 export const preprocessDraft = z.preprocess((arg) => {
@@ -62,3 +69,4 @@ export const preprocessDraft = z.preprocess((arg) => {
 }, futureSchema);
 
 export type Future = z.infer<typeof futureSchema>;
+export type FutureResponseBody = z.infer<typeof futureResponseBody>;

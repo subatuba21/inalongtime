@@ -103,6 +103,11 @@ export const App = () => {
             <ContentViewer mode='preview'></ContentViewer>
           </LoggedInRouteGuard>}/>
 
+        <Route path='/future/:id' element={
+          <ContentViewer mode='future'></ContentViewer>
+        }/>
+
+
         <Route path='/sent' element={
           <LoggedInRouteGuard>
             <Head title='Sent' />
