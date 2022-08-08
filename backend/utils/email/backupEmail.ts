@@ -4,6 +4,7 @@ import {Future} from 'shared/dist/types/future';
 import {compile} from 'handlebars';
 import {transporter} from './setup';
 import {formatDate} from 'shared/dist/utils/formatDate';
+import logger from '../../logger';
 
 const backupEmail = compile(fs.readFileSync(
     path.join(__dirname, './templates/backupEmail.hbs'), 'utf8'));
@@ -32,6 +33,7 @@ export const sendBackupEmail =
       });
 
       if (!result.accepted.includes(email)) {
+        logger.error(result.response);
         throw new Error('Email not accepted');
       }
     };

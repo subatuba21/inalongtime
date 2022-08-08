@@ -8,7 +8,7 @@ export const googleStrategy = new Strategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
   callbackURL:
   // eslint-disable-next-line max-len
-  `${process.env.GOOGLE_CALLBACK_URL_BASE as string}/api/auth/google/callback`,
+  `${process.env.HOST_ADDRESS as string}/api/auth/google/callback`,
 }, async (accessToken, refreshToken, profile, done) => {
   logger.verbose(`Localstrategy working for email ${profile.email}`);
   const userResponse: UserDbResponse = await getUserByEmail(profile.email);

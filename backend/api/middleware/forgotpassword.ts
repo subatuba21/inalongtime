@@ -8,6 +8,7 @@ import {addToken} from '../../db/forgotPassword';
 import {createToken, hashToken} from '../../utils/token';
 import {sendForgotPasswordEmail as sendForgotPasswordEmailFunc}
   from '../../utils/email/forgotPasswordEmail';
+import logger from '../../logger';
 
 export const extractNewPassword =
     (req: express.Request, res: express.Response, next: Function) => {
@@ -81,6 +82,7 @@ export const sendForgotPasswordEmail =
           throw new Error('');
         }
       } catch (err) {
+        logger.error((err as any).message);
         const response : APIResponse = {
           data: null,
           error: unknownError,

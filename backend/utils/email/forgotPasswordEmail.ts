@@ -2,6 +2,7 @@ import {transporter} from './setup';
 import fs from 'fs';
 import {compile} from 'handlebars';
 import path from 'path';
+import logger from '../../logger';
 
 const forgotPasswordEmail =
     compile(fs.readFileSync(
@@ -23,6 +24,7 @@ export const sendForgotPasswordEmail =
       });
 
       if (!result.accepted.includes(email)) {
+        logger.error(result.response);
         throw new Error('Email not accepted');
       }
     };
