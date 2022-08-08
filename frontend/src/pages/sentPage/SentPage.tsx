@@ -46,9 +46,14 @@ export const SentPage = () => {
       <Navbar></Navbar>
       <div id={styles.mainDiv}>
         <h2 className='pinkText'>Sent (to the future)</h2>
+        <h4 className='whiteText'>Sorted by creation date (latest first)</h4>
         {(data as FutureFrontendData).futures.map((draft, i) => {
           return <Sent key={i}
-            name={draft.title} type={draft.type}></Sent>;
+            name={draft.title} type={draft.type}
+            dateSent={draft.createdAt} arrivalDate={draft.nextSendDate}
+            recipientType={draft.recipientType}
+            recipientEmail={draft.recipientEmail}
+            viewed={draft.viewed} _id={draft._id}></Sent>;
         })}
       </div>
       <BottomBuffer></BottomBuffer>

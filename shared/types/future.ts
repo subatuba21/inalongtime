@@ -38,6 +38,8 @@ export const futureFrontendData = z.object({
         recipientEmail: true,
         recipientType: true,
         type: true,
+        viewed: true,
+        _id: true,
     }).strip())
 });
 

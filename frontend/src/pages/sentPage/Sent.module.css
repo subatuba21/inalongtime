@@ -44,6 +44,7 @@
     justify-content: center;
     align-items: center;
     margin-right: 5px;
+    font-size: 15pt;
 }
 
 .icons svg {
@@ -65,6 +66,10 @@
 
 #close {
     color: rgb(253, 86, 86);
+}
+
+.infoTag {
+    margin-bottom: 5px;
 }
 
 
