@@ -81,7 +81,7 @@ export const getFuturesBySenderId =
       }
     };
 
-export const getRecievedFutures =
+export const getreceivedFutures =
     async (recipientId: string, recipientEmail: string)
     : Promise<MultipleFutureDbResponse> => {
       try {

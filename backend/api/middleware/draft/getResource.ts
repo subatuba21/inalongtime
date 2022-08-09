@@ -82,8 +82,8 @@ async (req: express.Request, res: express.Response, next: Function) => {
 
         const fileStream = file.createReadStream(options);
         fileStream.on('error', (error) => {
-          console.log(`Error reading file`);
-          console.log(error);
+          logger.error(`Error reading file`);
+          logger.error(error.message);
           res.sendStatus(500);
         });
         fileStream.pipe(res);

@@ -17,6 +17,7 @@ import {convertDraftToFuture, deleteUnnecessaryFiles, onlyAllowUnpaid,
   setIsDraftIsPaid} from './middleware/fulfillment';
 import {returnIsDraftPaid} from './middleware/draft/isDraftPaid';
 import {getSentFutures} from './middleware/draft/getSentFutures';
+import {getreceivedFutures} from './middleware/draft/getReceivedFutures';
 import {handleFutureResource} from './middleware/handleFutureResource';
 import {allowedToAccessFuture} from '../utils/allowedFutureAccess';
 import {Future} from 'shared/types/future';
@@ -28,6 +29,7 @@ export const draftRouter = Router();
 
 draftRouter.get('/user', mustBeLoggedIn, getUserDrafts);
 draftRouter.get('/sent', mustBeLoggedIn, getSentFutures);
+draftRouter.get('/received', mustBeLoggedIn, getreceivedFutures);
 draftRouter.post('/', mustBeLoggedIn, extractDraftType, addNewDraft);
 draftRouter.put('/:id', mustBeLoggedIn,
     extractDraftIDFromURL, authorizeDraft, extractDraftType,

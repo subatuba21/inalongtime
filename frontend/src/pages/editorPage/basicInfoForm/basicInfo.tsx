@@ -158,7 +158,6 @@ export const BasicInfo = () => {
             const errors = [];
             if (input.length===0) errors.push('Phone number cannot be blank.');
             const withoutPlusses = input.replace(/\+/g, '');
-            console.log(withoutPlusses);
 
             if (!validate.isMobilePhone(`+${withoutPlusses}`, 'any', {
               strictMode: true,

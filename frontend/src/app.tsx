@@ -28,7 +28,7 @@ import {ContentViewer} from './pages/ContentViewer/ContentViewer';
 import {SuccessPage} from './pages/successPage/successPage';
 import {Head} from './components/Head/Head';
 import {SentPage} from './pages/sentPage/SentPage';
-import {RecievedPage} from './pages/recievedPage/RecievedPage';
+import {ReceivedPage} from './pages/receivedPage/ReceivedPage';
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -115,10 +115,10 @@ export const App = () => {
             <SentPage></SentPage>
           </LoggedInRouteGuard>}/>
 
-        <Route path='/recieved' element={
+        <Route path='/received' element={
           <LoggedInRouteGuard>
-            <Head title='Recieved' />
-            <RecievedPage />
+            <Head title='Received' />
+            <ReceivedPage />
           </LoggedInRouteGuard>}/>
 
 

@@ -16,7 +16,7 @@ interface getUserDraftsResult {
   data?: MiniDraft[],
 }
 
-interface getSentFutureResult {
+interface getSentOrReceivedFutureResult {
   success: boolean,
   error?: CentralError,
   data?: FutureFrontendData,
@@ -227,7 +227,7 @@ export const editorAPI = {
     }
   },
 
-  getSentDrafts: async () : Promise<getSentFutureResult> => {
+  getSentDrafts: async () : Promise<getSentOrReceivedFutureResult> => {
     try {
       const res = await axios({
         method: 'get',
@@ -248,6 +248,36 @@ export const editorAPI = {
       const error = {
         type: CentralErrors.getDraftError,
         message: 'There was an unknown error getting your sent drafts.',
+      };
+
+      return {
+        success: false,
+        error,
+      };
+    }
+  },
+
+  getReceivedDrafts: async () : Promise<getSentOrReceivedFutureResult> => {
+    try {
+      const res = await axios({
+        method: 'get',
+        url: `/api/draft/received`,
+      });
+      if (res.status===200) {
+        const parsed = await futureFrontendData.safeParseAsync(res.data?.data);
+        if (!parsed.success) throw new Error('Unable to retrieve received drafts. Please try again later.');
+
+        return {
+          success: true,
+          data: parsed.data,
+        };
+      } else {
+        throw new Error();
+      }
+    } catch (err) {
+      const error = {
+        type: CentralErrors.getDraftError,
+        message: 'There was an unknown error getting your received drafts.',
       };
 
       return {

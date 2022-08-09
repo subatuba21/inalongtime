@@ -1,12 +1,13 @@
 import express from 'express';
 import {futureFrontendData} from 'shared/dist/types/future';
-import {getFuturesBySenderId} from '../../../db/future';
+import {getreceivedFutures as getreceivedFuturesFromDB}
+  from '../../../db/future';
 import {UserSchema} from '../../../utils/schemas/user';
 import {APIResponse} from '../../../utils/types/apiStructure';
-export const getSentFutures =
+export const getreceivedFutures =
     async (req: express.Request, res: express.Response, next: Function) => {
       const user = req.user as UserSchema;
-      const result = await getFuturesBySenderId(user._id);
+      const result = await getreceivedFuturesFromDB(user._id, user.email);
       const futureData = await
       futureFrontendData.safeParseAsync(result);
       if (result.success && futureData.success) {
@@ -18,7 +19,7 @@ export const getSentFutures =
       } else {
         const response : APIResponse = {
           error: {
-            message: 'Unable to find sent futures. Please try again later.',
+            message: 'Unable to find received futures. Please try again later.',
             code: 500,
           },
           data: null,
