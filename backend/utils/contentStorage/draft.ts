@@ -7,7 +7,7 @@ import {Metadata} from '@google-cloud/storage/build/src/nodejs-common';
 import fs from 'fs';
 import {deleteResourceFromDraft} from '../../db/draft';
 import logger from '../../logger';
-import {allowedFileTypes} from 'shared/dist/types/fileTypes';
+import {allowedFileTypes, maxDraftSize} from 'shared/dist/types/fileTypes';
 const storage = new Storage({
   keyFilename: `${__dirname}/${process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE_PATH}`,
 });
@@ -72,8 +72,8 @@ export const postDraftResource = async (userId: string, draftId: string, resourc
     totalStorage += metadata.size;
   });
 
-  if (totalStorage + fileSize > 5.05e8) {
-    throw new Error('Draft is over 500mb. Please delete resources and try again');
+  if (totalStorage + fileSize > maxDraftSize) {
+    throw new Error('Draft is over 1GB, which is the max storage. Please delete resources and try again');
   }
   const path = getContentResourceFileName(userId, draftId, resourceId);
   const file = bucket.file(path);

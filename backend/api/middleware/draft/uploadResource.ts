@@ -9,6 +9,7 @@ import {resourceSchema} from 'shared/dist/types/draft';
 import {allowedFileTypes,
   allowedFileTypesSchema} from 'shared/dist/types/fileTypes';
 import fs from 'fs';
+import {maxFileSize} from 'shared/types/fileTypes';
 
 export const allowFileTypes =
     async (req: express.Request, res: express.Response, next: Function) => {
@@ -59,12 +60,12 @@ export const uploadResource =
       return;
     } else {
       const file = req.files.file as UploadedFile;
-      if (file.size > 3.05e8) {
+      if (file.size > maxFileSize) {
         const response : APIResponse = {
           data: null,
           error: {
             code: 413,
-            message: 'File must be 300MB or smaller',
+            message: 'File must be 500MB or smaller',
           },
         };
         res.status(413).end(JSON.stringify(response));

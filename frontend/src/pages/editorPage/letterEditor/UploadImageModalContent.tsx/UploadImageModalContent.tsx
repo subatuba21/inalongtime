@@ -2,7 +2,7 @@ import {useState, useRef} from 'react';
 import {useSelector} from 'react-redux';
 import {DraftFrontendState} from 'shared/dist/types/draft';
 import {allowedFileTypesSchema,
-  allowedLetterImageFileTypes, allowedLetterImageFileTypesSchema}
+  allowedLetterImageFileTypes, allowedLetterImageFileTypesSchema, maxFileSize}
   from 'shared/dist/types/fileTypes';
 import {editorAPI} from '../../../../api/editor';
 import {BaseMediaPlayer} from
@@ -66,9 +66,14 @@ export const UploadImageModalContent =
       if (file) {
         const result = allowedLetterImageFileTypesSchema.safeParse(file.type);
         if (result.success) {
-          setCurrentFile(file);
-          setCurrentMessageText(`Current file: ${file.name}`);
-          setCurrentFileType(result.data);
+          if (file.size > maxFileSize) {
+            setCurrentMessageText(`Image size must be less than 700MB.`);
+            return;
+          } else {
+            setCurrentFile(file);
+            setCurrentMessageText(`Current file: ${file.name}`);
+            setCurrentFileType(result.data);
+          }
         } else {
           setCurrentMessageText(
               `File type must be jpeg or png`);
@@ -86,9 +91,14 @@ export const UploadImageModalContent =
       const file = event.currentTarget.files[0];
       const result = allowedLetterImageFileTypesSchema.safeParse(file.type);
       if (result.success) {
-        setCurrentFile(file);
-        setCurrentMessageText(`Current file: ${file.name}`);
-        setCurrentFileType(result.data);
+        if (file.size > maxFileSize) {
+          setCurrentMessageText(`Image size must be less than 700MB.`);
+          return;
+        } else {
+          setCurrentFile(file);
+          setCurrentMessageText(`Current file: ${file.name}`);
+          setCurrentFileType(result.data);
+        }
       } else {
         setCurrentMessageText(
             `File type must be jpeg, png, gif, mp4, or mp3`);

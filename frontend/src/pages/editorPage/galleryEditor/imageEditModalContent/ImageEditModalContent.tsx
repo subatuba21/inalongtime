@@ -1,7 +1,7 @@
 import {useSelector} from 'react-redux';
 import {GalleryContent,
   MediaResourceArray} from 'shared/dist/editor/classes/galleryContent';
-import {allowedFileTypes, allowedFileTypesSchema}
+import {allowedFileTypes, allowedFileTypesSchema, maxFileSize}
   from 'shared/dist/types/fileTypes';
 import {DraftFrontendState} from 'shared/dist/types/draft';
 import editorStyles from '../GalleryEditor.module.css';
@@ -95,9 +95,14 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
       const file = event.currentTarget.files[0];
       const result = allowedFileTypesSchema.safeParse(file.type);
       if (result.success) {
-        setCurrentFile(file);
-        setCurrentMessageText(`Current file: ${file.name}`);
-        setCurrentFileType(result.data);
+        if (file.size > maxFileSize) {
+          setCurrentMessageText(`File size must be less than 700MB.`);
+          return;
+        } else {
+          setCurrentFile(file);
+          setCurrentMessageText(`Current file: ${file.name}`);
+          setCurrentFileType(result.data);
+        }
       } else {
         setCurrentMessageText(
             `File type must be jpeg, png, gif, mp4, or mp3`);
@@ -126,9 +131,14 @@ export const ImageEditModalContent = (props: {mediaArrayIndex: number}) => {
     if (file) {
       const result = allowedFileTypesSchema.safeParse(file.type);
       if (result.success) {
-        setCurrentFile(file);
-        setCurrentMessageText(`Current file: ${file.name}`);
-        setCurrentFileType(result.data);
+        if (file.size > maxFileSize) {
+          setCurrentMessageText(`File size must be less than 700MB.`);
+          return;
+        } else {
+          setCurrentFile(file);
+          setCurrentMessageText(`Current file: ${file.name}`);
+          setCurrentFileType(result.data);
+        }
       } else {
         setCurrentMessageText(
             `File type must be jpeg, png, gif, mp4, or mp3`);

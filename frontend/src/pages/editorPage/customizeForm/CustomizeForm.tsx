@@ -53,10 +53,14 @@ export const CustomizeForm = () => {
       }} className={styles.swatchesPicker}></SwatchesPicker>
 
     <br />
+    <br />
     <h4>Additional Options</h4>
     <br />
     <span className={styles.fieldName}>
         Custom Name
+    </span>
+    <span className={styles.fieldDescription}>
+        Use this if you want to use a nickname or go anonymous.
     </span>
     <InputBox name='custom name' valueState={{
       value: editorState.senderName,
