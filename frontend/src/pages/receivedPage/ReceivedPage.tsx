@@ -57,7 +57,7 @@ export const ReceivedPage = () => {
                 <h5 className='whiteText'>You have no received drafts.
                 Click <Link to='/home' style={{color: 'lightcyan',
                   textDecoration: 'underline'}}>here</Link>
-                  to create one.</h5> : (
+                  &nbsp;to create one.</h5> : (
                     <>
                       <h4 className='whiteText'>Sorted by arrival date
                       (latest first)</h4>
@@ -66,7 +66,8 @@ export const ReceivedPage = () => {
                           return <Received key={i}
                             name={draft.title} type={draft.type}
                             arrivalDate={draft.nextSendDate}
-                            _id={draft._id}></Received>;
+                            _id={draft._id} senderName={
+                              draft.senderName}></Received>;
                         })
                       }
                     </>

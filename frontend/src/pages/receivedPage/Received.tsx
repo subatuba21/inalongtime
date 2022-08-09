@@ -7,6 +7,7 @@ export const Received = (props: {
     type: DraftType,
     arrivalDate: Date,
     _id: string,
+    senderName: string
 }) => {
   const navigate = useNavigate();
   return <div className={styles.received} onClick={() => {
@@ -15,8 +16,10 @@ export const Received = (props: {
     <div>
       <h3>{props.name}</h3>
       <h4>
-        <span className='pinkText'>{props.type[0].toUpperCase() +
-    props.type.substring(1)}</span> from Subhajit Das</h4>
+        <span style={{
+          color: 'rgba(0, 0, 0, 0.6)',
+        }}>{props.type[0].toUpperCase() +
+    props.type.substring(1)}</span> from {props.senderName}</h4>
     </div>
     <div className={styles.dateDiv}>Arrived&nbsp;
       {formatDate(props.arrivalDate)}</div>

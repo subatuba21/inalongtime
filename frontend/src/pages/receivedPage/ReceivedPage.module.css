@@ -33,13 +33,13 @@
 
 .received {
     background-color: white;
-    border-radius: 10px;
+    border-radius: 12px;
     width: 100%;
     padding: 15px;
+    padding-top: 12.5px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
     cursor: pointer;
 }
 
@@ -62,6 +62,9 @@
 
 .dateDiv {
     max-width: 33%;
+    position: relative;
+    top: 1.5px;
+    right: 3px;
 }
 
 @media (max-width: 600px) {
