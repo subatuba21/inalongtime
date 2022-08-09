@@ -56,7 +56,10 @@ export const SentPage = () => {
         </Link> to create one.</h5> :
         <>
           <h4 className='whiteText'>Sorted by creation date (latest first)</h4>
-          {(data as FutureFrontendData).futures.map((draft, i) => {
+          {(data as FutureFrontendData).futures.sort((future1, future2) => {
+            return future1.createdAt <= future2
+                .createdAt ? 1 : -1;
+          }).map((draft, i) => {
             return <Sent key={i}
               name={draft.title} type={draft.type}
               dateSent={draft.createdAt} arrivalDate={draft.nextSendDate}

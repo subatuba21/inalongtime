@@ -62,17 +62,44 @@ export const ReceivedPage = () => {
                       <h4 className='whiteText'>Sorted by arrival date
                       (latest first)</h4>
                       {
-                        data?.futures.map((draft, i) => {
-                          return <Received key={i}
-                            name={draft.title} type={draft.type}
-                            arrivalDate={draft.nextSendDate}
-                            _id={draft._id} senderName={
-                              draft.senderName}></Received>;
+                        data?.futures.sort((future1, future2) => {
+                          return future1.nextSendDate <= future2
+                              .nextSendDate ? 1 : -1;
                         })
+                            .map((draft, i) => {
+                              return <Received key={i}
+                                name={draft.title} type={draft.type}
+                                arrivalDate={draft.nextSendDate}
+                                _id={draft._id} senderName={
+                                  draft.senderName}></Received>;
+                            })
                       }
                     </>
                   )
           }
+
+          <p className={styles.question}>
+            <h3 className='pinkText'>Q: Why can&apos;t I view what I sent?</h3>
+            <p className='whiteText'>
+            If you sent your letter, gallery, etc. to someone else,
+            you can view it by clicking on your draft and then clicking the
+            &apos;view&apos; button. If you sent it to yourself, you won&apos;t
+            be able to view it till the arrival date. We want to be a surprise!
+            </p>
+          </p>
+          <p className={styles.question}>
+            <h3 className='pinkText'>Can I delete once I have clicked send?</h3>
+            <p className='whiteText'>Not yet, but that will be coming soon.
+          If you urgently need to delete a sent draft, please contact us
+          at contact@inalongtime.com.
+            </p>
+          </p>
+          <p className={styles.question}>
+            <h3 className='pinkText'>Can I edit once I have clicked send?</h3>
+            <p className='whiteText'>Editing after you hit send is
+            not supported.
+            </p>
+          </p>
         </div>
         <BottomBuffer></BottomBuffer>
       </div>
