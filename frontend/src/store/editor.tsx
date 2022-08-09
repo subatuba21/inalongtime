@@ -161,6 +161,10 @@ export const editorSlice = createSlice({
       (state: DraftFrontendState, action: PayloadAction<StepType>) => {
         state.progress[action.payload] = 'unfinished';
       },
+    changeSenderName:
+      (state: DraftFrontendState, action: PayloadAction<string>) => {
+        state.senderName = action.payload;
+      },
     loadDraft:
       (state: DraftFrontendState, action: PayloadAction<DraftResponseBody>) => {
         state._id = action.payload.properties._id;
@@ -174,6 +178,7 @@ export const editorSlice = createSlice({
         state.userId = action.payload.properties.userId;
         state.backupEmail = action.payload.properties.backupEmail;
         state.customization = action.payload.properties.customization;
+        state.senderName = action.payload.properties.senderName;
 
         try {
           state.content = parseContent(action.payload.content, state.type);

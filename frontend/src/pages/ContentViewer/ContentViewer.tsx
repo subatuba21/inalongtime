@@ -18,8 +18,6 @@ import {GalleryContent,
 import {Carousel, CarouselItem} from 'react-bootstrap';
 import {BaseMediaPlayer} from
   '../../components/BaseMediaPlayer/baseMediaPlayer';
-import {UserState} from '../../store/user';
-import {useSelector} from 'react-redux';
 import {Headphones} from 'react-bootstrap-icons';
 
 export const ContentViewer = (props: {
@@ -40,12 +38,13 @@ export const ContentViewer = (props: {
 
   const [content, setContent] = useState<Content | undefined>(undefined);
   const [title, setTitle] = useState<string>('');
+  const [senderName, setSenderName] = useState<string | undefined>(undefined);
+
   const [customization, setCustomization] =
   useState<CustomizationSchema | undefined>(undefined);
   const [contentType, setContentType] =
     useState<DraftType | undefined>(undefined);
   const [createdAt, setCreatedAt] = useState<Date | undefined>(undefined);
-  const userState = useSelector((state) => (state as any).user) as UserState;
 
   useEffect(() => {
     const getData = async () => {
@@ -62,6 +61,8 @@ export const ContentViewer = (props: {
             res.data?.properties.title : '');
 
           setCustomization(res.data?.properties.customization);
+
+          setSenderName(res.data?.properties.senderName);
         }
         setIsLoading(false);
         setTimeout(() => {
@@ -82,6 +83,8 @@ export const ContentViewer = (props: {
           setCustomization(res.data?.properties.customization);
 
           setCreatedAt(res.data?.properties.createdAt);
+
+          setSenderName(res.data?.properties.senderName);
         }
         setIsLoading(false);
         setTimeout(() => {
@@ -209,8 +212,7 @@ export const ContentViewer = (props: {
           <header>{title}</header>
           <span className={styles.createdOn}>Sent on {props.mode === 'preview' ?
       formatDate(new Date()) : formatDate(createdAt || new Date())}</span>
-          <span className={styles.author}>By {props.mode === 'preview' ?
-      userState.firstName + ' ' + userState.lastName : ''}</span>
+          <span className={styles.author}>From {senderName}</span>
           {jsxContent}
         </div>
       </div>

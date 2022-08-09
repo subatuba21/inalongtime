@@ -29,6 +29,7 @@ export const futureSchema = draftSchema.extend({
     viewed: z.boolean(),
     filesAccessible: z.boolean().default(true),
     createdAt: dateSchema,
+    senderName: z.string().default('Anonymous'),
 }).strip();
 
 export const futureFrontendData = z.object({
@@ -40,6 +41,7 @@ export const futureFrontendData = z.object({
         recipientType: true,
         type: true,
         viewed: true,
+        senderName: true,
         _id: true,
     }).strip())
 });
@@ -54,7 +56,8 @@ export const futureResponseBody = z.object({
         nextSendDate: true,
         type: true,
         _id: true,
-        customization: true
+        customization: true,
+        senderName: true,
     }).strip()
 });
 

@@ -40,6 +40,7 @@ export const draftSchema = z.object({
   backupEmail: z.string(),
   resources: z.array(resourceSchema),
   customization: customizationSchema.optional(),
+  senderName: z.string().optional(),
 }).strict();
 
 export const ProgressState = z.enum(['finished', 'unfinished', 'unopened']);

@@ -40,6 +40,7 @@ export const addNewDraft =
             user._id, draftID.toString()),
         lastEdited: new Date(),
         resources: [],
+        senderName: `${user.firstname} ${user.lastname}`,
       }, draftID);
 
       const error = await addDraftIdToUser(user._id, draftID.toString());
