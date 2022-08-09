@@ -96,6 +96,8 @@
 
 #reminder #subject {
     flex-grow: 1;
+    font-weight: bold;
+    font-size: 13pt;
 }
 
 #reminder #subject p {

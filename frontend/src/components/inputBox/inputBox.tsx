@@ -3,6 +3,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import {useState, useRef, useEffect, FocusEventHandler} from 'react';
 import {XLg} from 'react-bootstrap-icons';
+import {Form} from 'react-bootstrap';
 
 export const InputBox = (props:
   {
@@ -16,11 +17,24 @@ export const InputBox = (props:
     },
     type?: 'password',
     onBlur?: FocusEventHandler<HTMLInputElement>,
+    optional?: {
+      defaultValue: string,
+    }
   }) => {
   const [errors, setErrors]:
   [string[], React.Dispatch<React.SetStateAction<string[]>>] =
   useState([] as string[]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [optIn, setOptIn] = useState(
+      props.valueState.value === props.optional?.defaultValue);
+
+  const onSwitchChange : React.ChangeEventHandler<HTMLInputElement> =
+    (event) => {
+      if (optIn) {
+        props.valueState.set(props.optional?.defaultValue);
+      }
+      setOptIn(!optIn);
+    };
 
   useEffect(() => {
     if (!props.valueState.value) {
@@ -62,16 +76,18 @@ export const InputBox = (props:
     };
   }
 
-  const Input = <input className='inputBox'
+  const InputStage1 = <input className='inputBox'
     placeholder={props.placeholder}
     onChange={onChange} type={props.type}
     ref={inputRef} onBlur={props.onBlur} style={inputStyle}
     value={props.valueState.value}
   />;
 
+  let InputStage2;
+
 
   if (props.validation?.showErrors) {
-    return <OverlayTrigger placement='bottom-start'
+    InputStage2 = <OverlayTrigger placement='bottom-start'
       trigger={['hover', 'focus']} overlay={
         <Popover style={{
           display: errors.length===0 ? 'none' : '',
@@ -91,11 +107,26 @@ export const InputBox = (props:
           </Popover.Body>
         </Popover>
       }>
-      {Input}
+      {InputStage1}
     </OverlayTrigger>;
   } else {
-    return <div style={styles}>
-      {Input}
+    InputStage2 = <div style={styles}>
+      {InputStage1}
     </div>;
   }
+
+  let InputStage3;
+
+  if (props.optional) {
+    InputStage3 = <>
+      <Form.Switch onChange={onSwitchChange} checked={optIn}></Form.Switch>
+      {
+        optIn ? InputStage2 : <></>
+      }
+    </>;
+  } else {
+    InputStage3 = InputStage2;
+  }
+
+  return InputStage3;
 };
