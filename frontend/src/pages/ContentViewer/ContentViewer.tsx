@@ -212,8 +212,10 @@ export const ContentViewer = (props: {
           fontFamily: customization?.font ? customization.font : 'Open Sans',
         }}>
           <header>{title}</header>
-          <span className={styles.createdOn}>Sent on {props.mode === 'preview' ?
-      formatDate(new Date()) : formatDate(createdAt || new Date())}</span>
+          { customization?.showDate ? <span className={styles.createdOn}
+          >Sent on {props.mode === 'preview' ?
+      formatDate(new Date()) :
+       formatDate(createdAt || new Date())}</span> : <></>}
           <span className={styles.author}>From {senderName}</span>
           {jsxContent}
         </div>

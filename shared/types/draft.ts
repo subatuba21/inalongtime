@@ -18,7 +18,7 @@ export const customizationSchema = z.object({
   headerColor: hexSchema.default('#000000'),
   font: z.string(),
   fontColor: hexSchema,
-  showDate: z.boolean().default(true).optional(),
+  showDate: z.boolean().default(true),
 });
 
 export const resourceSchema = z.object({

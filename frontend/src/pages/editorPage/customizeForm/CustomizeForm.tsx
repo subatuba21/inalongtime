@@ -4,13 +4,15 @@ import {SwatchesPicker} from 'react-color';
 import {useSelector} from 'react-redux';
 import {DraftFrontendState} from 'shared/dist/types/draft';
 import {useAppDispatch} from '../../../store/store';
-import {changeSenderName, saveDraft, setBackgroundColor, setFontColor,
+import {changeSenderName, changeShowDate,
+  saveDraft, setBackgroundColor, setFontColor,
   setFontFamily,
   setHeaderColor,
   setStepFinished} from '../../../store/editor';
 import {useEffect} from 'react';
 import {InputBox} from '../../../components/inputBox/inputBox';
 import {UserState} from '../../../store/user';
+import {SelectBox} from '../../../components/selectBox/selectBox';
 
 export const CustomizeForm = () => {
   const dispatch = useAppDispatch();
@@ -81,6 +83,24 @@ Choose heading color
     }} onBlur={() => {
       dispatch(saveDraft('properties'));
     }}/>
+    <br />
+    <span className={styles.fieldName}>
+        Custom Name
+    </span>
+    <span className={styles.fieldDescription}>
+        If you don&apos;t want to the recipient to see
+        when you sent this, select &apos;no&apos;
+    </span>
+    <SelectBox name={'showDate'}
+      options={['Yes', 'No']} values={['true', 'false']} valueState={{
+        value: editorState.customization?.showDate ? 'true' : 'false',
+        set: (value: string) => {
+          const bool = value === 'true';
+          dispatch(changeShowDate(bool));
+        },
+      }} onChange={() => {
+        dispatch(saveDraft('properties'));
+      }} />
 
   </div>;
 };
