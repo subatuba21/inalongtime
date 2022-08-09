@@ -4,15 +4,18 @@ import {SwatchesPicker} from 'react-color';
 import {useSelector} from 'react-redux';
 import {DraftFrontendState} from 'shared/dist/types/draft';
 import {useAppDispatch} from '../../../store/store';
-import {saveDraft, setBackgroundColor, setFontColor,
+import {changeSenderName, saveDraft, setBackgroundColor, setFontColor,
   setFontFamily,
   setStepFinished} from '../../../store/editor';
 import {useEffect} from 'react';
+import {InputBox} from '../../../components/inputBox/inputBox';
+import {UserState} from '../../../store/user';
 
 export const CustomizeForm = () => {
   const dispatch = useAppDispatch();
   const editorState = useSelector(
       (state) => (state as any).editor) as DraftFrontendState;
+  const userState = useSelector((state) => (state as any).user) as UserState;
 
   useEffect(() => {
     dispatch(setStepFinished('customize'));
@@ -49,6 +52,20 @@ export const CustomizeForm = () => {
         dispatch(saveDraft('properties'));
       }} className={styles.swatchesPicker}></SwatchesPicker>
 
+    <br />
+    <h4>Additional Options</h4>
+    <br />
+    <span className={styles.fieldName}>
+        Custom Name
+    </span>
+    <InputBox name='custom name' valueState={{
+      value: editorState.senderName,
+      set: (value: string) => dispatch(changeSenderName(value)),
+    }} placeholder='Ex. Uncle Sam' optional={{
+      defaultValue: `${userState.firstName} ${userState.lastName}`,
+    }} onBlur={() => {
+      dispatch(saveDraft('properties'));
+    }}/>
 
   </div>;
 };

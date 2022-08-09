@@ -165,6 +165,12 @@ export const editorSlice = createSlice({
       (state: DraftFrontendState, action: PayloadAction<string>) => {
         state.senderName = action.payload;
       },
+    changeShowDate:
+      (state: DraftFrontendState, action: PayloadAction<boolean>) => {
+        if (!state.customization) state.customization = baseCustomization;
+        state.customization =
+          {...state.customization, showDate: action.payload};
+      },
     loadDraft:
       (state: DraftFrontendState, action: PayloadAction<DraftResponseBody>) => {
         state._id = action.payload.properties._id;
@@ -238,6 +244,7 @@ export const {changeTitle, changePhoneNumber,
   loadDraft, changeContent,
   changeSendDate, clearDraft,
   setFontColor, setFontFamily,
-  setBackgroundColor,
+  setBackgroundColor, changeSenderName,
+  changeShowDate,
 } =
    editorSlice.actions;

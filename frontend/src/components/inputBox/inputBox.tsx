@@ -26,7 +26,7 @@ export const InputBox = (props:
   useState([] as string[]);
   const inputRef = useRef<HTMLInputElement>(null);
   const [optIn, setOptIn] = useState(
-      props.valueState.value === props.optional?.defaultValue);
+      props.valueState.value !== props.optional?.defaultValue);
 
   const onSwitchChange : React.ChangeEventHandler<HTMLInputElement> =
     (event) => {
@@ -34,6 +34,7 @@ export const InputBox = (props:
         props.valueState.set(props.optional?.defaultValue);
       }
       setOptIn(!optIn);
+      props.onBlur ? props.onBlur(event as any) : null;
     };
 
   useEffect(() => {
