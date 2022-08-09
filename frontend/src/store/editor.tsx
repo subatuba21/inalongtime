@@ -13,6 +13,7 @@ export const baseCustomization = {
   fontColor: '#000000',
   backgroundColor: '#ffffff',
   font: 'Open Sans',
+  headerColor: '#000000',
 };
 
 const initialState : DraftFrontendState = {
@@ -233,6 +234,13 @@ export const editorSlice = createSlice({
         state.customization =
           {...state.customization, backgroundColor: action.payload};
       },
+
+    setHeaderColor:
+      (state: DraftFrontendState, action: PayloadAction<string>) => {
+        if (!state.customization) state.customization = baseCustomization;
+        state.customization =
+          {...state.customization, headerColor: action.payload};
+      },
   },
 });
 
@@ -245,6 +253,6 @@ export const {changeTitle, changePhoneNumber,
   changeSendDate, clearDraft,
   setFontColor, setFontFamily,
   setBackgroundColor, changeSenderName,
-  changeShowDate,
+  changeShowDate, setHeaderColor,
 } =
    editorSlice.actions;

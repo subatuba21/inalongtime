@@ -6,6 +6,7 @@ import {DraftFrontendState} from 'shared/dist/types/draft';
 import {useAppDispatch} from '../../../store/store';
 import {changeSenderName, saveDraft, setBackgroundColor, setFontColor,
   setFontFamily,
+  setHeaderColor,
   setStepFinished} from '../../../store/editor';
 import {useEffect} from 'react';
 import {InputBox} from '../../../components/inputBox/inputBox';
@@ -39,6 +40,16 @@ export const CustomizeForm = () => {
     <SwatchesPicker
       color={editorState.customization?.fontColor} onChange={(x) => {
         dispatch(setFontColor(x.hex));
+        dispatch(saveDraft('properties'));
+      }} className={styles.swatchesPicker}></SwatchesPicker>
+    <br />
+
+    <span className={styles.fieldName}>
+Choose heading color
+    </span>
+    <SwatchesPicker
+      color={editorState.customization?.headerColor} onChange={(x) => {
+        dispatch(setHeaderColor(x.hex));
         dispatch(saveDraft('properties'));
       }} className={styles.swatchesPicker}></SwatchesPicker>
     <br />

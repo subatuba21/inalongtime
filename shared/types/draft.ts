@@ -15,6 +15,7 @@ export const hexSchema = z.string().regex(/^#[0-9A-F]{6}$/i);
 
 export const customizationSchema = z.object({
   backgroundColor: hexSchema,
+  headerColor: hexSchema.default('#000000'),
   font: z.string(),
   fontColor: hexSchema,
   showDate: z.boolean().default(true).optional(),

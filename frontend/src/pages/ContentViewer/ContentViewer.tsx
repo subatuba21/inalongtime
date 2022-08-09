@@ -61,8 +61,10 @@ export const ContentViewer = (props: {
             res.data?.properties.title : '');
 
           setCustomization(res.data?.properties.customization);
-
           setSenderName(res.data?.properties.senderName);
+
+          document.documentElement.style.setProperty('--content-header-color',
+              res.data?.properties.customization?.headerColor ?? null);
         }
         setIsLoading(false);
         setTimeout(() => {

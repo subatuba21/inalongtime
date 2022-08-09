@@ -33,12 +33,18 @@
     font-weight: bold;
     line-height: 1.2;
     margin-bottom: 5px;
+    color: var(--content-header-color);
+}
+
+#background h1, #background h2, #background h3, #background h4, #background h5, #background h6 {
+    color: var(--content-header-color);
 }
 
 #background span.createdOn, #background span.author {
     display: block;
     font-size: 13pt;
     font-family: 'DM Sans', sans-serif;
+    color: var(--content-header-color);
 }
 
 #background span.author {
