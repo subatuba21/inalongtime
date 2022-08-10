@@ -14,7 +14,7 @@ export const baseCustomization = {
   backgroundColor: '#ffffff',
   font: 'Open Sans',
   headerColor: '#000000',
-  showDate: false,
+  showDate: true,
 };
 
 const initialState : DraftFrontendState = {

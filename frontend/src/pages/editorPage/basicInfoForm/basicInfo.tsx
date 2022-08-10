@@ -37,9 +37,11 @@ export const BasicInfo = () => {
   useState<Record<string, string[]>>({});
 
   const today = new Date();
+  today.setDate(today.getDate());
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
-  if (editorState.nextSendDate<tomorrow) {
+
+  if (editorState.nextSendDate<=today) {
     formErrorState['date'] = ['Date must be in the future'];
   } else {
     formErrorState['date'] = [];

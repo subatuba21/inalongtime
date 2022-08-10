@@ -85,7 +85,7 @@ Choose heading color
     }}/>
     <br />
     <span className={styles.fieldName}>
-        Custom Name
+        Show date
     </span>
     <span className={styles.fieldDescription}>
         If you don&apos;t want to the recipient to see

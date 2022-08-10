@@ -19,6 +19,7 @@ import {Carousel, CarouselItem} from 'react-bootstrap';
 import {BaseMediaPlayer} from
   '../../components/BaseMediaPlayer/baseMediaPlayer';
 import {Headphones} from 'react-bootstrap-icons';
+import {Head} from '../../components/Head/Head';
 
 export const ContentViewer = (props: {
     mode: 'preview' | 'future'
@@ -199,6 +200,7 @@ export const ContentViewer = (props: {
 
   return (
     <>
+      <Head title={title}></Head>
       {waitTimeDone ? <></> : <div id={loadingStyles.loadingPage}
         className={loadingStyles.slideLeft}>
         <h1 className='logo'>in a long time</h1>
