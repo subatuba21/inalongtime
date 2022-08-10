@@ -80,9 +80,21 @@ export const LoginForm = () => {
       <Button variant='info' id={styles.button} type='submit' style={{
         opacity: processingLogin ? '.5' : '1',
       }}>Log In</Button>
+      <p style={{
+        fontSize: '10pt',
+        margin: '0px',
+        padding: '0px',
+        marginTop: '13px',
+      }}>
+        By signing in, you agree to our&nbsp;
+        <a href='#'>Terms of Use</a>
+        &nbsp;and our&nbsp;
+        <a href='#'>Privacy Policy</a>.
+      </p>
+      {errorState[CentralErrors.loginError]?.message ?
       <p id={styles.errorMessageBox}>
         {errorState[CentralErrors.loginError]?.message}
-      </p>
+      </p> : <></>}
     </form>
   </div>;
 };
