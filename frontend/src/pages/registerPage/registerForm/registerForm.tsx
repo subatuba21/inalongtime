@@ -177,7 +177,7 @@ export const RegisterForm = () => {
       padding: '0px',
       marginTop: '13px',
     }}>
-        By signing in, you agree to our&nbsp;
+        By signing up, you agree to our&nbsp;
       <a href='#'>Terms of Use</a>
         &nbsp;and our&nbsp;
       <a href='#'>Privacy Policy</a>.
