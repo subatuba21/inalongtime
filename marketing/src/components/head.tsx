@@ -1,7 +1,13 @@
 import * as React from "react"
 import { Helmet } from "react-helmet"
 
-export default function Head({ title, description, image }) {
+interface HeadProps {
+  title: string
+  description?: string
+  image?: { url: string }
+}
+
+export default function Head({ title, description, image }: HeadProps) {
   return (
     <Helmet
       htmlAttributes={{

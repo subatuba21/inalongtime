@@ -9,9 +9,17 @@ import {
   Heading,
   Text,
   Space,
+  HomepageImage,
 } from "./ui"
 
-function Benefit(props) {
+interface BenefitProps {
+  id: string
+  image?: HomepageImage
+  heading: string
+  text: string
+}
+
+function Benefit(props: BenefitProps) {
   return (
     <Box as="li" width="third" padding={4} paddingY={3}>
       {props.image && (
@@ -28,7 +36,13 @@ function Benefit(props) {
   )
 }
 
-export default function BenefitList(props) {
+export interface BenefitListProps {
+  heading?: string
+  text?: string
+  content: BenefitProps[]
+}
+
+export default function BenefitList(props: BenefitListProps) {
   return (
     <Section>
       <Container>

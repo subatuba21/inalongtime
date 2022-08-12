@@ -1,11 +1,31 @@
 import * as React from "react"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
-import { Box, Flex, FlexList, NavButtonLink, NavLink } from "./ui"
+import {
+  Box,
+  Flex,
+  FlexList,
+  HomepageImage,
+  NavButtonLink,
+  NavLink,
+} from "./ui"
 import Caret from "./caret"
 import * as styles from "./nav-item-group.css"
 import { media } from "./ui.css"
 
-export default function NavItemGroup({ name, navItems }) {
+export type NavItemGroupNavItem = {
+  id: string
+  href: string
+  icon: HomepageImage
+  text: string
+  description?: string
+}
+
+interface NavItemGroupProps {
+  name: string
+  navItems: NavItemGroupNavItem[]
+}
+
+export default function NavItemGroup({ name, navItems }: NavItemGroupProps) {
   const [isOpen, setIsOpen] = React.useState(false)
   const [popupVisible, setPopupVisible] = React.useState(false)
   const isSmallScreen = () => {
@@ -33,9 +53,9 @@ export default function NavItemGroup({ name, navItems }) {
       }
     }
     if (popupBox) {
-      popupBox.addEventListener("animationend", onAnimationEnd)
+      popupBox.addEventListener("animationend" as any, onAnimationEnd)
       return () => {
-        popupBox.removeEventListener("animationend", onAnimationEnd)
+        popupBox.removeEventListener("animationend" as any, onAnimationEnd)
       }
     }
   }, [isOpen, name])

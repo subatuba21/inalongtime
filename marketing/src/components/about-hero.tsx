@@ -1,10 +1,16 @@
 import * as React from "react"
 import { graphql } from "gatsby"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
-import { Container, Section, Text, SuperHeading } from "./ui"
+import { Container, Section, Text, SuperHeading, HomepageImage } from "./ui"
 import * as styles from "./about-hero.css"
 
-export default function AboutHero(props) {
+export interface AboutHeroProps {
+  heading: string
+  text?: string
+  image?: HomepageImage
+}
+
+export default function AboutHero(props: AboutHeroProps) {
   return (
     <Section>
       <Container>

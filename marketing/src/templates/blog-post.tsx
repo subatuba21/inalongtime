@@ -1,4 +1,5 @@
 import * as React from "react"
+import { graphql } from "gatsby"
 import { GatsbyImage } from "gatsby-plugin-image"
 import Layout from "../components/layout"
 import {
@@ -9,11 +10,32 @@ import {
   Heading,
   Text,
   Avatar,
+  HomepageImage,
 } from "../components/ui"
 import { avatar as avatarStyle } from "../components/ui.css"
 import * as styles from "./blog-post.css"
 
-export default function BlogPost(props) {
+export interface BlogAuthor {
+  id: string
+  name: string
+  avatar: HomepageImage
+}
+
+export interface BlogPost {
+  id: string
+  slug: string
+  title: string
+  excerpt: string
+  category: string
+  date: string
+  html: string
+  image: HomepageImage
+  author: BlogAuthor
+  next?: BlogPost
+  previous?: BlogPost
+}
+
+export default function BlogPost(props: BlogPost) {
   return (
     <Layout {...props} description={props.excerpt}>
       <Container>

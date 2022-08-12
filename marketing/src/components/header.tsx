@@ -19,11 +19,39 @@ import {
   mobileHeaderNavWrapper,
   mobileNavSVGColorWrapper,
 } from "./header.css"
-import NavItemGroup from "./nav-item-group"
+import NavItemGroup, { NavItemGroupNavItem } from "./nav-item-group"
 import BrandLogo from "./brand-logo"
 
+type NavItem = {
+  id: string
+  navItemType: "Link"
+  href: string
+  text: string
+}
+
+type NavItemGroup = {
+  id: string
+  navItemType: "Group"
+  name: string
+  navItems: NavItemGroupNavItem[]
+}
+
+interface HeaderData {
+  layout: {
+    header: {
+      id: string
+      navItems: NavItem[] | NavItemGroup[]
+      cta: {
+        id: string
+        href: string
+        text: string
+      }
+    }
+  }
+}
+
 export default function Header() {
-  const data = useStaticQuery(graphql`
+  const data: HeaderData = useStaticQuery(graphql`
     query {
       layout {
         header {

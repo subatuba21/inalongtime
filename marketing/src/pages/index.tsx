@@ -4,7 +4,19 @@ import Layout from "../components/layout"
 import * as sections from "../components/sections"
 import Fallback from "../components/fallback"
 
-export default function Homepage(props) {
+interface HomepageProps {
+  data: {
+    homepage: {
+      id: string
+      title: string
+      description: string
+      image: { id: string; url: string }
+      blocks: sections.HomepageBlock[]
+    }
+  }
+}
+
+export default function Homepage(props: HomepageProps) {
   const { homepage } = props.data
 
   return (
@@ -12,7 +24,7 @@ export default function Homepage(props) {
       {homepage.blocks.map((block) => {
         const { id, blocktype, ...componentProps } = block
         const Component = sections[blocktype] || Fallback
-        return <Component key={id} {...componentProps} />
+        return <Component key={id} {...(componentProps as any)} />
       })}
     </Layout>
   )

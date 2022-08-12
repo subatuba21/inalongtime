@@ -1,7 +1,15 @@
 import * as React from "react"
 import { caret } from "./caret.css"
 
-export default function CaretDown({ direction = "down", size = 9 }) {
+interface CaretProps {
+  direction?: "down" | "up"
+  size?: number
+}
+
+export default function CaretDown({
+  direction = "down",
+  size = 9,
+}: CaretProps) {
   const width = size
   const height = (8 / 9) * size
 

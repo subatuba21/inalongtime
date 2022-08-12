@@ -4,7 +4,13 @@ import Footer from "./footer"
 import Head from "./head"
 import "../styles.css"
 
-const Layout = (props) => {
+interface LayoutProps {
+  title: string
+  description?: string
+  image?: { id: string; url: string }
+}
+
+const Layout: React.FC<LayoutProps> = (props) => {
   return (
     <>
       <Head {...props} />

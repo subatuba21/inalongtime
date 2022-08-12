@@ -3,7 +3,13 @@ import { graphql } from "gatsby"
 import { Container, Section, FlexList, Box, Text } from "./ui"
 import * as styles from "./about-stat-list.css"
 
-function AboutStat(props) {
+interface AboutStatProps {
+  id: string
+  value?: string
+  label?: string
+}
+
+function AboutStat(props: AboutStatProps) {
   return (
     <Box width="fitContent" className={styles.statContainer}>
       {props.value && <Text variant="stat">{props.value}</Text>}
@@ -12,7 +18,11 @@ function AboutStat(props) {
   )
 }
 
-export default function AboutStatList(props) {
+export interface AboutStatListProps {
+  content: AboutStatProps[]
+}
+
+export default function AboutStatList(props: AboutStatListProps) {
   return (
     <Section>
       <Container>

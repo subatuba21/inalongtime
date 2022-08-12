@@ -11,9 +11,17 @@ import {
   Blockquote,
   Text,
   Avatar,
+  HomepageImage,
 } from "./ui"
 
-function Testimonial(props) {
+interface TestimonialProps {
+  id: string
+  avatar: HomepageImage
+  quote: string
+  source: string
+}
+
+function Testimonial(props: TestimonialProps) {
   return (
     <Flex variant="start">
       {props.avatar && (
@@ -33,7 +41,13 @@ function Testimonial(props) {
   )
 }
 
-export default function TestimonialList(props) {
+export interface TestimonialListProps {
+  kicker?: string
+  heading: string
+  content: TestimonialProps[]
+}
+
+export default function TestimonialList(props: TestimonialListProps) {
   return (
     <Section>
       <Container>

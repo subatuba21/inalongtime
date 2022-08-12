@@ -1,4 +1,5 @@
 import * as React from "react"
+import { graphql } from "gatsby"
 import { GatsbyImage } from "gatsby-plugin-image"
 import Layout from "../components/layout"
 import {
@@ -11,9 +12,31 @@ import {
   Subhead,
   Kicker,
   Text,
+  HomepageImage,
 } from "../components/ui"
+import { BlogAuthor, BlogPost } from "./blog-post"
 
-function PostCard({ slug, image, title, excerpt, author, category, ...props }) {
+interface PostCardSmallProps {
+  slug: string
+  image?: HomepageImage
+  title?: string
+  category?: string
+}
+
+interface PostCardProps extends PostCardSmallProps {
+  excerpt?: string
+  author?: BlogAuthor
+}
+
+function PostCard({
+  slug,
+  image,
+  title,
+  excerpt,
+  author,
+  category,
+  ...props
+}: PostCardProps) {
   return (
     <BlockLink {...props} to={`/blog/${slug}`}>
       {image && (
@@ -36,7 +59,13 @@ function PostCard({ slug, image, title, excerpt, author, category, ...props }) {
   )
 }
 
-function PostCardSmall({ slug, image, title, category, ...props }) {
+function PostCardSmall({
+  slug,
+  image,
+  title,
+  category,
+  ...props
+}: PostCardSmallProps) {
   return (
     <BlockLink {...props} to={`/blog/${slug}`}>
       {image && (
@@ -53,7 +82,11 @@ function PostCardSmall({ slug, image, title, category, ...props }) {
   )
 }
 
-export default function BlogIndex({ posts }) {
+export interface BlogIndexProps {
+  posts: BlogPost[]
+}
+
+export default function BlogIndex({ posts }: BlogIndexProps) {
   const featuredPosts = posts.filter((p) => p.category === "Featured")
   const regularPosts = posts.filter((p) => p.category !== "Featured")
 

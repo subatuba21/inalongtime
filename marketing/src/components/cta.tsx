@@ -9,9 +9,20 @@ import {
   Text,
   ButtonList,
   Kicker,
+  HomepageLink,
+  HomepageImage,
 } from "./ui"
 
-export default function HomepageCta(props) {
+export interface CtaProps {
+  id: string
+  kicker?: string
+  heading: string
+  text: string
+  links: HomepageLink[]
+  image?: HomepageImage
+}
+
+export default function HomepageCta(props: CtaProps) {
   return (
     <Container width="fullbleed">
       <Section padding={5} radius="large" background="primary">

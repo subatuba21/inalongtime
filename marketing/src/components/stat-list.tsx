@@ -13,7 +13,15 @@ import {
   Icon,
   ButtonList,
   Nudge,
+  HomepageImage,
+  HomepageLink,
 } from "./ui"
+
+interface StatProps {
+  id: string
+  value: string
+  label: string
+}
 
 function Stat(props) {
   return (
@@ -24,7 +32,17 @@ function Stat(props) {
   )
 }
 
-export default function StatList(props) {
+export interface StatListProps {
+  icon?: HomepageImage
+  kicker?: string
+  heading: string
+  text?: string
+  content: StatProps[]
+  links: HomepageLink[]
+  image?: HomepageImage
+}
+
+export default function StatList(props: StatListProps) {
   return (
     <Container width="fullbleed">
       <Section padding={5} radius="large" background="primary">

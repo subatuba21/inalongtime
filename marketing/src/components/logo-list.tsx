@@ -1,8 +1,22 @@
 import * as React from "react"
 import { graphql } from "gatsby"
-import { Space, Container, Section, FlexList, Text, Logo } from "./ui"
+import {
+  Space,
+  Container,
+  Section,
+  FlexList,
+  Text,
+  Logo,
+  HomepageImage,
+} from "./ui"
 
-export function LogoItem(props) {
+export interface LogoItemProps {
+  id: string
+  alt: string
+  image: HomepageImage
+}
+
+export function LogoItem(props: LogoItemProps) {
   if (!props.image) return null
 
   return (
@@ -10,7 +24,12 @@ export function LogoItem(props) {
   )
 }
 
-export default function LogoList(props) {
+export interface LogoListProps {
+  text?: string
+  logos: LogoItemProps[]
+}
+
+export default function LogoList(props: LogoListProps) {
   return (
     <Section paddingY={4}>
       <Container width="narrow">

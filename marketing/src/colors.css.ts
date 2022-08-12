@@ -1,7 +1,7 @@
 export const colors = {
-  background: "#ffd500",
-  text: "#005bbb",
-  primary: "#005bbb",
+  background: "linear-gradient(116.82deg, #5F00FA 0%, #C808D9 100%)",
+  text: "white",
+  primary: "#F8ACFF",
   muted: "#f5cc00",
   active: "#004287",
   black: "#000",
