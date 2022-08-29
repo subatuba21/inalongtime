@@ -36,6 +36,9 @@ export const App = () => {
   (window as any).state = state;
   const dispatch = useAppDispatch();
 
+  alert(`This app is in test mode. Please do not expect any 
+  letters to be sent till the app goes in production.`);
+
   useEffect(() => {
     const getData = async () => {
       const result = await authAPI.getCurrentUser();
