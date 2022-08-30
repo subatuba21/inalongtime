@@ -1,4 +1,4 @@
-import styles from './sent.module.css';
+import styles from './Sent.module.css';
 import {DraftType} from 'shared/dist/types/draft';
 import {InfoCircle} from 'react-bootstrap-icons';
 import {useAppDispatch} from '../../store/store';
