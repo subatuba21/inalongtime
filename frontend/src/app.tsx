@@ -36,9 +36,6 @@ export const App = () => {
   (window as any).state = state;
   const dispatch = useAppDispatch();
 
-  alert(`This app is in test mode. Please do not expect any 
-  letters to be sent till the app goes in production.`);
-
   useEffect(() => {
     const getData = async () => {
       const result = await authAPI.getCurrentUser();
@@ -59,6 +56,21 @@ export const App = () => {
 
   return isLoading ? <LoadingPage /> :
   <>
+    <div style={{
+      position: 'fixed',
+      bottom: '0',
+      left: '0',
+      width: '100%',
+      padding: '10px',
+      backgroundColor: 'white',
+      color: 'black',
+      zIndex: '1000',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}>
+      This app is in test mode.
+      Please do not expect this app to send letters until it goes to production.
+    </div>
     <Head title='' />
     <Modal></Modal>
     <BrowserRouter>
