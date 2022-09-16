@@ -20,7 +20,7 @@ import {getSentFutures} from './middleware/draft/getSentFutures';
 import {getreceivedFutures} from './middleware/draft/getReceivedFutures';
 import {handleFutureResource} from './middleware/handleFutureResource';
 import {allowedToAccessFuture} from '../utils/allowedFutureAccess';
-import {Future} from 'shared/types/future';
+import {Future} from 'shared/dist/types/future';
 import {UserSchema} from '../utils/schemas/user';
 
 

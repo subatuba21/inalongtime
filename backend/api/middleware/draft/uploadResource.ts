@@ -9,7 +9,7 @@ import {resourceSchema} from 'shared/dist/types/draft';
 import {allowedFileTypes,
   allowedFileTypesSchema} from 'shared/dist/types/fileTypes';
 import fs from 'fs';
-import {maxFileSize} from 'shared/types/fileTypes';
+import {maxFileSize} from 'shared/dist/types/fileTypes';
 
 export const allowFileTypes =
     async (req: express.Request, res: express.Response, next: Function) => {

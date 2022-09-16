@@ -3,7 +3,7 @@ import {PaymentData, paymentDataSchema} from '../../utils/schemas/payment';
 import {APIResponse} from '../../utils/types/apiStructure';
 import {unknownError} from 'shared/dist/types/apiErrors';
 import {DraftSchema} from 'shared/dist/types/draft';
-import {preprocessDraft} from 'shared/types/future';
+import {preprocessDraft} from 'shared/dist/types/future';
 import {StatusCodes} from 'http-status-codes';
 import {stripe} from '../../utils/stripe/setup';
 import Stripe from 'stripe';

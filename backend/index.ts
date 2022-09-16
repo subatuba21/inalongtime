@@ -20,9 +20,6 @@ import {setFutureDb} from './db/future';
 import {apiRouter} from './api/apiRouter';
 import {setForgotPasswordCol} from './db/forgotPassword';
 import {sendFunction, sendMainEmails} from './utils/cron/sendMainEmails';
-// import {populateDraftFromDB} from './api/middleware/draft/getDraft';
-// import {convertDraftToFuture} from './api/middleware/fulfillment';
-// import {processPayment} from './api/middleware/payment';
 
 const app = express();
 
@@ -37,9 +34,11 @@ app.use(session({
 }));
 
 app.use('/api', apiRouter);
-app.use(express.static(path.resolve(__dirname, '../frontend/build')));
+console.log(path.resolve(__dirname, 'frontend/build'));
+
+app.use(express.static(path.resolve(__dirname, 'frontend/build')));
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, 'frontend/build', 'index.html'));
 });
 
 // For anything that is async and needed by the server.

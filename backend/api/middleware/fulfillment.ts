@@ -2,10 +2,10 @@ import express from 'express';
 import {StatusCodes} from 'http-status-codes';
 import {deleteDraft} from '../../db/draft';
 import {APIResponse} from '../../utils/types/apiStructure';
-import {preprocessDraft} from '../../../shared/types/future';
+import {preprocessDraft} from 'shared/dist/types/future';
 import {ZodError} from 'zod';
 import {addFuture} from '../../db/future';
-import {DraftSchema} from 'shared/types/draft';
+import {DraftSchema} from 'shared/dist/types/draft';
 import {deleteUnnecessaryFiles as deleteUnnecessaryFilesFunc, getDraftContent}
   from '../../utils/contentStorage/draft';
 import {isDraftPaid} from '../../utils/draftPaid';
