@@ -26,7 +26,7 @@ export const addNewDraft =
       }
 
       const draftID = new ObjectID();
-      const result = await addDraft({
+      const result = await addDraft(req.dbManager.getDraftDB(), {
         userId: user._id,
         type: draftType,
         recipientType: 'myself',
@@ -43,7 +43,8 @@ export const addNewDraft =
         senderName: `${user.firstname} ${user.lastname}`,
       }, draftID);
 
-      const error = await addDraftIdToUser(user._id, draftID.toString());
+      const error = await addDraftIdToUser(
+          req.dbManager.getDraftDB(), user._id, draftID.toString());
 
       const draftRes : DraftResponseBody = await draftResponseBody.parseAsync({
         content: {},

@@ -2,14 +2,16 @@ import {Strategy} from 'passport-local';
 import {getUserByEmail} from '../../db/auth';
 import logger from '../../logger';
 import {validatePassword} from '../password';
+import {Request} from 'express';
 
 export const localStrategy = new Strategy({
   usernameField: 'email',
   passwordField: 'password',
-}, async (email: string, password: string,
+  passReqToCallback: true,
+}, async (req: Request, email: string, password: string,
     done) => {
   logger.verbose(`Localstrategy working for email ${email}`);
-  const userResponse = await getUserByEmail(email);
+  const userResponse = await getUserByEmail(req.dbManager.getUserDB(), email);
   if (!userResponse.success) {
     if (userResponse.error) {
       return done(userResponse.error, false);

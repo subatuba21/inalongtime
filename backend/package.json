@@ -7,8 +7,7 @@
     "test": "jest --forceExit --runInBand",
     "copy-files": "copyfiles  ./utils/email/templates/* dist/ && copyfiles -a \"../frontend/build/**/*\" dist/frontend",
     "start": "tsc && npm run copy-files && node dist/index.js",
-    "lint": "eslint *.ts",
-    "watch": "nodemon index.ts"
+    "lint": "eslint *.ts"
   },
   "author": "Subhajit Das",
   "license": "ISC",
@@ -51,6 +50,7 @@
     "handlebars": "^4.7.7",
     "http-status-codes": "^2.2.0",
     "mongodb": "^4.8.1",
+    "mongodb-memory-server": "^8.9.2",
     "nodemailer": "^6.7.7",
     "passport": "^0.6.0",
     "passport-facebook": "^3.0.0",

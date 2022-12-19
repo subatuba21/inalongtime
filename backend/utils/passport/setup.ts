@@ -13,9 +13,10 @@ passport.serializeUser((user: any, done) => {
   done(null, user._id);
 });
 
-passport.deserializeUser(async (id: string, done) => {
+passport.deserializeUser(async (req: express.Request,
+    id: string, done: any) => {
   logger.verbose('Deserializing user');
-  const userResponse = await getUser(id);
+  const userResponse = await getUser(req.dbManager.getDraftDB(), id);
   if (userResponse.success && userResponse.user) {
     return done(null, userResponse.user);
   } else if (!userResponse.success && userResponse.error) {

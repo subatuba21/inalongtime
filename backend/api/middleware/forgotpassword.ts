@@ -56,7 +56,8 @@ export const changePassword =
       };
 
       try {
-        await changePasswordDB(user._id, newPassword);
+        await changePasswordDB(req.dbManager.getUserDB(),
+            user._id, newPassword);
         res.json(response);
       } catch (err) {
         response.error = unknownError;
@@ -68,10 +69,11 @@ export const sendForgotPasswordEmail =
     async (req: express.Request, res: express.Response, next: Function) => {
       try {
         const email = req.email as string;
-        const userRes = await getUserByEmail(email);
+        const userRes = await getUserByEmail(req.dbManager.getDraftDB(), email);
         if (userRes.success && userRes.user) {
           const token = createToken();
-          await addToken(await hashToken(token), userRes.user._id);
+          await addToken(req.dbManager.getUserDB(),
+              await hashToken(token), userRes.user._id);
           await sendForgotPasswordEmailFunc(email, token, userRes.user._id);
           const response : APIResponse = {
             data: null,

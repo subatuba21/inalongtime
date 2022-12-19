@@ -7,7 +7,8 @@ import {APIResponse} from '../../../utils/types/apiStructure';
 export const getreceivedFutures =
     async (req: express.Request, res: express.Response, next: Function) => {
       const user = req.user as UserSchema;
-      const result = await getreceivedFuturesFromDB(user._id, user.email);
+      const result = await getreceivedFuturesFromDB(req.dbManager.getFutureDB(),
+          user._id, user.email);
       const futureData = await
       futureFrontendData.safeParseAsync(result);
       if (result.success && futureData.success) {

@@ -90,10 +90,11 @@ export const uploadResource =
           return;
         }
 
-        await addResourceToDraft(draftId, await resourceSchema.parseAsync({
-          id: resourceId,
-          mimetype: file.mimetype,
-        }));
+        await addResourceToDraft(req.dbManager.getDraftDB(),
+            draftId, await resourceSchema.parseAsync({
+              id: resourceId,
+              mimetype: file.mimetype,
+            }));
 
         const response : APIResponse = {
           data: {

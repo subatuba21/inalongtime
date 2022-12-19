@@ -14,7 +14,7 @@ import {StatusCodes} from 'http-status-codes';
 export const populateDraftFromDB =
     async (req: express.Request, res: express.Response, next: Function) => {
       const id = req.draft?.id as string;
-      const draft = await getDraftFromDB(id);
+      const draft = await getDraftFromDB(req.dbManager.getDraftDB(), id);
       if (!draft.success) {
         const response : APIResponse = {
           data: null,
@@ -34,7 +34,7 @@ export const populateDraftFromDB =
 export const getDraft =
   async (req: express.Request, res: express.Response, next: Function) => {
     const draftId = req.draft?.id as string;
-    const result = await getDraftFromDB(draftId);
+    const result = await getDraftFromDB(req.dbManager.getDraftDB(), draftId);
     const user = req.user as UserSchema;
 
     if (result.error === DBError.ENTITY_NOT_FOUND) {

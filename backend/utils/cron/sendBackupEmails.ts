@@ -4,9 +4,11 @@ import {Future} from 'shared/dist/types/future';
 import {getUser} from '../../db/auth';
 import {sendBackupEmail} from '../email/backupEmail';
 import {sendNotViewedEmail} from '../email/notViewedEmail';
+import {Collection} from 'mongodb';
 
-export const sendFunction = async () => {
-  const data = await getFuturesWeekOldNotVisited();
+export const sendFunction = async (futureCol: Collection,
+    userCol: Collection) => {
+  const data = await getFuturesWeekOldNotVisited(futureCol);
   logger.verbose(data);
   if (!data.success) {
     logger.error(data.error);
@@ -16,7 +18,7 @@ export const sendFunction = async () => {
   const futures = data.futures as Future[];
 
   for (const future of futures) {
-    const user = await getUser(future.userId.toString());
+    const user = await getUser(userCol, future.userId.toString());
     if (!user.success) {
       logger.error(user.error);
       continue;

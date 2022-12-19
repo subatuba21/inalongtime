@@ -7,6 +7,8 @@ import {PaymentData} from '../schemas/payment';
 import {PassportLoginInput,
   RegisterUserInput, UserSchema} from '../schemas/user';
 import {Future} from 'shared/dist/types/future';
+import {Db} from 'mongodb';
+import {DBManager} from '../../db/manager';
 
 declare module 'express-serve-static-core' {
     interface Request {
@@ -33,5 +35,6 @@ declare module 'express-serve-static-core' {
       email?: string,
       userId?: string,
       token?: string,
+      dbManager: DBManager
     }
 }

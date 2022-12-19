@@ -67,7 +67,7 @@ export const registerUser =
   async (req: express.Request, res: express.Response, next: Function) => {
     try {
       const userInfo = req.registerInfo as RegisterUserInput;
-      const user = await registerUserToDb(userInfo);
+      const user = await registerUserToDb(req.dbManager.getUserDB(), userInfo);
       if (user.success && user.user) {
         const userData : ClientUserData = {
           _id: user.user._id,

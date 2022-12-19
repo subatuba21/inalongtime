@@ -1,19 +1,15 @@
-import {Collection, Db, ObjectId} from 'mongodb';
+import {Collection, ObjectId} from 'mongodb';
 import {Future, futureSchema} from 'shared/dist/types/future';
 import logger from '../logger';
-import {DbResponse} from './setup';
+import {DbResponse} from '../utils/types/dbResponse';
 
-let futureCol : Collection;
-export const setFutureDb = async (db: Db) => {
-  futureCol = db.collection('futures');
-};
 
 export interface FutureDbResponse extends DbResponse {
     future: Future | undefined;
 }
 
 export const addFuture =
-    async (future: Future)
+    async (futureCol: Collection, future: Future)
     : Promise<FutureDbResponse> => {
       try {
         logger.verbose(future);
@@ -37,7 +33,8 @@ export const addFuture =
       }
     };
 
-export const getFuture = async (_id: string) : Promise<FutureDbResponse> => {
+export const getFuture = async (futureCol: Collection,
+    _id: string) : Promise<FutureDbResponse> => {
   try {
     const res = await futureCol.findOne({_id: new ObjectId(_id)});
     if (res) {
@@ -60,7 +57,8 @@ export const getFuture = async (_id: string) : Promise<FutureDbResponse> => {
 };
 
 export const getFuturesBySenderId =
-    async (senderId: string) : Promise<MultipleFutureDbResponse> => {
+    async (futureCol: Collection,
+        senderId: string) : Promise<MultipleFutureDbResponse> => {
       try {
         const res = await futureCol.find(
             {userId: new ObjectId(senderId)}).toArray();
@@ -82,7 +80,8 @@ export const getFuturesBySenderId =
     };
 
 export const getreceivedFutures =
-    async (recipientId: string, recipientEmail: string)
+    async (futureCol: Collection,
+        recipientId: string, recipientEmail: string)
     : Promise<MultipleFutureDbResponse> => {
       try {
         const res = await futureCol.find(
@@ -115,7 +114,8 @@ export const getreceivedFutures =
     };
 
 
-export const setFutureViewed = async (_id: string) : Promise<boolean> => {
+export const setFutureViewed = async (
+    futureCol: Collection, _id: string) : Promise<boolean> => {
   try {
     const res = await futureCol.updateOne(
         {_id: new ObjectId(_id)},
@@ -134,7 +134,8 @@ export const setFutureViewed = async (_id: string) : Promise<boolean> => {
 };
 
 export const setFilesAccessibleFalse =
-  async (_id: string) : Promise<boolean> => {
+  async (futureCol: Collection,
+      _id: string) : Promise<boolean> => {
     try {
       const res = await futureCol.updateOne(
           {_id: new ObjectId(_id)},
@@ -157,7 +158,8 @@ export interface MultipleFutureDbResponse extends DbResponse {
 }
 
 export const getFuturesBySendDate =
-    async (sendDate: Date) : Promise<MultipleFutureDbResponse> => {
+    async (futureCol: Collection,
+        sendDate: Date) : Promise<MultipleFutureDbResponse> => {
       try {
         const beginningToday = new Date(sendDate.toDateString());
         const beginningTomorrow =
@@ -187,7 +189,7 @@ export const getFuturesBySendDate =
     };
 
 export const getFuturesWeekOldNotVisited =
-    async () : Promise<MultipleFutureDbResponse> => {
+    async (futureCol: Collection) : Promise<MultipleFutureDbResponse> => {
       try {
         const beginningToday = new Date(new Date().toDateString());
 

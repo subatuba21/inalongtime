@@ -2,23 +2,29 @@ import {Strategy} from 'passport-google-oauth2';
 import {getUserByEmail, registerGoogleUser,
   UserDbResponse} from '../../db/auth';
 import logger from '../../logger';
+import {Request} from 'express';
 
 export const googleStrategy = new Strategy({
   clientID: process.env.GOOGLE_CLIENT_ID as string,
+  passReqToCallback: true,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
   callbackURL:
   // eslint-disable-next-line max-len
   `${process.env.HOST_ADDRESS as string}/api/auth/google/callback`,
-}, async (accessToken, refreshToken, profile, done) => {
+}, async (req: Request, accessToken: any,
+    refreshToken: any, profile: any, done: any) => {
   logger.verbose(`Localstrategy working for email ${profile.email}`);
-  const userResponse: UserDbResponse = await getUserByEmail(profile.email);
+  const userResponse: UserDbResponse = await getUserByEmail(
+      req.dbManager.getUserDB(),
+      profile.email);
   if (!userResponse.success) {
     if (profile.email) {
-      const registerUserResponse = await registerGoogleUser({
-        email: profile.email,
-        firstname: profile.given_name,
-        lastname: profile.family_name,
-      });
+      const registerUserResponse = await registerGoogleUser(
+          req.dbManager.getUserDB(), {
+            email: profile.email,
+            firstname: profile.given_name,
+            lastname: profile.family_name,
+          });
 
       if (registerUserResponse.success) {
         return done(null, registerUserResponse.user);

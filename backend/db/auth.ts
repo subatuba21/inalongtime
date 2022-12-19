@@ -1,22 +1,17 @@
-import {Db, Collection, ObjectId} from 'mongodb';
+import {Collection, ObjectId} from 'mongodb';
 import {hashPassword} from '../utils/password';
-import {DbResponse} from './setup';
 import {GoogleUserInput, RegisterUserInput,
   UserSchema} from '../utils/schemas/user';
 import logger from '../logger';
 import {DBError} from './errors';
-
-let userCol : Collection;
-export const setUserDb = async (db: Db) => {
-  userCol = db.collection('users');
-};
+import {DbResponse} from '../utils/types/dbResponse';
 
 export interface UserDbResponse extends DbResponse {
     user: UserSchema | null;
 }
 
 // eslint-disable-next-line max-len
-export const registerUser = async (userInput: RegisterUserInput) : Promise<UserDbResponse> => {
+export const registerUser = async (userCol: Collection, userInput: RegisterUserInput) : Promise<UserDbResponse> => {
   const hashedPass = await hashPassword(userInput.password);
   try {
     logger.verbose(`registering user: ${userInput}`);
@@ -56,7 +51,8 @@ export const registerUser = async (userInput: RegisterUserInput) : Promise<UserD
 };
 
 export const registerGoogleUser =
-  async (input: GoogleUserInput) : Promise<UserDbResponse> => {
+  async (userCol: Collection, input: GoogleUserInput)
+    : Promise<UserDbResponse> => {
     try {
       logger.verbose(`registering google user user: ${input.email}`);
       const user = await userCol.findOne({email: input.email});
@@ -95,7 +91,8 @@ export const registerGoogleUser =
     }
   };
 
-export const getUser = async (_id: string) : Promise<UserDbResponse> => {
+export const getUser = async (userCol: Collection, _id: string)
+    : Promise<UserDbResponse> => {
   try {
     logger.verbose(`finding user with _id: ${_id}`);
     const res = await userCol.findOne({_id: new ObjectId(_id)});
@@ -115,7 +112,7 @@ export const getUser = async (_id: string) : Promise<UserDbResponse> => {
 };
 
 // eslint-disable-next-line max-len
-export const getUserByEmail = async (email: string) : Promise<UserDbResponse> => {
+export const getUserByEmail = async (userCol: Collection, email: string) : Promise<UserDbResponse> => {
   try {
     logger.verbose(`finding user with email: ${email}`);
     const res = await userCol.findOne({email});
@@ -134,7 +131,8 @@ export const getUserByEmail = async (email: string) : Promise<UserDbResponse> =>
   }
 };
 
-export const addDraftIdToUser = async (userID: string, draftID: string) => {
+export const addDraftIdToUser = async (userCol: Collection,
+    userID: string, draftID: string) => {
   try {
     const result = await userCol.updateOne({
       _id: new ObjectId(userID),
@@ -151,7 +149,7 @@ export const addDraftIdToUser = async (userID: string, draftID: string) => {
 };
 
 export const deleteDraftIdFromUser =
-  async (userID: string, draftID: string) => {
+  async (userCol: Collection, userID: string, draftID: string) => {
     try {
       await userCol.updateOne({
         _id: new ObjectId(userID),
@@ -165,7 +163,8 @@ export const deleteDraftIdFromUser =
     }
   };
 
-export const addFutureIdToUser = async (userID: string, futureID: string) => {
+export const addFutureIdToUser = async (userCol: Collection,
+    userID: string, futureID: string) => {
   try {
     await userCol.updateOne({
       _id: new ObjectId(userID),
@@ -180,7 +179,7 @@ export const addFutureIdToUser = async (userID: string, futureID: string) => {
 };
 
 export const deleteFutureIdFromUser =
-  async (userID: string, futureID: string) => {
+  async (userCol: Collection, userID: string, futureID: string) => {
     try {
       await userCol.updateOne({
         _id: new ObjectId(userID),
@@ -194,7 +193,8 @@ export const deleteFutureIdFromUser =
     }
   };
 
-export const changePassword = async (userID: string, newPassword: string) => {
+export const changePassword = async (userCol: Collection,
+    userID: string, newPassword: string) => {
   try {
     const hashedPass = await hashPassword(newPassword);
     await userCol.updateOne({

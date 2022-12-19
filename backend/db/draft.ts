@@ -1,14 +1,10 @@
-import {Db, Collection, ObjectId} from 'mongodb';
+import {Collection, ObjectId} from 'mongodb';
 import logger from '../logger';
 import {DraftSchema, miniDraft, MiniDraft,
   Resource, UserDraftsResponseData} from 'shared/dist/types/draft';
-import {DbResponse} from './setup';
 import {DBError} from './errors';
+import {DbResponse} from '../utils/types/dbResponse';
 
-let draftCol : Collection;
-export const setDraftDb = async (db: Db) => {
-  draftCol = db.collection('drafts');
-};
 
 export type DraftInput = Omit<DraftSchema, '_id'>
 
@@ -17,7 +13,8 @@ export interface DraftDbResponse extends DbResponse {
 }
 
 export const addDraft =
-    async (draft: DraftInput, _id?: ObjectId) : Promise<DraftDbResponse> => {
+    async (draftCol: Collection, draft: DraftInput, _id?: ObjectId)
+    : Promise<DraftDbResponse> => {
       try {
         const res = await draftCol.insertOne(
             {...draft, userId: new ObjectId(draft.userId),
@@ -42,7 +39,8 @@ export const addDraft =
       }
     };
 
-export const getDraft = async (_id: string) : Promise<DraftDbResponse> => {
+export const getDraft = async (draftCol: Collection, _id: string)
+: Promise<DraftDbResponse> => {
   try {
     const res = await draftCol.findOne({_id: new ObjectId(_id)});
     if (res) {
@@ -66,7 +64,8 @@ export const getDraft = async (_id: string) : Promise<DraftDbResponse> => {
 };
 
 export const getNumberOfUserDrafts =
-  async (userId: string) : Promise<number | undefined> => {
+  async (draftCol: Collection,
+      userId: string) : Promise<number | undefined> => {
     try {
       const res = await draftCol.countDocuments({userId: {
         $eq: new ObjectId(userId),
@@ -79,7 +78,7 @@ export const getNumberOfUserDrafts =
 
 export type ModifyDraftInput = Partial<DraftInput>;
 export const modifyDraft =
-    async (_id: string, draft : ModifyDraftInput)
+    async (draftCol: Collection, _id: string, draft : ModifyDraftInput)
     : Promise<DraftDbResponse> => {
       try {
         const res = await draftCol.findOneAndUpdate(
@@ -106,7 +105,8 @@ export const modifyDraft =
       }
     };
 
-export const deleteDraft = async (_id: string) : Promise<DraftDbResponse> => {
+export const deleteDraft = async (draftCol: Collection, _id: string)
+: Promise<DraftDbResponse> => {
   try {
     const res = await draftCol.findOneAndDelete({_id: new ObjectId(_id)});
     if (res && res.value) {
@@ -133,7 +133,7 @@ interface getUserDraftsDbResponse extends DbResponse {
   draftData?: UserDraftsResponseData,
 }
 
-export const getUserDrafts = async (userId: string) :
+export const getUserDrafts = async (draftCol: Collection, userId: string) :
   Promise<getUserDraftsDbResponse> => {
   try {
     const drafts : MiniDraft[] = [];
@@ -160,28 +160,28 @@ export const getUserDrafts = async (userId: string) :
   }
 };
 
-export const addResourceToDraft = async (
-    draftId: string, resource: Resource) => {
-  try {
-    const result = await draftCol.updateOne({
-      _id: new ObjectId(draftId),
-    }, {
-      $addToSet: {
-        resources: {...resource, id: resource.id},
-      },
-    });
+export const addResourceToDraft =
+  async (draftCol: Collection, draftId: string, resource: Resource) => {
+    try {
+      const result = await draftCol.updateOne({
+        _id: new ObjectId(draftId),
+      }, {
+        $addToSet: {
+          resources: {...resource, id: resource.id},
+        },
+      });
 
-    if (!result.acknowledged) {
-      throw new Error(
-          'Unable to add resource to draft');
+      if (!result.acknowledged) {
+        throw new Error(
+            'Unable to add resource to draft');
+      }
+    } catch (err) {
+      return DBError.ENTITY_NOT_FOUND;
     }
-  } catch (err) {
-    return DBError.ENTITY_NOT_FOUND;
-  }
-};
+  };
 
 export const deleteResourceFromDraft = async (
-    draftId: string, resourceId: string) => {
+    draftCol: Collection, draftId: string, resourceId: string) => {
   try {
     const result = await draftCol.updateOne({
       _id: new ObjectId(draftId),

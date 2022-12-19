@@ -22,7 +22,6 @@ export const ReceivedPage = () => {
       const futureResult = await editorAPI.getReceivedDrafts();
       if (futureResult.success) {
         setData(futureResult.data);
-        console.log(futureResult.data);
         setLoading(false);
       } else {
         dispatch(activateModal({

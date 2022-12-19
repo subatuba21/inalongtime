@@ -18,13 +18,13 @@ export const futureRouter = Router();
 
 futureRouter.get('/:id', extractDraftIDFromURL, async (req, res) => {
   const id = req.draft?.id as string;
-  const future = await getFuture(id);
+  const future = await getFuture(req.dbManager.getFutureDB(), id);
   const notFoundRes : APIResponse = {
     data: null,
     error: notFoundError,
   };
 
-  logger.verbose(console.log(future));
+  logger.verbose(future);
 
   if (!future.success || !future.future) {
     res.status(404).json(notFoundRes);
@@ -72,14 +72,15 @@ futureRouter.get('/:id', extractDraftIDFromURL, async (req, res) => {
       !(future.future.recipientType === 'someone else' &&
       req.user &&
       req.user._id === future.future.userId)) {
-      await setFutureViewed(id);
+      await setFutureViewed(req.dbManager.getFutureDB(), id);
 
       setTimeout(async () => {
-        await setFilesAccessibleFalse(id);
+        await setFilesAccessibleFalse(req.dbManager.getFutureDB(), id);
       }, 1000 * 60 * 10);
 
       if (future.future.recipientType === 'someone else' ) {
-        const user = await getUser(future.future._id.toString());
+        const user = await getUser(req.dbManager.getUserDB(),
+            future.future._id.toString());
 
         if (user.success) {
           await sendFutureViewedEmail(

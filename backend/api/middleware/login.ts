@@ -145,11 +145,11 @@ export const loginWithToken =
     const userId = req.userId as string;
     const token = req.token as string;
 
-    const dbToken = await getToken(userId);
+    const dbToken = await getToken(req.dbManager.getForgotPasswordDB(), userId);
     if (dbToken && await validateToken(token, dbToken.token)) {
       manuallySerializeUser(req, userId);
       res.redirect('/account');
-      await deleteToken(userId);
+      await deleteToken(req.dbManager.getForgotPasswordDB(), userId);
       return;
     } else {
       res.redirect('/login');

@@ -8,6 +8,7 @@ import fs from 'fs';
 import {deleteResourceFromDraft} from '../../db/draft';
 import logger from '../../logger';
 import {allowedFileTypes, maxDraftSize} from 'shared/dist/types/fileTypes';
+import {Collection} from 'mongodb';
 const storage = new Storage({
   keyFilename: `${__dirname}/${process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE_PATH}`,
 });
@@ -110,7 +111,7 @@ export const getDraftFile = async (userId: string, draftId: string, resourceId: 
   }
 };
 
-export const deleteUnnecessaryFiles = async (userId: string, draftSchema: DraftSchema) => {
+export const deleteUnnecessaryFiles = async (draftCol: Collection, userId: string, draftSchema: DraftSchema) => {
   const draftId = draftSchema._id;
   const content = await getDraftContent(userId, draftId, draftSchema.type);
   const contentResources = content.getResourceIDs();
@@ -118,7 +119,7 @@ export const deleteUnnecessaryFiles = async (userId: string, draftSchema: DraftS
     if (!contentResources.includes(resource.id)) {
       try {
         await deleteDraftResource(userId, draftId, resource.id);
-        await deleteResourceFromDraft(draftId, resource.id);
+        await deleteResourceFromDraft(draftCol, draftId, resource.id);
       } catch (e) {
         const err = e as Error;
         logger.warn(err.message);

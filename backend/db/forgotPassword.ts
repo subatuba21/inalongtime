@@ -1,11 +1,6 @@
-import {Collection, Db} from 'mongodb';
+import {Collection} from 'mongodb';
 import logger from '../logger';
-import {DbResponse} from './setup';
-
-let forgotPasswordCol : Collection;
-export const setForgotPasswordCol = async (db: Db) => {
-  forgotPasswordCol = db.collection('forgot_passwords');
-};
+import {DbResponse} from '../utils/types/dbResponse';
 
 export interface TokenResponse extends DbResponse {
   token: string;
@@ -14,7 +9,8 @@ export interface TokenResponse extends DbResponse {
 }
 
 export const addToken =
-  async (token: string, userId: string) : Promise<TokenResponse> => {
+  async (forgotPasswordCol : Collection,
+      token: string, userId: string) : Promise<TokenResponse> => {
     try {
       const date = new Date(Date.now() + 1000*60*10);
       const res = await forgotPasswordCol.insertOne({
@@ -45,7 +41,8 @@ export const addToken =
   };
 
 export const getToken =
-  async (userId: string) : Promise<TokenResponse> => {
+  async (forgotPasswordCol : Collection, userId: string)
+  : Promise<TokenResponse> => {
     try {
       const res = await forgotPasswordCol.findOne(
           {userId, expiry: {$gt: new Date()}});
@@ -74,7 +71,8 @@ export const getToken =
   };
 
 export const deleteToken =
-  async (userId: string) : Promise<TokenResponse> => {
+  async (forgotPasswordCol : Collection, userId: string)
+  : Promise<TokenResponse> => {
     try {
       const res = await forgotPasswordCol.deleteMany({userId});
       if (res.acknowledged) {

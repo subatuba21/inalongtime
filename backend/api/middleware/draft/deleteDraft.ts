@@ -11,10 +11,12 @@ import {deleteDraft as deleteDraftFromDB} from '../../../db/draft';
 export const deleteDraft =
   async (req: express.Request, res: express.Response, next: Function) => {
     const draftId = req.draft?.id as string;
-    const draftRes = await deleteDraftFromDB(draftId);
+    const draftRes = await deleteDraftFromDB(
+        req.dbManager.getDraftDB(), draftId);
     const user = req.user as UserSchema;
     await deleteDraftContent(user._id, draftId);
-    const error = await deleteDraftIdFromUser(user._id, draftId);
+    const error = await deleteDraftIdFromUser(
+        req.dbManager.getDraftDB(), user._id, draftId);
 
     if (draftRes.error || error) {
       logger.warn(draftRes.error || error);

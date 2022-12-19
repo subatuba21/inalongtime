@@ -14,7 +14,8 @@ import {deleteDraftIdFromUser} from '../../db/auth';
 export const deleteUnnecessaryFiles =
   async (req: express.Request, res: express.Response, next: Function) => {
     const draft = req.draft?.dbObject as DraftSchema;
-    await deleteUnnecessaryFilesFunc(draft.userId, draft);
+    await deleteUnnecessaryFilesFunc(req.dbManager.getDraftDB(),
+        draft.userId, draft);
     next();
   };
 
@@ -54,10 +55,12 @@ export const convertDraftToFuture =
 
       try {
         const future = preprocessDraft.parse(draft);
-        const result = await addFuture(future);
+        const result = await addFuture(req.dbManager.getFutureDB(), future);
         if (result.success) {
-          const result = await deleteDraft(draft._id);
-          await deleteDraftIdFromUser(draft.userId, draft._id);
+          const result = await deleteDraft(
+              req.dbManager.getDraftDB(), draft._id);
+          await deleteDraftIdFromUser(
+              req.dbManager.getDraftDB(), draft.userId, draft._id);
           if (!result.success) {
             return;
           }

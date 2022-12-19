@@ -8,7 +8,8 @@ import {getUserDrafts as getUserDraftsFromDB} from '../../../db/draft';
 export const getUserDrafts =
   async (req: express.Request, res: express.Response, next: Function) => {
     const user = req.user as UserSchema;
-    const result = await getUserDraftsFromDB(user._id);
+    const result = await getUserDraftsFromDB(req.dbManager.getDraftDB(),
+        user._id);
     if (result.error) {
       const response : APIResponse = {
         data: null,

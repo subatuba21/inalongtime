@@ -18,7 +18,8 @@ export const editDraft =
       const user = req.user as UserSchema;
 
       if (draftData.properties) {
-        const draftRes = await modifyDraft(draftId, draftData.properties);
+        const draftRes = await modifyDraft(req.dbManager.getDraftDB(),
+            draftId, draftData.properties);
         if (draftRes.error) {
           logger.warn(draftRes.error);
           const response : APIResponse = {
