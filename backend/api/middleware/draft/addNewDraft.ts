@@ -8,6 +8,7 @@ import {getContentFilename} from '../../../utils/contentStorage/draft';
 import {UserSchema} from '../../../utils/schemas/user';
 import {APIResponse} from '../../../utils/types/apiStructure';
 import express from 'express';
+import logger from '../../../logger';
 
 export const addNewDraft =
     async (req: express.Request, res: express.Response, next: Function) => {
@@ -44,7 +45,8 @@ export const addNewDraft =
       }, draftID);
 
       const error = await addDraftIdToUser(
-          req.dbManager.getDraftDB(), user._id, draftID.toString());
+          req.dbManager.getUserDB(), user._id, draftID.toString());
+      logger.verbose(error);
 
       const draftRes : DraftResponseBody = await draftResponseBody.parseAsync({
         content: {},
