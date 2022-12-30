@@ -18,6 +18,7 @@ import {GalleryEditor} from './galleryEditor/GalleryEditor';
 import {ArrowUpRightSquareFill} from 'react-bootstrap-icons';
 import {ReminderEditor} from './reminderEditor/reminderEditor';
 import {CustomizeForm} from './customizeForm/CustomizeForm';
+import {ContentViewer} from '../ContentViewer/ContentViewer';
 
 const LetterEditor =
   lazy(() => import('./letterEditor/LetterEditor')
@@ -28,6 +29,7 @@ export const EditorPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const editorState = useSelector(
       (state: any) => state.editor) as DraftFrontendState;
 
@@ -123,6 +125,11 @@ export const EditorPage = () => {
     return <LoadingPage loggedInNavbar={true}></LoadingPage>;
   }
 
+  if (previewOpen) {
+    return <ContentViewer mode='preview' id={editorState._id}
+      onSpacePressed={() => setPreviewOpen(false)}></ContentViewer>;
+  }
+
   return <div style={styles}>
     <div className='fillPage'>
       <Navbar></Navbar>
@@ -132,7 +139,7 @@ export const EditorPage = () => {
             All fields are autosaved.
         </p>
         <p id={styles.previewURL}>
-          <a href={`/preview/${id}`} target="_blank" rel="noreferrer">
+          <span onClick={() => setPreviewOpen(true)}>
             <ArrowUpRightSquareFill style={{
               marginRight: '9px',
               position: 'relative',
@@ -140,7 +147,7 @@ export const EditorPage = () => {
               fontSize: '15pt',
             }}></ArrowUpRightSquareFill>
             Open Preview
-          </a>
+          </span>
         </p>
         <h3 style={{marginBottom: '10px'}}>Steps</h3>
         <div style={{marginBottom: '10px'}}>
@@ -190,7 +197,7 @@ export const EditorPage = () => {
             Next
           </div>
           <div id={styles.bottomPreview}>
-            <a href={`/preview/${id}`} target="_blank" rel="noreferrer">
+            <span onClick={() => setPreviewOpen(true)}>
               <ArrowUpRightSquareFill style={{
                 marginRight: '9px',
                 position: 'relative',
@@ -198,7 +205,7 @@ export const EditorPage = () => {
                 fontSize: '15pt',
               }}></ArrowUpRightSquareFill>
             Open Preview
-            </a>
+            </span>
           </div>
         </div>
       </div>

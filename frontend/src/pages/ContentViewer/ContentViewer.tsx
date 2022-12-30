@@ -7,7 +7,7 @@ import parse from 'html-react-parser';
 import {ReminderContent} from 'shared/dist/editor/classes/reminderContent';
 import {formatDate} from 'shared/dist/utils/formatDate';
 import {useNavigate, useParams} from 'react-router-dom';
-import {useEffect, useState} from 'react';
+import {KeyboardEventHandler, useEffect, useRef, useState} from 'react';
 import {editorAPI} from '../../api/editor';
 import {DraftType, CustomizationSchema} from 'shared/dist/types/draft';
 import styles from './ContentViewer.module.css';
@@ -23,10 +23,13 @@ import {Head} from '../../components/Head/Head';
 
 export const ContentViewer = (props: {
     mode: 'preview' | 'future'
+    id?: string,
+    onSpacePressed?: KeyboardEventHandler<HTMLDivElement>,
 }) => {
+  const outerDivRef = useRef<HTMLDivElement>(null);
   const params = useParams();
   const navigate = useNavigate();
-  const id = params.id as string;
+  const id = params.id as string || props.id;
 
   if (!id) {
     navigate('/home');
@@ -99,8 +102,14 @@ export const ContentViewer = (props: {
     getData();
   }, []);
 
+  useEffect(() => {
+    if (outerDivRef.current) {
+      outerDivRef.current.focus();
+    }
+  }, [isLoading, waitTimeDone]);
+
   const loadingPageText = props.mode === 'preview' ?
-  'Reload the page to see the latest changes.' :
+  'Click the spacebar to go back to the editor.' :
    'Get ready.';
 
   if (isLoading) {
@@ -198,8 +207,18 @@ export const ContentViewer = (props: {
     }
   }
 
+  const onSpacePressedWrapper : KeyboardEventHandler<HTMLDivElement> = (e) => {
+    console.log('space pressed');
+    if (e.code === 'Space') {
+      e.preventDefault();
+      props.onSpacePressed?.(e);
+    }
+  };
+
   return (
-    <>
+    <div onKeyPress={onSpacePressedWrapper}
+      tabIndex={0}
+      ref={outerDivRef}>
       <Head title={title}></Head>
       {waitTimeDone ? <></> : <div id={loadingStyles.loadingPage}
         className={loadingStyles.slideLeft}>
@@ -222,5 +241,5 @@ export const ContentViewer = (props: {
           {jsxContent}
         </div>
       </div>
-    </>);
+    </div>);
 };
