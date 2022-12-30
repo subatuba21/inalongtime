@@ -29,6 +29,7 @@ import {SuccessPage} from './pages/successPage/successPage';
 import {Head} from './components/Head/Head';
 import {SentPage} from './pages/sentPage/SentPage';
 import {ReceivedPage} from './pages/receivedPage/ReceivedPage';
+import {AddingPageSoon} from './pages/addingPageSoon/AddingPageSoon';
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -136,6 +137,22 @@ export const App = () => {
 
         <Route path='/load' element={
           <LoadingPage></LoadingPage>
+        } />
+
+        <Route path='/pricing' element={
+          <Navigate to={'/comingsoon'}></Navigate>
+        } />
+
+        <Route path='/about' element={
+          <Navigate to={'/comingsoon'}></Navigate>
+        } />
+
+        <Route path='/faqs' element={
+          <Navigate to={'/comingsoon'}></Navigate>
+        } />
+
+        <Route path='/comingsoon' element={
+          <AddingPageSoon></AddingPageSoon>
         } />
 
         <Route path="*" element={<Navigate to='/login'></Navigate>} />

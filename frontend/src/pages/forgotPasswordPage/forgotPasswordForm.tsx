@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {useState} from 'react';
 import {Button} from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
@@ -55,7 +56,7 @@ export const ForgotPasswordForm = () => {
   return <div className="box" id={styles.form}>
     <h2>Forgot Password?</h2>
     <form id={styles.container} onSubmit={handleSubmit}>
-      <div>
+      {/* <div>
         <InputBox placeholder='Email' name='email'
           valueState={{value: email, set: setEmail}} validation={
             {
@@ -74,12 +75,13 @@ export const ForgotPasswordForm = () => {
               showErrors: true,
             }
           }></InputBox>
-      </div>
-      <p>If your account exists, we will email you a
-        link you can use to login and reset your password.</p>
-      <Button variant='info' id={styles.button} type='submit' style={{
+      </div> */}
+      {/* <p>If your account exists, we will email you a
+        link you can use to login and reset your password.</p> */}
+      <p>Hold tight! We are adding this **very soon**!</p>
+      {/* <Button variant='info' id={styles.button} type='submit' style={{
         opacity: processing ? '.5' : '1',
-      }}>Submit</Button>
+      }}>Submit</Button> */}
     </form>
   </div>;
 };

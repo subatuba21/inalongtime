@@ -1,0 +1,13 @@
+#mainDiv {
+    width: 400px;
+    max-width: 90%;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+#mainDiv > div {
+    width: 100%;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+}

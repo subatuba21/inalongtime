@@ -30,9 +30,9 @@ export const Navbar = (props?: {type?: 'index' | 'home'}) => {
 
   if (props?.type==='index') {
     navbarMiddle = <div id={styles.navbarMiddle}>
-      <Link to='/login'>Pricing</Link>
-      <Link to='/signup'>FAQs</Link>
-      <Link to='/signup'>About</Link>
+      <Link to='/pricing'>Pricing</Link>
+      <Link to='/faqs'>FAQs</Link>
+      <Link to='/about'>About</Link>
     </div>;
 
     navbarRight = <div id={styles.navbarRight}>
