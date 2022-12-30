@@ -100,8 +100,7 @@ export const ConfirmForm = () => {
   return <div id={styles.confirmForm} className='box'>
     <div style={allowedToConfirm ? {display: 'none'} : {}}>
       <p>
-        <b>Looks like you still have errors or missing
-            info in some sections.</b>
+        <b>Looks like you still have to review some sections.</b>
       </p>
     </div>
     <div className={!allowedToConfirm ? styles.disabled : null}>

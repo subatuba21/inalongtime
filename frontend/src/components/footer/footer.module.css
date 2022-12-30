@@ -5,6 +5,13 @@
   padding-top: 30px;
 }
 
+#smallfooter {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0.5em;
+  font-size: 15pt;
+  padding-top: 10px;
+}
+
 .column {
   margin: 10px;
   margin-right: 50px;
@@ -23,7 +30,7 @@
   padding-top: 30px;
 }
 
-#firstRow > span.link {
+#firstRow > .link {
   margin-left: 10px;
   margin-right: 10px;
   color: var(--pink);
@@ -45,7 +52,7 @@
 }
 
 @media (max-width: 700px) {
-  #footer {
+  #footer, #smallfooter {
     font-size: 12pt;
     padding: 6vw;
   }

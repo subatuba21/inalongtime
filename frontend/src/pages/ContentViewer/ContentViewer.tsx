@@ -108,8 +108,9 @@ export const ContentViewer = (props: {
     }
   }, [isLoading, waitTimeDone]);
 
-  const loadingPageText = props.mode === 'preview' ?
-  'Click the spacebar to go back to the editor.' :
+  const loadingPageText = props.mode === 'preview' && props.onSpacePressed ?
+  'Click the spacebar to go back to the editor.' : props.mode === 'preview' ?
+  'Exit this tab to go back to the editor.' :
    'Get ready.';
 
   if (isLoading) {

@@ -1,5 +1,6 @@
+import {Link} from 'react-router-dom';
 import styles from './footer.module.css';
-export const Footer = () => {
+export const BigFooter = () => {
   return <div id={styles.footer}>
     <div id={styles.firstRow}>
       <span id={styles.logo} className='logo'>
@@ -38,5 +39,24 @@ export const Footer = () => {
     </div>
 
 
+  </div>;
+};
+
+export const Footer = () => {
+  return <div id={styles.smallfooter}>
+    <div id={styles.firstRow}>
+      <span id={styles.logo} className='logo'>
+        in a long time
+      </span>
+      <Link to="/home" className={styles.link}>
+        Home
+      </Link>
+      <a className={styles.link} href="https://forms.gle/sEXdP3mRKvYz5GJH8" target="_blank" rel="noreferrer">
+        Contact Us
+      </a>
+      <span className={styles.link}>
+        Copyright In a long time
+      </span>
+    </div>
   </div>;
 };
