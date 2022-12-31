@@ -17,6 +17,7 @@ export const registerUser = async (userCol: Collection, userInput: RegisterUserI
     logger.verbose(`registering user: ${userInput}`);
     const user = await userCol.findOne({email: userInput.email});
     if (user) {
+      logger.verbose(`user already exists: ${userInput}`);
       return {success: false,
         error: DBError.UNIQUE_ENTITY_ALREADY_EXISTS, user: null};
     }
@@ -42,6 +43,7 @@ export const registerUser = async (userCol: Collection, userInput: RegisterUserI
       };
     } else throw new Error('MongoDB error: write not allowed.');
   } catch (err: any) {
+    logger.verbose(`Other error: ${err.message}`);
     return {
       success: false,
       error: err.message,
