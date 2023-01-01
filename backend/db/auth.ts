@@ -186,7 +186,7 @@ export const deleteFutureIdFromUser =
       await userCol.updateOne({
         _id: new ObjectId(userID),
       }, {
-        $addToSet: {
+        $pull: {
           futureIDs: futureID,
         },
       });

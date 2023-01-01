@@ -63,24 +63,13 @@ export const getDraft = async (draftCol: Collection, _id: string)
   }
 };
 
-export const getNumberOfUserDrafts =
-  async (draftCol: Collection,
-      userId: string) : Promise<number | undefined> => {
-    try {
-      const res = await draftCol.countDocuments({userId: {
-        $eq: new ObjectId(userId),
-      }});
-      return res;
-    } catch {
-      return undefined;
-    }
-  };
-
 export type ModifyDraftInput = Partial<DraftInput>;
 export const modifyDraft =
     async (draftCol: Collection, _id: string, draft : ModifyDraftInput)
     : Promise<DraftDbResponse> => {
       try {
+        if (draft.userId) delete draft.userId;
+        // Not allowed to change userId of draft
         const res = await draftCol.findOneAndUpdate(
             {_id: new ObjectId(_id)}, {$set: draft}, {
               returnDocument: 'after',
@@ -137,7 +126,7 @@ export const getUserDrafts = async (draftCol: Collection, userId: string) :
   Promise<getUserDraftsDbResponse> => {
   try {
     const drafts : MiniDraft[] = [];
-    const res = await draftCol.find({userId: {
+    const res = draftCol.find({userId: {
       $eq: new ObjectId(userId),
     }});
 
