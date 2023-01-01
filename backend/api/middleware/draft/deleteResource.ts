@@ -8,7 +8,7 @@ async (req: express.Request, res: express.Response, next: Function) => {
   const user = req.user as UserSchema;
   const draftId = req.draft?.id as string;
   const resourceId = req.resourceId as string;
-  await deleteDraftResource(user._id, draftId, resourceId);
+  await deleteDraftResource(req.storage, user._id, draftId, resourceId);
   await deleteResourceFromDraft(
       req.dbManager.getDraftDB(), draftId, resourceId);
   const response : APIResponse = {

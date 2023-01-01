@@ -56,7 +56,7 @@ export const getDraft =
     }
 
     try {
-      const draftContent = await getDraftContent(user._id,
+      const draftContent = await getDraftContent(req.storage, user._id,
           draftId, result.draft?.type as DraftType);
       const draftRes : DraftResponseBody = await draftResponseBody.parseAsync({
         content: draftContent.serialize(),

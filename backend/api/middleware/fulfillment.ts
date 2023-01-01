@@ -14,7 +14,7 @@ import {deleteDraftIdFromUser} from '../../db/auth';
 export const deleteUnnecessaryFiles =
   async (req: express.Request, res: express.Response, next: Function) => {
     const draft = req.draft?.dbObject as DraftSchema;
-    await deleteUnnecessaryFilesFunc(req.dbManager.getDraftDB(),
+    await deleteUnnecessaryFilesFunc(req.storage, req.dbManager.getDraftDB(),
         draft.userId, draft);
     next();
   };
@@ -23,7 +23,7 @@ export const setIsDraftIsPaid =
     async (req: express.Request, res: express.Response, next: Function) => {
       const draft = req.draft?.dbObject as DraftSchema;
       const content =
-        await getDraftContent(draft.userId, draft._id, draft.type);
+        await getDraftContent(req.storage, draft.userId, draft._id, draft.type);
       if (!req.draft) req.draft = {};
       req.draft.paidInfo = isDraftPaid(draft, content);
       next();

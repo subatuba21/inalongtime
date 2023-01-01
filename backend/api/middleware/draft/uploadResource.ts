@@ -73,7 +73,7 @@ export const uploadResource =
       } else {
         const resourceId = new ObjectId().toString();
         try {
-          await postDraftResource(
+          await postDraftResource(req.storage,
               user._id, draftId, resourceId, file.tempFilePath,
               file.size, file.mimetype as allowedFileTypes);
         } catch (err) {

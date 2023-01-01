@@ -1,4 +1,4 @@
-import express, {Express} from 'express';
+import express from 'express';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import {DBManager} from './db/manager';
@@ -6,9 +6,10 @@ import {MongoClient} from 'mongodb';
 import {apiRouter} from './api/apiRouter';
 import path from 'path';
 import {handleEndError} from './utils/handleEndError';
+import {EnvironmentSetup} from './utils/types/environment';
+import {Storage} from '@google-cloud/storage';
 
-export const getSetup = async () :
-Promise<{ server: Express; dbManager: DBManager; }> => {
+export const getSetup : EnvironmentSetup = async () => {
   const app = express();
 
   app.use(session({
@@ -26,8 +27,14 @@ Promise<{ server: Express; dbManager: DBManager; }> => {
   const db = mongoClient.db(process.env.MONGO_DB_NAME as string);
   const dbManager = new DBManager(db);
 
+  const storage = new Storage({
+    keyFilename:
+    `${__dirname}/${process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE_PATH}`,
+  });
+
   app.use('/api', async (req: express.Request, res: express.Response, next) => {
     req.dbManager = dbManager;
+    req.storage = storage;
     next();
   });
 
@@ -42,6 +49,7 @@ Promise<{ server: Express; dbManager: DBManager; }> => {
 
   return {
     server: app,
-    dbManager: dbManager,
+    dbManager,
+    storage,
   };
 };

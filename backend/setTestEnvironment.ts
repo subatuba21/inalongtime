@@ -11,11 +11,11 @@ import {apiRouter} from './api/apiRouter';
 import {DBManager} from './db/manager';
 import path from 'path';
 import {handleEndError} from './utils/handleEndError';
-import {Express} from 'express';
 import MongoStore from 'connect-mongo';
+import {EnvironmentSetup} from './utils/types/environment';
+import {Storage} from '@google-cloud/storage';
 
-export const getTestSetup = async () :
-Promise<{ server: Express; dbManager: DBManager; }> => {
+export const getTestSetup : EnvironmentSetup = async () => {
   const app = express();
   const mongoServer = new MongoMemoryServer();
   await mongoServer.start();
@@ -35,6 +35,11 @@ Promise<{ server: Express; dbManager: DBManager; }> => {
   const db = mongoClient.db('test_db');
   const dbManager = new DBManager(db);
 
+  const storage = new Storage({
+    keyFilename:
+    `${__dirname}/${process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE_PATH}`,
+  });
+
   app.use('/api', async (req: express.Request, res: express.Response, next) => {
     req.dbManager = dbManager;
     next();
@@ -52,5 +57,6 @@ Promise<{ server: Express; dbManager: DBManager; }> => {
   return {
     server: app,
     dbManager: dbManager,
+    storage,
   };
 };

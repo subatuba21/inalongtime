@@ -35,7 +35,7 @@ export const editDraft =
       if (draftData.content) {
         try {
           const content = parseContent(draftData.content, draftType);
-          await postDraftContent(user._id, draftId, content);
+          await postDraftContent(req.storage, user._id, draftId, content);
         } catch (err) {
           logger.warn(err);
           const response : APIResponse = {

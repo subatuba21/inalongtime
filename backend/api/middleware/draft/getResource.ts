@@ -16,7 +16,7 @@ async (req: express.Request, res: express.Response, next: Function) => {
       'Cache-Control': 'max-age=604800',
     };
     const file =
-      await getDraftFile(user._id, draftId, resourceId);
+      await getDraftFile(req.storage, user._id, draftId, resourceId);
 
     const metadata : Metadata = (await file.getMetadata())[0];
     const contentType = metadata.contentType ?? 'undefined';

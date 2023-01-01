@@ -9,9 +9,6 @@ import {deleteResourceFromDraft} from '../../db/draft';
 import logger from '../../logger';
 import {allowedFileTypes, maxDraftSize} from 'shared/dist/types/fileTypes';
 import {Collection} from 'mongodb';
-const storage = new Storage({
-  keyFilename: `${__dirname}/${process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE_PATH}`,
-});
 
 export const getContentFolderName = (userId: string, contentId: string) => {
   return `user-${userId}/content-${contentId}/`;
@@ -28,7 +25,7 @@ export const getContentResourceFileName = (userId: string, contentId: string, re
 export type ContentPath = string;
 
 export const postDraftContent =
-    async (userId: string, draftId: string, content : Content) : Promise<ContentPath> => {
+    async (storage: Storage, userId: string, draftId: string, content : Content) : Promise<ContentPath> => {
       const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
       const path = getContentFilename(userId, draftId);
       const file = bucket.file(path);
@@ -37,7 +34,7 @@ export const postDraftContent =
     };
 
 export const getDraftContent =
-    async (userId: string, draftId: string, type : DraftType) : Promise<Content> => {
+    async (storage: Storage, userId: string, draftId: string, type : DraftType) : Promise<Content> => {
       const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
       const file = bucket.file(getContentFilename(userId, draftId));
       if ((await file.exists())[0]) {
@@ -52,7 +49,7 @@ export const getDraftContent =
       }
     };
 
-export const deleteDraftContent = async (userId: string, draftId: string) => {
+export const deleteDraftContent = async (storage: Storage, userId: string, draftId: string) => {
   const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
   const folder = await bucket.getFiles({
     prefix: getContentFolderName(userId, draftId),
@@ -62,7 +59,7 @@ export const deleteDraftContent = async (userId: string, draftId: string) => {
   });
 };
 
-export const postDraftResource = async (userId: string, draftId: string, resourceId: string, uploadFilePath: string, fileSize: number, contentType: allowedFileTypes) => {
+export const postDraftResource = async (storage: Storage, userId: string, draftId: string, resourceId: string, uploadFilePath: string, fileSize: number, contentType: allowedFileTypes) => {
   const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
   let totalStorage = 0;
   const folder = await bucket.getFiles({
@@ -92,14 +89,14 @@ export const postDraftResource = async (userId: string, draftId: string, resourc
 };
 
 
-export const deleteDraftResource = async (userId: string, draftId: string, resourceId: string) => {
+export const deleteDraftResource = async (storage: Storage, userId: string, draftId: string, resourceId: string) => {
   const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
   const fileName = getContentResourceFileName(userId, draftId, resourceId);
   const file = bucket.file(fileName);
   await file.delete();
 };
 
-export const getDraftFile = async (userId: string, draftId: string, resourceId: string) => {
+export const getDraftFile = async (storage: Storage, userId: string, draftId: string, resourceId: string) => {
   const bucket = storage.bucket(process.env.CONTENT_BUCKET_NAME as string);
   const fileName = getContentResourceFileName(userId, draftId, resourceId);
   const file = bucket.file(fileName);
@@ -111,14 +108,14 @@ export const getDraftFile = async (userId: string, draftId: string, resourceId: 
   }
 };
 
-export const deleteUnnecessaryFiles = async (draftCol: Collection, userId: string, draftSchema: DraftSchema) => {
+export const deleteUnnecessaryFiles = async (storage: Storage, draftCol: Collection, userId: string, draftSchema: DraftSchema) => {
   const draftId = draftSchema._id;
-  const content = await getDraftContent(userId, draftId, draftSchema.type);
+  const content = await getDraftContent(storage, userId, draftId, draftSchema.type);
   const contentResources = content.getResourceIDs();
   for (const resource of draftSchema.resources) {
     if (!contentResources.includes(resource.id)) {
       try {
-        await deleteDraftResource(userId, draftId, resource.id);
+        await deleteDraftResource(storage, userId, draftId, resource.id);
         await deleteResourceFromDraft(draftCol, draftId, resource.id);
       } catch (e) {
         const err = e as Error;

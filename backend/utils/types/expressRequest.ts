@@ -1,16 +1,15 @@
-/* eslint-disable no-unused-vars */
-import {editDraftRequestBody, DraftType,
+import {DraftType,
   EditDraftRequestBody,
   DraftSchema} from 'shared/dist/types/draft';
 import {APIError} from 'shared/dist/types/apiErrors';
 import {PaymentData} from '../schemas/payment';
-import {PassportLoginInput,
-  RegisterUserInput, UserSchema} from '../schemas/user';
+import {RegisterUserInput, UserSchema} from '../schemas/user';
 import {Future} from 'shared/dist/types/future';
-import {Db} from 'mongodb';
+import {Storage} from '@google-cloud/storage';
 import {DBManager} from '../../db/manager';
 
 declare module 'express-serve-static-core' {
+    // eslint-disable-next-line no-unused-vars
     interface Request {
       user?: UserSchema;
       error?: APIError;
@@ -35,6 +34,7 @@ declare module 'express-serve-static-core' {
       email?: string,
       userId?: string,
       token?: string,
-      dbManager: DBManager
+      dbManager: DBManager,
+      storage: Storage
     }
 }

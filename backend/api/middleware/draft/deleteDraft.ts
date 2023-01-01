@@ -14,7 +14,7 @@ export const deleteDraft =
     const draftRes = await deleteDraftFromDB(
         req.dbManager.getDraftDB(), draftId);
     const user = req.user as UserSchema;
-    await deleteDraftContent(user._id, draftId);
+    await deleteDraftContent(req.storage, user._id, draftId);
     const error = await deleteDraftIdFromUser(
         req.dbManager.getDraftDB(), user._id, draftId);
 

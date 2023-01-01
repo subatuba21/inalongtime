@@ -60,7 +60,8 @@ futureRouter.get('/:id', extractDraftIDFromURL, async (req, res) => {
   }
 
   try {
-    const content = await getDraftContent(future.future.userId.toString(),
+    const content = await getDraftContent(
+        req.storage, future.future.userId.toString(),
         future.future._id.toString(), future.future.type);
 
     const futureRes = await futureResponseBody.parseAsync({
