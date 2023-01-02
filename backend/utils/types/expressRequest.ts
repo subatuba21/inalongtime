@@ -6,7 +6,7 @@ import {PaymentData} from '../schemas/payment';
 import {RegisterUserInput, UserSchema} from '../schemas/user';
 import {Future} from 'shared/dist/types/future';
 import {Storage} from '@google-cloud/storage';
-import {DBManager} from '../../db/manager';
+import {DBManager} from './dbManager';
 
 declare module 'express-serve-static-core' {
     // eslint-disable-next-line no-unused-vars

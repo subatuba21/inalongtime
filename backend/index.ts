@@ -5,7 +5,7 @@ import logger from './logger';
 import './utils/passport/setup';
 import {sendFunction, sendMainEmails} from './utils/cron/sendMainEmails';
 import {getSetup} from './setEnvironment';
-import {DBManager} from './db/manager';
+import {DBManager} from './utils/types/dbManager';
 import Express from 'express';
 
 const setupPromise = getSetup();

@@ -8,7 +8,7 @@ import session from 'express-session';
 import {MongoClient} from 'mongodb';
 import {MongoMemoryServer} from 'mongodb-memory-server';
 import {apiRouter} from './api/apiRouter';
-import {DBManager} from './db/manager';
+import {TestDBManager} from './utils/types/dbManager';
 import path from 'path';
 import {handleEndError} from './utils/handleEndError';
 import MongoStore from 'connect-mongo';
@@ -33,7 +33,7 @@ export const getTestSetup : EnvironmentSetup = async () => {
   const mongoClient = new MongoClient(uri);
   await mongoClient.connect();
   const db = mongoClient.db('test_db');
-  const dbManager = new DBManager(db);
+  const dbManager = new TestDBManager(db);
 
   const storage = new Storage({
     keyFilename:

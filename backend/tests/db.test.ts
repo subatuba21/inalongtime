@@ -3,11 +3,14 @@ import {addDraftIdToUser, addFutureIdToUser,
   changePassword,
   deleteDraftIdFromUser, deleteFutureIdFromUser, getUser,
   getUserByEmail, registerUser} from '../db/auth';
-import {DBManager} from '../db/manager';
+import {DBManager} from '../utils/types/dbManager';
 import {assert, expect} from 'chai';
 import {addDraft, addResourceToDraft,
   deleteDraft, deleteResourceFromDraft, DraftInput,
   getDraft, getUserDrafts, modifyDraft} from '../db/draft';
+import {addFuture, getFuture} from '../db/future';
+import {Future} from 'shared/dist/types/future';
+import {ObjectId} from 'mongodb';
 
 
 let dbManager : DBManager;
@@ -248,5 +251,44 @@ describe('Testing draft dunctions', () => {
 
     const getDraftRes = await getDraft(draftDb, testDraftId);
     expect(getDraftRes.success).to.equal(false);
+  });
+});
+
+const TestFuture : Future = {
+  type: 'letter',
+  _id: new ObjectId().toString(),
+  userId: TestUser.id,
+  recipientType: 'myself',
+  recipientEmail: TestUser.email,
+  lastEdited: new Date(),
+  createdAt: new Date(),
+  nextSendDate: new Date(),
+  title: 'Test Future',
+  contentCloudStoragePath: 'None',
+  phoneNumber: '+15512070645',
+  backupEmail: 'backupemail@gmail.com',
+  resources: [],
+  viewed: false,
+  senderName: 'SUBS',
+  filesAccessible: true,
+};
+
+describe('Testing future functions', () => {
+  it('Should create a future and get it', async () => {
+    TestFuture.userId = TestUser.id;
+    const futureDb = dbManager.getFutureDB();
+    const addFutureRes = await addFuture(futureDb, TestFuture);
+    expect(addFutureRes.success).to.be.true;
+    expect(addFutureRes.future?._id).to.equal(TestFuture._id);
+    expect(addFutureRes.future?.backupEmail).to.equal(TestFuture.backupEmail);
+    expect(addFutureRes.future?.lastEdited).to.eql(TestFuture.lastEdited);
+    TestFuture._id = addFutureRes.future?._id as string;
+
+    const getFutureRes = await getFuture(
+        dbManager.getFutureDB(), TestFuture._id);
+    expect(getFutureRes.success).to.be.true;
+    expect(getFutureRes.future?._id).to.equal(TestFuture._id);
+    expect(getFutureRes.future?.backupEmail).to.equal(TestFuture.backupEmail);
+    expect(getFutureRes.future?.lastEdited).to.eql(TestFuture.lastEdited);
   });
 });

@@ -3,6 +3,7 @@ import {Express} from 'express';
 import {TestDBManager} from '../utils/types/dbManager';
 import fetch from 'node-fetch-cjs';
 import {expect} from 'chai';
+import nock from 'nock';
 
 // let dbManager : DBManager;
 let app : Express;
