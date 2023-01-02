@@ -4,16 +4,9 @@ import {getUserByEmail, registerGoogleUser,
 import logger from '../../logger';
 import {Request} from 'express';
 
-export const googleStrategy = new Strategy({
-  clientID: process.env.GOOGLE_CLIENT_ID as string,
-  passReqToCallback: true,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-  callbackURL:
-  // eslint-disable-next-line max-len
-  `${process.env.HOST_ADDRESS as string}/api/auth/google/callback`,
-}, async (req: Request, accessToken: any,
+export const onGoogleLogin = async (req: Request, accessToken: any,
     refreshToken: any, profile: any, done: any) => {
-  logger.verbose(`Localstrategy working for email ${profile.email}`);
+  logger.verbose(`Googlestrategy working for email ${profile.email}`);
   const userResponse: UserDbResponse = await getUserByEmail(
       req.dbManager.getUserDB(),
       profile.email);
@@ -27,8 +20,10 @@ export const googleStrategy = new Strategy({
           });
 
       if (registerUserResponse.success) {
+        logger.verbose(`User ${profile.email} registered!`);
         return done(null, registerUserResponse.user);
       } else {
+        logger.debug(`Googlestrategy error: ${registerUserResponse.error}`);
         return done(null, false);
       }
     } else {
@@ -39,4 +34,13 @@ export const googleStrategy = new Strategy({
       return done(null, userResponse.user);
     } else return done(null, false);
   }
-});
+};
+
+export const googleStrategy = new Strategy({
+  clientID: process.env.GOOGLE_CLIENT_ID as string,
+  passReqToCallback: true,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+  callbackURL:
+  // eslint-disable-next-line max-len
+  `${process.env.HOST_ADDRESS as string}/api/auth/google/callback`,
+}, onGoogleLogin);

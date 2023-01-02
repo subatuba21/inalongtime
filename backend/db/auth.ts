@@ -81,6 +81,7 @@ export const registerGoogleUser =
             email: input.email,
             firstname: input.firstname,
             lastname: input.lastname,
+            method: 'google',
           },
         };
       } else throw new Error('MongoDB error: write not allowed.');

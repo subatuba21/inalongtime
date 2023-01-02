@@ -2,8 +2,8 @@ import {getTestSetup} from '../setTestEnvironment';
 import {addDraftIdToUser, addFutureIdToUser,
   changePassword,
   deleteDraftIdFromUser, deleteFutureIdFromUser, getUser,
-  getUserByEmail, registerUser} from '../db/auth';
-import {DBManager} from '../utils/types/dbManager';
+  getUserByEmail, registerGoogleUser, registerUser} from '../db/auth';
+import {TestDBManager} from '../utils/types/dbManager';
 import {assert, expect} from 'chai';
 import {addDraft, addResourceToDraft,
   deleteDraft, deleteResourceFromDraft, DraftInput,
@@ -13,10 +13,11 @@ import {Future} from 'shared/dist/types/future';
 import {ObjectId} from 'mongodb';
 
 
-let dbManager : DBManager;
+let dbManager : TestDBManager;
 before(async () => {
   const setup = await getTestSetup();
-  dbManager = setup.dbManager;
+  dbManager = setup.dbManager as TestDBManager;
+  dbManager.clearAllDBs();
 });
 
 const TestUser = {
@@ -143,6 +144,21 @@ describe('Testing basic auth functions', () => {
         assert.equal(user2.success, true);
         expect(user2.user?.passwordHash).to.not.equal(oldPasswordHash);
       });
+
+  it('Should add an user who signed in with google', async () => {
+    const userDb = dbManager.getUserDB();
+    const testProfile = {
+      email: 'testuserg@gmail.com',
+      firstname: 'Test',
+      lastname: 'User',
+    };
+    const res = await registerGoogleUser(userDb, testProfile);
+    expect(res.success).to.equal(true);
+    expect(res.user?.email).to.equal(testProfile.email);
+    expect(res.user?.firstname).to.equal(testProfile.firstname);
+    expect(res.user?.lastname).to.equal(testProfile.lastname);
+    expect(res.user?.method).to.equal('google');
+  });
 });
 
 const TestDraft : DraftInput = {
