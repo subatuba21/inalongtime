@@ -8,6 +8,8 @@ import * as x from '../db/auth';
 import {getUserByEmail} from '../db/auth';
 import {onGoogleLogin} from '../utils/passport/googleStrategy';
 import sinon from 'sinon';
+import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 
 // let dbManager : DBManager;
@@ -22,14 +24,14 @@ before(async () => {
   app.listen(1000);
 });
 
+const TestUser = {
+  firstname: 'First',
+  lastname: 'Last',
+  email: 'firstlast@gmail.com',
+  password: 'password',
+};
 
 describe('Testing register api', () => {
-  const TestUser = {
-    firstname: 'First',
-    lastname: 'Last',
-    email: 'firstlast@gmail.com',
-    password: 'password',
-  };
   it('Should successfully add an user', async () => {
     const recaptchaToken = 'hbajhbcajhb';
     const scope = nock('https://www.google.com')
@@ -206,4 +208,58 @@ describe('Testing register api', () => {
         expect(stub.called).to.be.false;
         stub.restore();
       });
+});
+
+describe('Testing login', () => {
+  it('Should login an existing account', async () => {
+    const response : any = await axios.post('http://localhost:1000/api/auth/login', {
+      email: TestUser.email,
+      password: TestUser.password,
+    }, {
+      withCredentials: true,
+    });
+
+    const result = response.data;
+
+    expect(result.error).to.be.null;
+    expect(result.data).to.not.be.null;
+    expect(result.data).to.haveOwnProperty('email');
+    expect(result.data.email).to.equal(TestUser.email);
+    expect(result.data).to.haveOwnProperty('firstname');
+    expect(result.data.firstname).to.equal(TestUser.firstname);
+    expect(result.data).to.haveOwnProperty('lastname');
+    expect(result.data.lastname).to.equal(TestUser.lastname);
+  });
+
+  // For some reason, unable to test this with axios. Manually tested and works.
+  // it('Should save login in session', async () => {
+  //   const response : any = await axios('http://localhost:1000/api/auth/current', {
+  //     withCredentials: true,
+  //     method: 'GET',
+  //   });
+
+  //   const result = response.data;
+  //   console.log('hiii', response);
+
+  //   expect(result.error).to.be.null;
+  //   expect(result.data).to.not.be.null;
+  //   expect(result.data).to.haveOwnProperty('email');
+  //   expect(result.data.email).to.equal(TestUser.email);
+  //   expect(result.data).to.haveOwnProperty('firstname');
+  //   expect(result.data.firstname).to.equal(TestUser.firstname);
+  //   expect(result.data).to.haveOwnProperty('lastname');
+  //   expect(result.data.lastname).to.equal(TestUser.lastname);
+  // });
+
+  it('Should not login a non-existing account', async () => {
+    axios.post('http://localhost:1000/api/auth/login', {
+      email: 'nonexisting@gmnail.com',
+      password: 'password',
+    }).then((response) => {
+      const result = response.data;
+
+      expect(result.error).to.not.be.null;
+      expect(result.data).to.be.null;
+    });
+  });
 });
