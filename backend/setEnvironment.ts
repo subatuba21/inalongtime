@@ -8,6 +8,7 @@ import path from 'path';
 import {handleEndError} from './utils/handleEndError';
 import {EnvironmentSetup} from './utils/types/environment';
 import {Storage} from '@google-cloud/storage';
+import logger from './logger';
 
 export const getSetup : EnvironmentSetup = async () => {
   const app = express();
@@ -22,8 +23,15 @@ export const getSetup : EnvironmentSetup = async () => {
     }),
   }));
 
+
   const mongoClient = new MongoClient(process.env.MONGO_URL as string);
-  await mongoClient.connect();
+  try {
+    await mongoClient.connect();
+    logger.verbose('Connected to MongoDB');
+  } catch (err: any) {
+    logger.error(`Error connecting to MongoDB ${err.message}`);
+    throw err;
+  }
   const db = mongoClient.db(process.env.MONGO_DB_NAME as string);
   const dbManager = new DBManager(db);
 
