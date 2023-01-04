@@ -25,12 +25,24 @@ export const start = async (app: Express.Application,
   return server;
 };
 
+export const runSendMainEmails = async (dbManager: DBManager) => {
+  sendFunction(dbManager.getFutureDB(), dbManager.getUserDB());
+};
+
 process.on('uncaughtException', (err) => {
   logger.error(err);
 });
 
-setupPromise.then(({
-  server,
-  dbManager,
-}) => start(server, dbManager));
+if (process.env.MODE==='SEND_EMAILS') {
+  setupPromise.then(({
+    dbManager,
+  }) => runSendMainEmails(dbManager));
+} else if (process.env.MODE==='SERVER') {
+  setupPromise.then(({
+    server,
+    dbManager,
+  }) => start(server, dbManager));
+} else {
+  logger.error('No mode specified');
+}
 
