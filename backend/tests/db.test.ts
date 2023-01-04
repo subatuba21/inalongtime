@@ -1,19 +1,32 @@
-import {getTestSetup} from '../setTestEnvironment';
-import {addDraftIdToUser, addFutureIdToUser,
+import { getTestSetup } from "../setTestEnvironment";
+import {
+  addDraftIdToUser,
+  addFutureIdToUser,
   changePassword,
-  deleteDraftIdFromUser, deleteFutureIdFromUser, getUser,
-  getUserByEmail, registerGoogleUser, registerUser} from '../db/auth';
-import {TestDBManager} from '../utils/types/dbManager';
-import {assert, expect} from 'chai';
-import {addDraft, addResourceToDraft,
-  deleteDraft, deleteResourceFromDraft, DraftInput,
-  getDraft, getUserDrafts, modifyDraft} from '../db/draft';
-import {addFuture, getFuture} from '../db/future';
-import {Future} from 'shared/dist/types/future';
-import {ObjectId} from 'mongodb';
+  deleteDraftIdFromUser,
+  deleteFutureIdFromUser,
+  getUser,
+  getUserByEmail,
+  registerGoogleUser,
+  registerUser,
+} from "../db/auth";
+import { TestDBManager } from "../utils/types/dbManager";
+import { assert, expect } from "chai";
+import {
+  addDraft,
+  addResourceToDraft,
+  deleteDraft,
+  deleteResourceFromDraft,
+  DraftInput,
+  getDraft,
+  getUserDrafts,
+  modifyDraft,
+} from "../db/draft";
+import { addFuture, getFuture } from "../db/future";
+import { Future } from "shared/dist/types/future";
+import { ObjectId } from "mongodb";
 
-
-let dbManager : TestDBManager;
+let dbManager: TestDBManager;
 before(async () => {
   const setup = await getTestSetup();
   dbManager = setup.dbManager as TestDBManager;
@@ -21,23 +34,23 @@ before(async () => {
 });
 
 const TestUser = {
-  firstname: 'Test',
-  lastname: 'User',
-  email: 'testuser@gmail.com',
-  password: 'testpassword',
-  recaptchaToken: 'testtoken',
-  id: '',
+  firstname: "Test",
+  lastname: "User",
+  email: "testuser@gmail.com",
+  password: "testpassword",
+  recaptchaToken: "testtoken",
+  id: "",
 };
 
-describe('Testing basic auth functions', () => {
-  it('Should add an user and retrieve it', async () => {
+describe("Testing basic auth functions", () => {
+  it("Should add an user and retrieve it", async () => {
     const userDb = dbManager.getUserDB();
     const res = await registerUser(dbManager.getUserDB(), TestUser);
 
     assert.equal(res.success, true);
-    const queryRes = userDb.find({email: 'testuser@gmail.com'});
+    const queryRes = userDb.find({ email: "testuser@gmail.com" });
     let count = 0;
-    let userRes : any;
+    let userRes: any;
     await queryRes.forEach((user) => {
       count++;
       userRes = user;
@@ -46,152 +59,167 @@ describe('Testing basic auth functions', () => {
     console.log(userRes);
 
     assert.equal(count, 1);
-    assert.equal(userRes.firstname, 'Test');
-    assert.equal(userRes.lastname, 'User');
-    assert.equal(userRes.email, 'testuser@gmail.com');
+    assert.equal(userRes.firstname, "Test");
+    assert.equal(userRes.lastname, "User");
+    assert.equal(userRes.email, "testuser@gmail.com");
     assert.equal(userRes._id, res.user?._id);
     TestUser.id = res.user?._id as any;
 
     const user = await getUser(userDb, userRes._id);
     assert.equal(user.success, true);
-    assert.equal(user.user?.firstname, 'Test');
-    assert.equal(user.user?.lastname, 'User');
-    assert.equal(user.user?.email, 'testuser@gmail.com');
+    assert.equal(user.user?.firstname, "Test");
+    assert.equal(user.user?.lastname, "User");
+    assert.equal(user.user?.email, "testuser@gmail.com");
 
     console.log(user.user);
   });
 
-  it('Should not add an user with the same email', async () => {
+  it("Should not add an user with the same email", async () => {
     const userDb = dbManager.getUserDB();
     const secondRes = await registerUser(userDb, {
-      firstname: 'Test2',
-      lastname: 'User2',
-      email: 'testuser@gmail.com',
-      password: 'testpassword',
-      recaptchaToken: 'testtoken',
+      firstname: "Test2",
+      lastname: "User2",
+      email: "testuser@gmail.com",
+      password: "testpassword",
+      recaptchaToken: "testtoken",
     });
 
     assert.equal(secondRes.success, false);
   });
 
-  it('should retrieve user by email', async () => {
+  it("should retrieve user by email", async () => {
     const userDb = dbManager.getUserDB();
-    const user = await getUserByEmail(userDb, 'testuser@gmail.com');
+    const user = await getUserByEmail(userDb, "testuser@gmail.com");
     assert.equal(user.success, true);
-    assert.equal(user.user?.firstname, 'Test');
-    assert.equal(user.user?.lastname, 'User');
-    assert.equal(user.user?.email, 'testuser@gmail.com');
+    assert.equal(user.user?.firstname, "Test");
+    assert.equal(user.user?.lastname, "User");
+    assert.equal(user.user?.email, "testuser@gmail.com");
   });
 
-  it('should add draftId to user and delete it', async () => {
+  it("should add draftId to user and delete it", async () => {
     const userDb = dbManager.getUserDB();
-    let user = await getUserByEmail(userDb, 'testuser@gmail.com');
+    let user = await getUserByEmail(userDb, "testuser@gmail.com");
     assert.equal(user.success, true);
 
-    const draftId = 'testDraftId';
+    const draftId = "testDraftId";
     const error = await addDraftIdToUser(
-        userDb, user.user?._id as string, draftId);
+      userDb,
+      user.user?._id as string,
+      draftId
+    );
     assert.equal(error, undefined);
 
-    user = await getUserByEmail(userDb, 'testuser@gmail.com');
+    user = await getUserByEmail(userDb, "testuser@gmail.com");
     expect(user.user?.draftIDs).to.include(draftId);
 
     const error2 = await deleteDraftIdFromUser(
-        userDb, user.user?._id as string, draftId);
+      userDb,
+      user.user?._id as string,
+      draftId
+    );
     assert.equal(error2, undefined);
 
-    user = await getUserByEmail(userDb, 'testuser@gmail.com');
+    user = await getUserByEmail(userDb, "testuser@gmail.com");
     assert.equal(user.success, true);
 
     expect(user.user?.draftIDs).to.not.include(draftId);
   });
 
-  it('should add futureId to user and delete it', async () => {
+  it("should add futureId to user and delete it", async () => {
     const userDb = dbManager.getUserDB();
-    let user = await getUserByEmail(userDb, 'testuser@gmail.com');
+    let user = await getUserByEmail(userDb, "testuser@gmail.com");
     assert.equal(user.success, true);
 
-    const futureID = 'testFutureId';
+    const futureID = "testFutureId";
     const error = await addFutureIdToUser(
-        userDb, user.user?._id as string, futureID);
+      userDb,
+      user.user?._id as string,
+      futureID
+    );
     assert.equal(error, undefined);
 
-    user = await getUserByEmail(userDb, 'testuser@gmail.com');
+    user = await getUserByEmail(userDb, "testuser@gmail.com");
     expect(user.user?.futureIDs).to.include(futureID);
 
     const error2 = await deleteFutureIdFromUser(
-        userDb, user.user?._id as string, futureID);
+      userDb,
+      user.user?._id as string,
+      futureID
+    );
     assert.equal(error2, undefined);
 
-    user = await getUserByEmail(userDb, 'testuser@gmail.com');
+    user = await getUserByEmail(userDb, "testuser@gmail.com");
     assert.equal(user.success, true);
 
     expect(user.user?.futureIDs).to.not.include(futureID);
   });
 
-  it('Should have a different passwordHash after changing password',
-      async () => {
-        const userDb = dbManager.getUserDB();
-        const user = await getUserByEmail(userDb, 'testuser@gmail.com');
-        assert.equal(user.success, true);
+  it("Should have a different passwordHash after changing password", async () => {
+    const userDb = dbManager.getUserDB();
+    const user = await getUserByEmail(userDb, "testuser@gmail.com");
+    assert.equal(user.success, true);
 
-        const oldPasswordHash = user.user?.passwordHash;
-        const error = await changePassword(
-            userDb, user.user?._id as string, 'newpassword');
-        assert.equal(error, undefined);
+    const oldPasswordHash = user.user?.passwordHash;
+    const error = await changePassword(
+      userDb,
+      user.user?._id as string,
+      "newpassword"
+    );
+    assert.equal(error, undefined);
 
-        const user2 = await getUserByEmail(userDb, 'testuser@gmail.com');
-        assert.equal(user2.success, true);
-        expect(user2.user?.passwordHash).to.not.equal(oldPasswordHash);
-      });
+    const user2 = await getUserByEmail(userDb, "testuser@gmail.com");
+    assert.equal(user2.success, true);
+    expect(user2.user?.passwordHash).to.not.equal(oldPasswordHash);
+  });
 
-  it('Should add an user who signed in with google', async () => {
+  it("Should add an user who signed in with google", async () => {
     const userDb = dbManager.getUserDB();
     const testProfile = {
-      email: 'testuserg@gmail.com',
-      firstname: 'Test',
-      lastname: 'User',
+      email: "testuserg@gmail.com",
+      firstname: "Test",
+      lastname: "User",
     };
     const res = await registerGoogleUser(userDb, testProfile);
     expect(res.success).to.equal(true);
     expect(res.user?.email).to.equal(testProfile.email);
     expect(res.user?.firstname).to.equal(testProfile.firstname);
     expect(res.user?.lastname).to.equal(testProfile.lastname);
-    expect(res.user?.method).to.equal('google');
+    expect(res.user?.method).to.equal("google");
   });
 });
 
-const TestDraft : DraftInput = {
-  title: 'Test Draft',
-  type: 'letter',
+const TestDraft: DraftInput = {
+  title: "Test Draft",
+  type: "letter",
   userId: TestUser.id,
-  recipientType: 'myself',
+  recipientType: "myself",
   lastEdited: new Date(),
   nextSendDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7),
-  phoneNumber: '1234567890',
+  phoneNumber: "1234567890",
   backupEmail: TestUser.email,
-  contentCloudStoragePath: 'none',
+  contentCloudStoragePath: "none",
   resources: [],
 };
 
-let testDraftId: string = '';
+let testDraftId: string = "";
 
-describe('Testing draft dunctions', () => {
-  it('Should add a draft and retrieve it', async () => {
+describe("Testing draft dunctions", () => {
+  it("Should add a draft and retrieve it", async () => {
     const draftDb = dbManager.getDraftDB();
     const userDb = dbManager.getUserDB();
     const user = await getUserByEmail(userDb, TestUser.email);
     expect(user.success).to.equal(true);
     TestDraft.userId = TestUser.id;
 
-    const addDraftResponse = await addDraft(
-        draftDb, TestDraft);
+    const addDraftResponse = await addDraft(draftDb, TestDraft);
 
     expect(addDraftResponse.success).to.equal(true);
     testDraftId = addDraftResponse.draft?._id as string;
 
     const getDraftRes = await getDraft(
-        draftDb, addDraftResponse.draft?._id as string);
+      draftDb,
+      addDraftResponse.draft?._id as string
+    );
     expect(getDraftRes.success).to.equal(true);
     expect(getDraftRes.draft?.title).to.equal(TestDraft.title);
     expect(getDraftRes.draft?.type).to.equal(TestDraft.type);
@@ -203,46 +231,52 @@ describe('Testing draft dunctions', () => {
     expect(getDraftRes.draft?.phoneNumber).to.equal(TestDraft.phoneNumber);
     expect(getDraftRes.draft?.backupEmail).to.equal(TestDraft.backupEmail);
 
-    expect(getDraftRes.draft?.contentCloudStoragePath)
-        .to.equal(TestDraft.contentCloudStoragePath);
+    expect(getDraftRes.draft?.contentCloudStoragePath).to.equal(
+      TestDraft.contentCloudStoragePath
+    );
     expect(getDraftRes.draft?.resources).to.eql(TestDraft.resources);
   });
 
-  it('Should update a draft', async () => {
+  it("Should update a draft", async () => {
     const draftDb = dbManager.getDraftDB();
-    const updateDraftRes = await modifyDraft(draftDb,
-        testDraftId, {...TestDraft, title: 'Test Draft 2',
-          recipientType: 'someone else'});
+    const updateDraftRes = await modifyDraft(draftDb, testDraftId, {
+      ...TestDraft,
+      title: "Test Draft 2",
+      recipientType: "someone else",
+    });
 
     expect(updateDraftRes.success).to.equal(true);
 
     const getDraftRes = await getDraft(draftDb, testDraftId);
     expect(getDraftRes.success).to.equal(true);
 
-    expect(getDraftRes.draft?.title).to.equal('Test Draft 2');
-    expect(getDraftRes.draft?.recipientType).to.equal('someone else');
+    expect(getDraftRes.draft?.title).to.equal("Test Draft 2");
+    expect(getDraftRes.draft?.recipientType).to.equal("someone else");
     expect(getDraftRes.draft?.userId).to.equal(TestDraft.userId);
 
     console.log(getDraftRes.draft);
   });
 
-  it('Should get all drafts for a user', async () => {
+  it("Should get all drafts for a user", async () => {
     const draftDb = dbManager.getDraftDB();
     console.log(TestUser.id);
     const getDraftsRes = await getUserDrafts(draftDb, TestUser.id);
     expect(getDraftsRes.success).to.equal(true);
     expect(getDraftsRes.draftData?.drafts.length).to.equal(1);
-    expect(getDraftsRes.draftData?.drafts[0].title).to.equal('Test Draft 2');
+    expect(getDraftsRes.draftData?.drafts[0].title).to.equal("Test Draft 2");
   });
 
-  it('Should add a resource to a draft', async () => {
+  it("Should add a resource to a draft", async () => {
     const draftDb = dbManager.getDraftDB();
-    const resource : any = {
-      id: 'testResource',
-      mimetype: 'image/jpeg',
+    const resource: any = {
+      id: "testResource",
+      mimetype: "image/jpeg",
     };
     const addResourceRes = await addResourceToDraft(
-        draftDb, testDraftId, resource);
+      draftDb,
+      testDraftId,
+      resource
+    );
     expect(addResourceRes).to.be.undefined;
 
     const getDraftRes = await getDraft(draftDb, testDraftId);
@@ -250,17 +284,20 @@ describe('Testing draft dunctions', () => {
     expect(getDraftRes.draft?.resources).to.eql([resource]);
   });
 
-  it('Should delete a resource from a draft', async () => {
+  it("Should delete a resource from a draft", async () => {
     const draftDb = dbManager.getDraftDB();
     const deleteResourceRes = await deleteResourceFromDraft(
-        draftDb, testDraftId, 'testResource');
+      draftDb,
+      testDraftId,
+      "testResource"
+    );
     expect(deleteResourceRes).to.be.undefined;
     const getDraftRes = await getDraft(draftDb, testDraftId);
     expect(getDraftRes.success).to.equal(true);
     expect(getDraftRes.draft?.resources).to.be.empty;
   });
 
-  it('Should delete a draft', async () => {
+  it("Should delete a draft", async () => {
     const draftDb = dbManager.getDraftDB();
     const deleteDraftRes = await deleteDraft(draftDb, testDraftId);
     expect(deleteDraftRes.success).to.equal(true);
@@ -270,27 +307,27 @@ describe('Testing draft dunctions', () => {
   });
 });
 
-const TestFuture : Future = {
-  type: 'letter',
+const TestFuture: Future = {
+  type: "letter",
   _id: new ObjectId().toString(),
   userId: TestUser.id,
-  recipientType: 'myself',
+  recipientType: "myself",
   recipientEmail: TestUser.email,
   lastEdited: new Date(),
   createdAt: new Date(),
   nextSendDate: new Date(),
-  title: 'Test Future',
-  contentCloudStoragePath: 'None',
-  phoneNumber: '+15512070645',
-  backupEmail: 'backupemail@gmail.com',
+  title: "Test Future",
+  contentCloudStoragePath: "None",
+  phoneNumber: "+15512070645",
+  backupEmail: "backupemail@gmail.com",
   resources: [],
   viewed: false,
-  senderName: 'SUBS',
+  senderName: "SUBS",
   filesAccessible: true,
 };
 
-describe('Testing future functions', () => {
-  it('Should create a future and get it', async () => {
+describe("Testing future functions", () => {
+  it("Should create a future and get it", async () => {
     TestFuture.userId = TestUser.id;
     const futureDb = dbManager.getFutureDB();
     const addFutureRes = await addFuture(futureDb, TestFuture);
@@ -301,7 +338,9 @@ describe('Testing future functions', () => {
     TestFuture._id = addFutureRes.future?._id as string;
 
     const getFutureRes = await getFuture(
-        dbManager.getFutureDB(), TestFuture._id);
+      dbManager.getFutureDB(),
+      TestFuture._id
+    );
     expect(getFutureRes.success).to.be.true;
     expect(getFutureRes.future?._id).to.equal(TestFuture._id);
     expect(getFutureRes.future?.backupEmail).to.equal(TestFuture.backupEmail);
