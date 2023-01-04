@@ -127,7 +127,7 @@ export const EditorPage = () => {
 
   if (previewOpen) {
     return <ContentViewer mode='preview' id={editorState._id}
-      onSpacePressed={() => setPreviewOpen(false)}></ContentViewer>;
+      onExitEvent={() => setPreviewOpen(false)}></ContentViewer>;
   }
 
   return <div style={styles}>

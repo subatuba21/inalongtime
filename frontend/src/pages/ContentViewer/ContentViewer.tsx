@@ -15,7 +15,7 @@ import loadingStyles from './LoadingPage.module.css';
 import WebFont from 'webfontloader';
 import {GalleryContent,
   MediaResourceArray} from 'shared/dist/editor/classes/galleryContent';
-import {Carousel, CarouselItem} from 'react-bootstrap';
+import {Button, Carousel, CarouselItem} from 'react-bootstrap';
 import {BaseMediaPlayer} from
   '../../components/BaseMediaPlayer/baseMediaPlayer';
 import {Headphones} from 'react-bootstrap-icons';
@@ -24,7 +24,7 @@ import {Head} from '../../components/Head/Head';
 export const ContentViewer = (props: {
     mode: 'preview' | 'future'
     id?: string,
-    onSpacePressed?: KeyboardEventHandler<HTMLDivElement>,
+    onExitEvent?: () => void,
 }) => {
   const outerDivRef = useRef<HTMLDivElement>(null);
   const params = useParams();
@@ -108,8 +108,9 @@ export const ContentViewer = (props: {
     }
   }, [isLoading, waitTimeDone]);
 
-  const loadingPageText = props.mode === 'preview' && props.onSpacePressed ?
-  'Click the spacebar to go back to the editor.' : props.mode === 'preview' ?
+  const loadingPageText = props.mode === 'preview' && props.onExitEvent ?
+  'Click the spacebar or double tap to go back to the editor.' :
+  props.mode === 'preview' ?
   'Exit this tab to go back to the editor.' :
    'Get ready.';
 
@@ -212,7 +213,7 @@ export const ContentViewer = (props: {
     console.log('space pressed');
     if (e.code === 'Space') {
       e.preventDefault();
-      props.onSpacePressed?.(e);
+      props.onExitEvent?.();
     }
   };
 
@@ -242,5 +243,8 @@ export const ContentViewer = (props: {
           {jsxContent}
         </div>
       </div>
+      {props.mode === 'preview' && (<div id={styles.closePreviewButton}>
+        <Button variant='outline-light' onClick={props.onExitEvent} />
+      </div>)}
     </div>);
 };
