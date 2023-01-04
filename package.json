@@ -1,7 +1,19 @@
 {
     "private": true,
     "workspaces": {
-        "packages": ["frontend", "backend", "shared"],
-        "nohoist": ["**/eslint-config-google", "**/eslint-config-google/**", "**/mongodb", "**/mongodb/**"]
+        "packages": [
+            "frontend",
+            "backend",
+            "shared"
+        ],
+        "nohoist": [
+            "**/eslint-config-google",
+            "**/eslint-config-google/**",
+            "**/mongodb",
+            "**/mongodb/**"
+        ]
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.20"
     }
 }

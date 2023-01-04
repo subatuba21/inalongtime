@@ -54,7 +54,7 @@ export const getDraft = async (draftCol: Collection, _id: string)
       throw new Error('Draft not found.');
     }
   } catch (err: any) {
-    logger.warn(`Unable to find draft with id ${_id}: ${err.message}`);
+    logger.warn(`Unable to find a draft with id ${_id}: ${err.message}`);
     return {
       success: false,
       error: err.message,

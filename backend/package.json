@@ -6,6 +6,7 @@
   "scripts": {
     "test": "mocha -r ts-node/register 'tests/**/*.ts' --exit",
     "copy-files": "copyfiles  ./utils/email/templates/* dist/ && copyfiles  ./utils/contentStorage/keyfile.json dist/ && copyfiles -a \"../frontend/build/**/*\" dist/frontend",
+    "dev": "npm run copy-files && tsc -w & nodemon -q -w dist --exec \"node dist/index.js\"",
     "start": "tsc && npm run copy-files && node dist/index.js",
     "lint": "eslint *.ts"
   },
