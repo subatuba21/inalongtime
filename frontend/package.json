@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:1500",
   "dependencies": {
     "@draft-js-plugins/alignment": "^5.0.3",
     "@draft-js-plugins/buttons": "^4.3.1",
