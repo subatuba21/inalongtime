@@ -13,18 +13,22 @@ import {DraftType, CustomizationSchema} from 'shared/dist/types/draft';
 import styles from './ContentViewer.module.css';
 import loadingStyles from './LoadingPage.module.css';
 import WebFont from 'webfontloader';
-import {GalleryContent,
-  MediaResourceArray} from 'shared/dist/editor/classes/galleryContent';
+import {
+  GalleryContent,
+  MediaResourceArray,
+} from 'shared/dist/editor/classes/galleryContent';
 import {Button, Carousel, CarouselItem} from 'react-bootstrap';
 import {BaseMediaPlayer} from
   '../../components/BaseMediaPlayer/baseMediaPlayer';
 import {Headphones} from 'react-bootstrap-icons';
 import {Head} from '../../components/Head/Head';
+import {useAppDispatch} from '../../store/store';
+import {activateModal} from '../../store/modal';
 
 export const ContentViewer = (props: {
-    mode: 'preview' | 'future'
-    id?: string,
-    onExitEvent?: () => void,
+  mode: 'preview' | 'future'
+  id?: string,
+  onExitEvent?: () => void,
 }) => {
   const outerDivRef = useRef<HTMLDivElement>(null);
   const params = useParams();
@@ -45,41 +49,74 @@ export const ContentViewer = (props: {
   const [senderName, setSenderName] = useState<string | undefined>(undefined);
 
   const [customization, setCustomization] =
-  useState<CustomizationSchema | undefined>(undefined);
+    useState<CustomizationSchema | undefined>(undefined);
   const [contentType, setContentType] =
     useState<DraftType | undefined>(undefined);
   const [createdAt, setCreatedAt] = useState<Date | undefined>(undefined);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const getData = async () => {
       if (props.mode === 'preview') {
-        const res = await editorAPI.getDraft(id);
-        if (res.success) {
-          setContent(
-              parseContent(res.data?.content,
+        editorAPI.getDraft(id).then((res) => {
+          if (res.success) {
+            setContent(
+                parseContent(res.data?.content,
                 res.data?.properties.type as DraftType));
 
-          setContentType(res.data?.properties.type);
+            setContentType(res.data?.properties.type);
 
-          setTitle(res.data?.properties.title ?
-            res.data?.properties.title : '');
+            setTitle(res.data?.properties.title ?
+              res.data?.properties.title : '');
 
-          setCustomization(res.data?.properties.customization);
-          setSenderName(res.data?.properties.senderName);
+            setCustomization(res.data?.properties.customization);
+            setSenderName(res.data?.properties.senderName);
 
-          document.documentElement.style.setProperty('--content-header-color',
-              res.data?.properties.customization?.headerColor ?? null);
-        }
-        setIsLoading(false);
-        setTimeout(() => {
-          setWaitTimeDone(true);
-        }, 2000);
+            document.documentElement.style.setProperty('--content-header-color',
+                res.data?.properties.customization?.headerColor ?? null);
+
+            setIsLoading(false);
+            setTimeout(() => {
+              setWaitTimeDone(true);
+            }, 2000);
+          } else {
+            dispatch(activateModal({
+              header: 'Error viewing draft',
+              // eslint-disable-next-line max-len
+              content: <>There was a problem viewing your draft. Please try again later.</>,
+              successButton: {
+                text: 'Back to editor',
+                onClick: () => {
+                  props.onExitEvent?.();
+                },
+              },
+              onClose: () => {
+                props.onExitEvent?.();
+              },
+            }));
+          }
+        }).catch((err) => {
+          dispatch(activateModal({
+            header: 'Error viewing draft',
+            // eslint-disable-next-line max-len
+            content: <>You need to add content and customization to your draft before you can preview it</>,
+            successButton: {
+              text: 'Back to editor',
+              onClick: () => {
+                props.onExitEvent?.();
+              },
+            },
+            onClose: () => {
+              props.onExitEvent?.();
+            },
+          }));
+        });
       } else {
         const res = await editorAPI.getFuture(id);
         if (res.success) {
           setContent(
               parseContent(res.data?.content,
-                res.data?.properties.type as DraftType));
+              res.data?.properties.type as DraftType));
 
           setContentType(res.data?.properties.type);
 
@@ -109,10 +146,10 @@ export const ContentViewer = (props: {
   }, [isLoading, waitTimeDone]);
 
   const loadingPageText = props.mode === 'preview' && props.onExitEvent ?
-  'Click the spacebar or double tap to go back to the editor.' :
-  props.mode === 'preview' ?
-  'Exit this tab to go back to the editor.' :
-   'Get ready.';
+    'Click the spacebar or double tap to go back to the editor.' :
+    props.mode === 'preview' ?
+      'Exit this tab to go back to the editor.' :
+      'Get ready.';
 
   if (isLoading) {
     return (<div id={loadingStyles.loadingPage}>
@@ -121,7 +158,7 @@ export const ContentViewer = (props: {
     </div>);
   }
 
-  let jsxContent : any = <></>;
+  let jsxContent: any = <></>;
 
   if (customization?.font) {
     WebFont.load({
@@ -158,7 +195,7 @@ export const ContentViewer = (props: {
 
     case 'gallery': {
       const gallery = content as GalleryContent;
-      const galleryItems : any[] = [];
+      const galleryItems: any[] = [];
       (gallery.mediaResourceArray as MediaResourceArray)
           .forEach((media, i) => {
             galleryItems.push(<CarouselItem key={i}>
@@ -209,7 +246,7 @@ export const ContentViewer = (props: {
     }
   }
 
-  const onSpacePressedWrapper : KeyboardEventHandler<HTMLDivElement> = (e) => {
+  const onSpacePressedWrapper: KeyboardEventHandler<HTMLDivElement> = (e) => {
     console.log('space pressed');
     if (e.code === 'Space') {
       e.preventDefault();
@@ -229,22 +266,27 @@ export const ContentViewer = (props: {
       </div>}
       <div id={styles.background} style={{
         backgroundColor: customization?.backgroundColor ?
-  customization.backgroundColor : '#fff'}}>
+          customization.backgroundColor : '#fff',
+      }}>
         <div id={styles[contentType || 'none']} style={{
           color: customization?.fontColor ? customization.fontColor : '#000',
           fontFamily: customization?.font ? customization.font : 'Open Sans',
         }}>
           <header>{title}</header>
-          { customization?.showDate ? <span className={styles.createdOn}
+          {customization?.showDate ? <span className={styles.createdOn}
           >Sent on {props.mode === 'preview' ?
-      formatDate(new Date()) :
-       formatDate(createdAt || new Date())}</span> : <></>}
+            formatDate(new Date()) :
+            formatDate(createdAt || new Date())}</span> : <></>}
           <span className={styles.author}>From {senderName}</span>
           {jsxContent}
         </div>
+        {props.mode === 'preview' && (<div id={styles.closePreviewButton}>
+          <Button variant='primary' onClick={props.onExitEvent}
+            className='tw-m-auto tw-border-4
+             tw-border-black tw-text-purple tw-mt-3'>
+            Close preview
+          </Button>
+        </div>)}
       </div>
-      {props.mode === 'preview' && (<div id={styles.closePreviewButton}>
-        <Button variant='outline-light' onClick={props.onExitEvent} />
-      </div>)}
     </div>);
 };

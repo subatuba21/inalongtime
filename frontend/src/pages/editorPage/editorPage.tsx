@@ -30,6 +30,13 @@ export const EditorPage = () => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const [previewOpen, setPreviewOpen] = useState(false);
+
+  // State for confirmation page
+  const detailsConfirmed = useState(false);
+  const previewConfirmed = useState(false);
+  const paymentConfirmed = useState(false);
+  const paymentMessageContent = useState(<></>);
+
   const editorState = useSelector(
       (state: any) => state.editor) as DraftFrontendState;
 
@@ -49,7 +56,7 @@ export const EditorPage = () => {
         dispatch(activateModal({
           header: 'Error: Unable to get draft.',
           content: <>We were unable to retrieve your draft.
-          Please try again later.</>,
+            Please try again later.</>,
           onClose: () => {
             navigate('/drafts');
           },
@@ -61,10 +68,10 @@ export const EditorPage = () => {
   const [currentStep, setStepState] = useState<StepType>('info');
 
   const setStep = (name: StepType) => {
-    if (name!==currentStep) setStepState(name);
+    if (name !== currentStep) setStepState(name);
   };
 
-  let contentEditor : ReactNode = <></>;
+  let contentEditor: ReactNode = <></>;
 
   switch (editorState.type) {
     case 'letter': {
@@ -112,7 +119,14 @@ export const EditorPage = () => {
     }
 
     case 'confirm': {
-      content = <ConfirmForm></ConfirmForm>;
+      content = <ConfirmForm detailsConfirmed={detailsConfirmed}
+        previewConfirmed={previewConfirmed}
+        paymentConfirmed={paymentConfirmed} paymentMessageContent=
+          {paymentMessageContent}
+        openPreview={() => {
+          setPreviewOpen(true);
+        }}
+      ></ConfirmForm>;
       break;
     }
 
@@ -136,7 +150,7 @@ export const EditorPage = () => {
       <div id={styles.mainDiv}>
         <h2 className='pinkText'>Draft Editor</h2>
         <p id={styles.autosavedMessage} className='whiteText'>
-            All fields are autosaved.
+          All fields are autosaved.
         </p>
         <p id={styles.previewURL}>
           <span onClick={() => setPreviewOpen(true)}>
@@ -204,7 +218,7 @@ export const EditorPage = () => {
                 bottom: '2px',
                 fontSize: '15pt',
               }}></ArrowUpRightSquareFill>
-            Open Preview
+              Open Preview
             </span>
           </div>
         </div>

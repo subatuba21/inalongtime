@@ -11,15 +11,21 @@ import {activateModal} from '../../../store/modal';
 import {Spinner} from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
 
-export const ConfirmForm = () => {
-  const [firstStepDone, setFirstStepDone] = useState(false);
-  const [secondStepDone, setSecondStepDone] = useState(false);
+export const ConfirmForm = (props: {
+  detailsConfirmed: [boolean, (value: boolean) => void],
+  previewConfirmed: [boolean, (value: boolean) => void],
+  paymentConfirmed: [boolean, (value: boolean) => void],
+  paymentMessageContent: [JSX.Element, (value: JSX.Element) => void],
+  openPreview: () => void,
+}) => {
+  const [firstStepDone, setFirstStepDone] = props.detailsConfirmed;
+  const [secondStepDone, setSecondStepDone] = props.previewConfirmed;
 
   const editorState = useSelector(
       (state) => (state as any).editor as DraftFrontendState);
   const dispatch = useAppDispatch();
-  const [thirdStepContent, setThirdStepContent] = useState(<></>);
-  const [thirdStepDone, setThirdStepDone] = useState(false);
+  const [thirdStepContent, setThirdStepContent] = props.paymentMessageContent;
+  const [thirdStepDone, setThirdStepDone] = props.paymentConfirmed;
   const navigate = useNavigate();
   const [paid, setPaid] = useState(false);
 
@@ -53,8 +59,8 @@ export const ConfirmForm = () => {
         Your draft does not fall into the free tier.
         The reason: {paidResult.reason} You can check our
         pricing details <a href={'https://inalongtime.com/pricing'}>here</a>.
-        <br/>
-        <br/>
+        <br />
+        <br />
         Good news: it is only $2.50 + tax! Click the confirm button below
         to pay and send your draft into the future!
       </p>);
@@ -93,8 +99,8 @@ export const ConfirmForm = () => {
 
   const allowedToConfirm =
     (editorState.progress.content === 'finished' &&
-        editorState.progress.info === 'finished' &&
-        editorState.progress.customize === 'finished');
+      editorState.progress.info === 'finished' &&
+      editorState.progress.customize === 'finished');
 
 
   return <div id={styles.confirmForm} className='box'>
@@ -106,32 +112,40 @@ export const ConfirmForm = () => {
     <div className={!allowedToConfirm ? styles.disabled : null}>
       <h4>1. Confirm Basic Info</h4>
       <p>
-        <b>Title:</b> {editorState.title}<br/>
+        <b>Title:</b> {editorState.title}<br />
         <b>Recipient: </b>
         {editorState.recipientType === 'myself' ? 'Myself' :
-        editorState.recipientEmail}<br/>
-        <b>Type:</b> {editorState.type}<br/>
-        <b>Send Date</b> {editorState.nextSendDate.toLocaleDateString()}<br/>
-        <b>Phone Number:</b> {editorState.phoneNumber}<br/>
-        <b>Backup Email:</b> {editorState.backupEmail}<br/>
+          editorState.recipientEmail}<br />
+        <b>Type:</b> {editorState.type}<br />
+        <b>Send Date</b> {editorState.nextSendDate.toLocaleDateString()}<br />
+        <b>Phone Number:</b> {editorState.phoneNumber}<br />
+        <b>Backup Email:</b> {editorState.backupEmail}<br />
       </p>
       <Button onClick={() => setFirstStepDone(true)}
         disabled={!allowedToConfirm}>
         {firstStepDone ? 'Confirmed' : 'Confirm'}
       </Button>
     </div>
-    <div className={!firstStepDone ? styles.disabled : null}>
+    <div className={!allowedToConfirm ||
+      !firstStepDone ? styles.disabled : null}>
       <h4>
         2. Confirm Preview
       </h4>
-      <p>Is this what you want to see in the future?
-        <a href={`/preview/${editorState._id}`}
-          target='_blank' rel="noreferrer">&nbsp;Preview</a></p>
+      <p>Please confirm that the <span
+        onClick={() => {
+          props.openPreview();
+        }}
+        className='tw-text-purple tw-font-medium
+        tw-cursor-pointer'>
+        preview
+      </span>
+      {' '}is to your liking.</p>
       <Button onClick={onfinishSecondStep}
         disabled={!firstStepDone}>{secondStepDone ? 'Confirmed' : 'Confirm'}
       </Button>
     </div>
-    <div className={!secondStepDone ? styles.disabled : null}>
+    <div className={!allowedToConfirm || !secondStepDone ?
+       styles.disabled : null}>
       <h4>
         3. Payment
       </h4>
